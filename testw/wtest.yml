@@ -1,0 +1,20 @@
+---
+- hosts: c7m
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: "磁盘"
+    shell: df -lh
+  - name: "内存"
+    command: free -m
+  - name: lsb
+    command: lsb_release -a
+  - name: Facts
+    setup: filter=ansible_os_family
+  - name: ansible_hostname
+    debug: msg="hello {{ ansible_hostname.upper() }}"
+  - debug: msg="hello {{ ansible_os_family.upper() }}"
+  - debug: msg="hello {{ ansible_all_ipv4_addresses }}"
+  - debug: msg="hello {{ ansible_default_ipv4 }}"
