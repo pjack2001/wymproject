@@ -43,10 +43,76 @@ docker run -d -p 19999:19999 --name netdata01 titpetric/netdata
 netdata 默认访问端口是19999，http://127.0.0.1:19999
 
 
+## ansible练习环境搭建
+
+
+https://www.w3cschool.cn/automate_with_ansible/automate_with_ansible-oqiz27p6.html
 
 
 
+在终端机 (Terminal) 里启动 Jupyter 的容器，请依个人喜好选择 image，
+其 latest 标签 (tag) 是对应到 alpine-3.4。
 
+$ docker run -p 8888:8888 -d chusiang/ansible-jupyter
+$ docker run -p 8888:8888 -d chusiang/ansible-jupyter:alpine-3.4
+
+ http://localhost:8888/ 进入 Jupyter 网站
+
+
+$ docker run --name server1 -d -P chusiang/ansible-managed-node:ubuntu-16.04
+
+$ docker run --name server2 -d -P chusiang/ansible-managed-node:centos-7
+
+或者使用docker-compose
+参见docker/ansiblejupyter
+
+
+```
+############################################################################
+使用docker在搭建lvs环境        使用docker-compose自动生成lvs环境
+
+https://blog.csdn.net/narry/article/details/51998206
+
+进入docker-compose所在目录才能执行相关命令
+
+$ docker-compose up  #Ctrl+C退出
+$ docker-compose up -d  #后台运行
+
+$ docker-compose ps
+
+
+$ docker-compose restart #重启所有容器
+$ docker-compose restart web2  #重启web2  ,dockerlvsmaster_web2_1，取中间的名字
+$ docker-compose stop #停止所有容器
+$ docker-compose stop web2    #停止App1
+
+进入web2容器
+$ docker-compose exec web2 bash
+
+重建容器
+docker-compose up -d --force-recreate 使用 --force-recreate 可以强制重建容器 （否则只能在容器配置有更改时才会重建容器）
+docker-compose down 停止所有容器，并删除容器 （这样下次使用docker-compose up时就一定会是新容器了）
+
+docker-compose up是创建和启动容器，具我所知只有在三种情况下会重新创建容器（即先删除旧的容器，再生成一个新的）：
+1.当镜像有更新时，会重新创建容器；
+2.容器不存在（即被删除了）;
+3.当容器A重新创建时，其依赖此容器的容器将会重新创建（即docker-compose.yml文件中的容器设置了depends_on为容器A的容器）
+
+build
+创建或者再建服务
+服务被创建后会标记为project_service(比如composetest_db)，如果改变了一个服务的Dockerfile或者构建目录的内容，可以使用docker-compose build来重建它
+
+
+
+使用docker compose部署服务
+
+谈到微服务的话题，技术上我们往往会涉及到多服务、多容器的部署与管理。
+Docker 有三个主要的作用：Build, Ship和Run。使用docker compose我们可以在Run的层面解决很多实际问题，如：通过创建compose(基于YUML语法)文件，在这个文件上面描述应用的架构，如使用什么镜像、数据卷、网络、绑定服务端口等等，然后再用一条命令就可以管理所有的服务（如启动、停止、重启、日志监控等等）
+
+
+https://docs.docker.com/compose/gettingstarted/#step-8-experiment-with-some-other-commands
+
+```
 
 ### ansible练习
 

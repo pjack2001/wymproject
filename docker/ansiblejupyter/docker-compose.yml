@@ -1,0 +1,17 @@
+version: '2'
+services:
+
+  control_machine:
+    ports:
+      - 8888:8888/tcp
+    image: chusiang/ansible-jupyter:latest
+
+  server1:
+    ports:
+      - 2221:22/tcp
+    image: chusiang/ansible-managed-node:ubuntu-16.04
+
+  server2:
+    ports:
+      - 2222:22/tcp
+    image: chusiang/ansible-managed-node:centos-7
