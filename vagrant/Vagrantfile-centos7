@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+wym_IP="192.168.31.164"
+wym1_IP="192.168.31.165"
+wym2_IP="192.168.31.166"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos7"
+
+  config.vm.define "server" do |server|
+      server.vm.hostname = "wymserver"
+      server.vm.network "private_network", ip: wym_IP
+      #server.vm.provision "shell", path: "master_provision.sh"
+      server.vm.provider "virtualbox" do |v|
+        v.name = "wym-server"
+        v.memory = 512
+        v.cpus = 2
+      end
+
+  end
+
+  config.vm.define "agent1" do |agent1|
+      agent1.vm.hostname = "wymagent1"
+      agent1.vm.network "private_network", ip: wym1_IP
+      #agent1.vm.provision "shell", path: "slave_provision.sh"
+      agent1.vm.provider "virtualbox" do |v|
+        v.name = "wym-agent1"
+        v.memory = 256
+      end
+
+  end
+
+  config.vm.define "agent2" do |agent2|
+      agent2.vm.hostname = "wymagent2"
+      agent2.vm.network "private_network", ip: wym2_IP
+      #agent2.vm.provision "shell", path: "slave_provision.sh"
+      agent2.vm.provider "virtualbox" do |v|
+        v.name = "wym-agent2"
+        v.memory = 256
+      end
+
+  end
+
+ # config.vm.provision "ansible" do |ansible|
+ #    ansible.playbook = "ansible/playbook.yml"
+ #    ansible.groups = {
+ #      "servers" => ["server"],
+ #      "agents" => ["agent[1:2]"],
+ #      "agents:vars" => {"wymserver_ip" => wym_IP}
+ #    }
+ #  end
+
+end

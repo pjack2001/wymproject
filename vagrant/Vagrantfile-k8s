@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "geerlingguy-centos7"
+
+  config.vm.define "k8sm" do | w1 |
+    w1.vm.hostname = "k8s-master"
+    #w1.vm.network "private_network", ip: "192.168.33.18"
+    w1.vm.network "public_network", bridge: "enp7s0f0", ip: "192.168.40.4"
+    w1.vm.network :forwarded_port, guest: 80, host: 8088
+    #w1.vm.synced_folder "/home/y/tools", "/home/vagrant/tools"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "k8sm"
+      v.memory = 4096
+    end
+  end
+
+  config.vm.define "k8sn1" do | w1 |
+    w1.vm.hostname = "k8s-node1"
+    w1.vm.network "public_network", bridge: "enp7s0f0", ip: "192.168.40.5"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "k8s-n1"
+      v.memory = 4096
+    end
+  end
+
+  config.vm.define "k8sn2" do | w1 |
+    w1.vm.hostname = "k8s-node2"
+    w1.vm.network "public_network", bridge: "enp7s0f0", ip: "192.168.40.6"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "k8s-n2"
+      v.memory = 4096
+    end
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/* /etc/yum.repos.d/repobak
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+    sudo yum install -y wget vim tree rsync docker-ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+  SHELL
+
+end
