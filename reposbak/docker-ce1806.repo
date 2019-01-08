@@ -1,0 +1,5 @@
+[docker-ce]
+name=local docker-ce
+baseurl=http://192.168.102.3/CentOS-YUM/centos/7/docker-ce-stable
+enabled=1
+gpgcheck=0

@@ -1,0 +1,5 @@
+[epel]
+name=local epel
+baseurl=http://192.168.102.3/CentOS-YUM/centos/7/epel
+enabled=1
+gpgcheck=0
