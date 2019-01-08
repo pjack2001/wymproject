@@ -1,6 +1,19 @@
 # kubernetes
 
 
+## 实验环境
+
+40.3服务器
+
+/home/wym/vagrant/k8sgjmzjkubeasz
+ip 10
+
+
+/home/wym/vagrant/k8s
+ip 4,5,6
+
+
+
 
 ## 收集
 
