@@ -1,0 +1,5 @@
+# source 'https://rubygems.org'
+# source 'https://ruby.taobao.org/'
+source 'http://mirrors.aliyun.com/rubygems/'
+
+gem 'sass'

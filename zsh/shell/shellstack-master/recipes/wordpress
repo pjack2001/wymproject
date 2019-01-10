@@ -1,0 +1,35 @@
+#!/bin/bash
+source "$ROOT_PATH/recipes/basic"
+source "$LIB_PATH/mysql.sh"
+source "$LIB_PATH/memcached.sh"
+source "$LIB_PATH/varnish.sh"
+source "$LIB_PATH/nginx.sh"
+source "$LIB_PATH/php.sh"
+source "$LIB_PATH/wordpress.sh"
+
+function defaults_wordpress {
+	MYSQL_ROOT_PASSWORD="mydbs3cr3t"
+        WP_DOMAIN="mydomain.com"
+        WP_MYSQL_USERNAME='myuser'
+        WP_MYSQL_PASSWORD='mydbs3cr3t'
+        WP_DATABASE_NAME='mydb_wp'
+        WP_USERNAME='myuser'
+        WP_PASSWORD='mys3cr3t'
+        WP_EMAIL='my@email.com'
+        WP_PUBLIC_BLOG=1
+}
+
+function install_wordpress {
+	install_basic
+	install_mysql $MYSQL_ROOT_PASSWORD && tune_mysql 40
+	install_memcached
+	install_nginx
+	install_php5_fpm
+	install_varnish
+        setup_varnish_wordpress_vcl
+        setup_php5_fpm_with_nginx
+        create_nginx_wordpress_site $WP_DOMAIN
+        enable_nginx_site wordpress
+        disable_nginx_site default
+        install_wordpress_site $MYSQL_ROOT_PASSWORD $WP_MYSQL_USERNAME $WP_MYSQL_PASSWORD $WP_DATABASE_NAME $WP_DOMAIN $WP_USERNAME $WP_PASSWORD $WP_EMAIL $WP_PUBLIC_BLOG
+}
