@@ -7,14 +7,25 @@ https://spacevim.org/cn/documentation/
 
 SPC 空格
 Leader \
-    
 
 
-
+F3 文件浏览
 
 s g 左右分屏
 s v 上下分屏
+
 Tab 切换
+
+\ 数字 切换tab标签
+
+q 退出窗口
+
+SPC h l 可用模块
+SPC p / 查找
+SPC c l 注释
+SPC ; 5 j 注释当前行及下方5行
+
+
 
 <Leader> 1  跳至标签栏序号 1
 <Leader> 2  跳至标签栏序号 2
@@ -31,11 +42,15 @@ SPC t u 行尾空格检查
 
 
 
+:SPUpdate 更新插件
+:SPUpdate SpaceVim 
+
+:h SpaceVim-config
+
+SPC f v d 打开配置文件
 
 
-
-
-
+按Tab键自动补全
 
 
 
