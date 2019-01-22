@@ -1,0 +1,11 @@
+# 一些内容
+
+## 库
+
+HTTP GET/POST, MySQL CRUD.
+
+## 初始化环境
+
+```
+$ curl -sSL https://github.com/chenzhiwei/linux/raw/master/library/initial-rc.sh | bash
+```

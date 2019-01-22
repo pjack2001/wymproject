@@ -1,0 +1,42 @@
+#!/bin/bash
+source "$ROOT_PATH/recipes/basic"
+source "$LIB_PATH/ruby.sh"
+source "$LIB_PATH/nodejs.sh"
+source "$LIB_PATH/passenger.sh"
+source "$LIB_PATH/bluepill.sh"
+source "$LIB_PATH/redis.sh"
+source "$LIB_PATH/mysql.sh"
+source "$LIB_PATH/postgresql.sh"
+
+function defaults_rails {
+  DATABASE_TYPE="mysql"
+  DATABASE_PASSWORD="mydbs3cr3t"
+  R_ENV="production"
+  RUBY_RELEASE="p290"
+  REDIS_VERSION="2.2.4"
+}
+
+function install_rails {
+	install_basic
+        install_ruby
+	install_nodejs
+	create_gemrc
+	update_rubygems
+	install_passenger_with_nginx
+        set_rails_production_environment
+	install_bundler
+	install_bluepill
+	install_redis
+        case "$DATABASE_TYPE" in
+          mysql)
+            install_mysql $DATABASE_PASSWORD && tune_mysql 40
+            ;;
+          pgsql)
+            install_postgresql $DATABASE_PASSWORD
+            ;;
+          *)
+            install_mysql $DATABASE_PASSWORD && tune_mysql 40
+            install_postgresql $DATABASE_PASSWORD
+            ;;
+        esac
+}

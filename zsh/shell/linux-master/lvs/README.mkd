@@ -1,0 +1,130 @@
+# LVS配置相关
+
+## LVS是什么
+LVS全称Linux Virtual Server，Linux虚拟服务器（集群），其宗旨是实现一个高性能、高可用的服务器。
+
+LVS其实就是给内核打了一个补丁，让内核支持Layer4层的转发，以做到负载均衡的目的。LVS中一个连接占用128 bytes，因此1G内存的LVS可以处理800万以上的请求。
+
+LVS可以通过三种方法来实现负载均衡（Load Balancer），分别是[DR][dr]、[NAT][nat]和[TUN][tun]。
+
+DR（Direct Routing）是使用IP负载均衡技术，通过来修改数据侦里的MAC地址来将请求发往后端服务器，这个扩展起来比较方便，但是这个方法要求负载均衡和后端服务器在同一个物理网络中。
+
+NAT方式是LVS内部实现了修改请求包的目的地址和端口以及修改回应包的源地址和端口。
+
+TUN退出IP Tunneling，通过包装IP数据包并直接转发到其他后端IP地址，后端服务器处理完成之后将结果直接返回给客户端（客户端收到的回应里看到的IP地址还是Director的）。
+
+## 内核是否支持LVS
+
+现在的内核都默认打了LVS的补丁，可以用以下方式来检查。
+
+```bash
+# modprobe ip_vs
+# cat /proc/net/ip_vs
+```
+
+用ipvsadm命令`ipvsadm -Ln`来检查也可以。
+
+## LVS体系结构
+
+LVS主要有三个组成部分，分别是负载调度器（Load Balancer）、服务器池（Server Pool）和后端存储（Backend Storage）。
+
+* 负载调度器
+负载调度器是整个集群对外面服务的前端机，负责将用户请求转发到服务器池中执行。该调度器可以使用IP负载均衡技术、基于内容分发技术或二者的结合。其[HA][ha]可以用keepalived或heartbeat来实现。([piranha][piranha],[UltraMonkey][ultramonkey]...)
+
+* 服务器池
+服务器池是一组真正执行用户请求的服务器，请求可以是WEB、DB、MAIL、DNS等服务。
+
+* 后端存储
+后端存储为服务器池提供一个共享的存储区，这样可以使服务器池中的机器很容易的拥有相同的内容，提供相同的服务。
+
+后端存储在LVS中是可选的部分，如果不使用后端存储的话，那么需要保证每台服务器池中的数据都是一致，这样在某些情况下比较麻烦。比如服务器池是用来提供WEB服务的，那么所有机器上必须得有相同的WEB目录代码，如果对代码做变更的话，这批机器需要同时变更，成本比较大。这时就比较麻烦了，如果使用后端存储的话，只需要将WEB代码保存后端存储机器上，然后挂载到服务器池上（[NFS][nfs]/[GFS][gfs]/...）。
+
+有时负载调度器又叫做Director，服务器池叫做Realserver，也就出来了两个新缩写DIP和RIP。
+
+## LVS的一种实现方法
+
+### 相关软件包
+* ipvsadm.x86\_64
+* modcluster.x86\_64
+* oddjob.x86\_64
+* oddjob-devel.x86\_64
+* oddjob-libs.x86\_64
+* system-config-cluster.noarch
+* piranha.x86\_64
+
+其中piranha为集群管理工具，有专门的WEB界面，可以直接通过WEB界面配置LVS，其配置文件都在/etc/sysconfig/ha目录下面。
+
+LVS的主配置文件： /etc/sysconfig/ha/lvs.cf  
+LVS管理界面的文档目录： /etc/sysconfig/ha/web  
+WEB管理界面的httpd配置文件: /etc/sysconfig/ha/conf/httpd.conf  
+WEB管理界面的登录名和密码： /etc/sysconfig/ha/conf/piranha.passwd
+
+ipvsadm是管理IPVS的工具，IPVS（IP Virstual Server）是IP虚拟服务器，是运行在LVS下的提供负载均衡的一种技术。可以认为IPVS是一种高效的4层交换机，稍后我会讲一下IPVS的功能及实现原理。
+
+### LVS配置示例
+一个WEB站点有两台前端机，LVS主备节点用的HA用heartbeat来实现，调度使用NAT模式。
+
+* 负载调度器
+
+scheduler1: IP地址为10.1.2.11，网关10.1.2.1  
+scheduler2: IP地址为10.1.2.12，网关10.1.2.1  
+对外提供服务的IP地址为10.1.2.15（VIP，模拟公网IP），其在scheduler1和scheduler2上面来回漂。
+
+配置文件请看同级目录下的lvs.cf，两台机器上的配置相同。
+
+* 服务器池
+
+web1: IP地址为10.1.2.21，网关10.1.2.1  
+web2: IP地址为10.1.2.22，网关10.1.2.1
+
+服务器池上启动相应的服务即可，因为该示例用的是DR模式，因此另外需要添加一条nat规则，两台web机器上都需要添加：
+
+```
+# iptables -t nat -A PREROUTING -p tcp -d 10.1.2.15 --dport 80 -j REDIRECT
+```
+
+注意： Director机器上一定要开启ip forward。
+
+### 使用方法
+
+在两台负载调度器上执行命令：
+
+```
+# /etc/init.d/pulse start 
+```
+
+然后在负载调度器master上用`ipvsadm`命令来查看状态：
+
+```
+# ipvsadm -Ln
+IP Virtual Server version 1.2.1 (size=4096)
+Prot LocalAddress:Port Scheduler Flags
+  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn
+TCP  10.1.2.15:80 wlc
+  -> 10.1.2.21:80                 Route   1      0          0         
+  -> 10.1.2.22:80                 Route   1      0          0
+```
+
+### 叶槽
+piranha这个鸟东西bug实在太多了，非常不好用，还不如果我自己写个脚本好使呢。另外，这种实现LVS功能的方法太不好用了。。。
+
+这个方法是我最开始接触LVS时在网上搜索到的，感觉这个方法非常不靠谱。接下来我会写一下关于使用keepalived实现LVS的方法。
+
+## LVS NAT + Keepalived
+
+参见[lvs+keepalived配置][lvs_keepalived]。
+
+## 参考资料
+
+1.<http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/index.html>  
+2.<http://kb.linuxvirtualserver.org/wiki/LVS_Cluster_Management>
+
+[nfs]: http://en.wikipedia.org/wiki/Network_File_System
+[gfs]: http://en.wikipedia.org/wiki/GlusterFS
+[ha]: http://www.linuxvirtualserver.org/HighAvailability.html
+[piranha]: http://www.linuxvirtualserver.org/docs/ha/piranha.html
+[ultramonkey]: http://www.linuxvirtualserver.org/docs/ha/ultramonkey.html
+[lvs_keepalived]: https://github.com/chenzhiwei/linux/tree/master/lvs-keepalived
+[dr]: http://kb.linuxvirtualserver.org/wiki/LVS/DR
+[nat]: http://kb.linuxvirtualserver.org/wiki/LVS/NAT
+[tun]: http://kb.linuxvirtualserver.org/wiki/LVS/TUN
