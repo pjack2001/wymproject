@@ -1,0 +1,65 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "geerlingguy/centos7"
+
+  config.vm.define "k8skubespray165" do | w1 |
+    w1.vm.hostname = "k8skubespray"
+#w1.vm.network "private_network", ip: "10.19.1.11"
+#w1.vm.network "public_network", bridge: "enp0s25", ip: "192.168.31.187"
+w1.vm.network :public_network, ip: "192.168.31.165", bridge:"wlp3s0", bootproto: "static", gateway: "192.168.30.1"
+    w1.vm.network :forwarded_port, guest: 80, host: 8099
+    #w1.vm.synced_folder "/home/y/tools", "/home/vagrant/tools"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "k8skubespray165"
+      v.memory = 4096
+    end
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+#yum源
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+#sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+#sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+#sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+#安装常用软件
+    sudo yum install -y wget vim tree
+    sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+#sudo yum list docker-ce --showduplicates
+    sudo yum install -y docker-ce #docker-ce-18.03.1.ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo mkdir -p /etc/docker
+# https://registry.docker-cn.com https://hub-mirror.c.163.com https://al9ikvwc.mirror.aliyuncs.com
+    sudo echo -e "{\n \"registry-mirrors\": [\"https://hub-mirror.c.163.com\"]\n}" > /etc/docker/daemon.json
+#sudo curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+#按文档要求配置https://www.kubernetes.org.cn/5012.html
+#echo "192.168.31.165 k8skubespray" >> /etc/hosts
+#swapoff -a && echo "vm.swappiness=0" >> /etc/sysctl.conf && sysctl -p && free –h
+#iptables -P FORWARD ACCEPT
+# 配置ssh# ssh-keygen -t rsa -N ""
+#cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+#rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+#rpm -Uvh http://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+#yum --enablerepo=elrepo-kernel install -y kernel-lt kernel-lt-devel
+#grub2-set-default 0
+#reboot
+#echo -e "# docker\nnet.bridge.bridge-nf-call-iptables = 1\nnet.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
+#
+  SHELL
+
+end
