@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "centos7"
+
+  config.vm.define "kubeasz13" do | w1 |
+    w1.vm.hostname = "kubeasz13"
+    w1.vm.network "public_network", bridge: "em1", ip: "192.168.102.13"
+    w1.vm.network :forwarded_port, guest: 6443, host: 6443
+    #w1.vm.synced_folder "/home/y/tools", "/home/vagrant/tools"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "kubeasz13"
+      v.memory = 8192
+    end
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/* /etc/yum.repos.d/repobak
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+    sudo yum install -y wget vim tree rsync docker-ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    sudo echo "nameserver 192.168.0.186" >> /etc/resolv.conf
+  SHELL
+
+end
