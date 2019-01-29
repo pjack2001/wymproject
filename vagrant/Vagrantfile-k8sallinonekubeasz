@@ -5,13 +5,13 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "centos7"
 
-  config.vm.define "kubeasz13" do | w1 |
-    w1.vm.hostname = "kubeasz13"
-    w1.vm.network "public_network", bridge: "em1", ip: "192.168.102.13"
+  config.vm.define "kubeasz10" do | w1 |
+    w1.vm.hostname = "kubeasz10"
+    w1.vm.network "public_network", bridge: "em1", ip: "192.168.102.10"
     w1.vm.network :forwarded_port, guest: 6443, host: 6443
     #w1.vm.synced_folder "/home/y/tools", "/home/vagrant/tools"
     w1.vm.provider "virtualbox" do |v|
-      v.name = "kubeasz13"
+      v.name = "kubeasz10"
       v.memory = 8192
     end
   end
