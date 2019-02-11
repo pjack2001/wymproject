@@ -71,11 +71,197 @@ SSR 二维码 : http://doub.pw/qr/qr.php?text=ssr://MzUuMjQxLjkwLjY3OjIzMzA6YXV0
 协议和混淆后面的[ _compatible ]，指的是 兼容原版协议/混淆。
 
 ## 安装 ss 客户端
-shadowsocks安装时是不分客户端还是服务器端的, 只不过安装后有两个脚本一个是sslocal代表以客户端模式工作，一个是ss server代表以服务器端模式工作
+shadowsocks安装时是不分客户端还是服务器端的, 只不过安装后有两个脚本一个是ss-local代表以客户端模式工作，一个是ss-server代表以服务器端模式工作
+
+
+### CentOS 7 安装使用Shadowsocks客户端
+```
+
+CentOS 7 安装使用Shadowsocks客户端
+
+2018.01.30 19:50 字数 222 阅读 19648评论 4喜欢 17
+实验背景、由于安装k8s使用官方源需要使用代理，故在CentOS7配置代理、进行科学上网
+
+安装Shadowsocks客户端
+安装epel源、安装pip包管理
+sudo yum -y install epel-release
+
+sudo yum -y install python-pip
+
+安装Shadowsocks客户端
+sudo pip install shadowsocks
+
+配置Shadowsocks连接
+新建配置文件、默认不存在
+sudo mkdir /etc/shadowsocks
+sudo vi /etc/shadowsocks/shadowsocks.json
+
+{
+"server":"35.241.90.67",
+"server_port":2330,
+"local_address": "127.0.0.1",
+"local_port":1080,
+"password":"d2b022067467135e",
+"timeout":300,
+"method":"aes-256-cfb",
+"fast_open": false,
+"workers": 5
+}
+
+添加配置信息：前提是需要有ss服务器的地址、端口等信息
+{
+    "server":"35.241.90.67",  # Shadowsocks服务器地址
+    "server_port":1035,  # Shadowsocks服务器端口
+    "local_address": "127.0.0.1", # 本地IP
+    "local_port":1080,  # 本地端口
+    "password":"password", # Shadowsocks连接密码
+    "timeout":300,  # 等待超时时间
+    "method":"aes-256-cfb",  # 加密方式
+    "fast_open": false,  # true或false。开启fast_open以降低延迟，但要求Linux内核在3.7+
+    "workers": 1  #工作线程数
+}
+
+配置自启动
+新建启动脚本文件，
+注意：
+如果安装 shadowsocks-2.8.2，sudo pip install shadowsocks，那么 /usr/bin/目录下会有sslocal或ssserver
+如果安装shadowsocks-libev，安装完成后，会有 ss-local, ss-manager, ss-nat, ss-redir, ss-server, ss-tunnel 命令可用 
+如果1080端口被占用，检查$ systemctl status shadowsocks-libev-local，关闭它
+
+用来测试，实际使用建立下面的自启动文件
+#启动
+ssserver -c /etc/shadowsocks.json -d start
+#停止
+ssserver -c /etc/shadowsocks.json -d stop
+#重启
+ssserver -c /etc/shadowsocks.json -d restart
+
+#查看是否成功启动
+ps -ef | grep shad
+
+vi /etc/systemd/system/shadowsocks.service，内容如下：
+
+[Unit]
+Description=Shadowsocks
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/sslocal -c /etc/shadowsocks/shadowsocks.json
+#ExecStart=/usr/bin/ss-local -c /etc/shadowsocks/shadowsocks.json
+[Install]
+WantedBy=multi-user.target
+
+启动Shadowsocks服务
+
+systemctl enable shadowsocks.service
+systemctl start shadowsocks.service
+systemctl status shadowsocks.service
+
+
+验证Shadowsocks客户端服务是否正常运行
+curl --socks5 127.0.0.1:1080 http://httpbin.org/ip
+
+Shadowsock客户端服务已正常运行，则结果如下：
+{
+  "origin": "x.x.x.x"       #你的Shadowsock服务器IP
+}
+
+安装配置privoxy
+安装privoxy
+yum install privoxy -y
+systemctl enable privoxy
+systemctl start privoxy
+systemctl status privoxy
+
+配置privoxy
+修改配置文件
+vi /etc/privoxy/config
+
+
+listen-address 127.0.0.1:8118 # 8118 是默认端口，不用改，只是检查
+forward-socks5t / 127.0.0.1:1080 . #去掉注释，转发到本地端口，注意最后有个点
+
+设置http、https代理
+# vi /etc/profile 在最后添加如下信息，注意，要把本地地址设置不需要代理
+
+PROXY_HOST=127.0.0.1
+export all_proxy=http://$PROXY_HOST:8118
+export ftp_proxy=http://$PROXY_HOST:8118
+export http_proxy=http://$PROXY_HOST:8118
+export https_proxy=http://$PROXY_HOST:8118
+#export no_proxy=localhost,192.168.102.0/24,127.0.0.1,172.16.0.0/24,172.0.0.0/16,192.168.0.0/24,10.0.0.0/24,172.20.0.0/24
+#export no_proxy=localhost,172.17.0.0/16,192.168.102.0/24,127.0.0.1,10.0.2.0/24,172.20.0.0/24
+
+# 重载环境变量
+source /etc/profile
+
+测试代理
+[root@aniu-k8s ~]# curl -I www.google.com
+HTTP/1.1 200 OK
+Date: Fri, 26 Jan 2018 05:32:37 GMT
+Expires: -1
+Cache-Control: private, max-age=0
+Content-Type: text/html; charset=ISO-8859-1
+P3P: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+Server: gws
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: SAMEORIGIN
+Set-Cookie: 1P_JAR=2018-01-26-05; expires=Sun, 25-Feb-2018 05:32:37 GMT; path=/; domain=.google.com
+Set-Cookie: NID=122=PIiGck3gwvrrJSaiwkSKJ5UrfO4WtAO80T4yipOx4R4O0zcgOEdvsKRePWN1DFM66g8PPF4aouhY4JIs7tENdRm7H9hkq5xm4y1yNJ-sZzwVJCLY_OK37sfI5LnSBtb7; expires=Sat, 28-Jul-2018 05:32:37 GMT; path=/; domain=.google.com; HttpOnly
+Transfer-Encoding: chunked
+Accept-Ranges: none
+Vary: Accept-Encoding
+Proxy-Connection: keep-alive
+
+取消使用代理
+while read var; do unset $var; done < <(env | grep -i proxy | awk -F= '{print $1}')
+
+参考链接：
+http://blog.csdn.net/u012375924/article/details/78706910
+https://www.zybuluo.com/ncepuwanghui/note/954160
+
+firewalld防火墙
+
+centos7用的firewalld，若不进行设置，可能会导致SS无法使用，如果是阿里云服务器，则可以在阿里云管理后台设置安全组；
+
+
+# 开放端口
+$ firewall-cmd --permanent --add-port=18381-18385/tcp 
+# 修改规则后需要重启
+$ firewall-cmd --reload 
+
+```
+
+### docker代理配置
+
+```
+创建目录
+# mkdir /etc/systemd/system/docker.service.d
+
+创建文件
+# vim /etc/systemd/system/docker.service.d/http-proxy.conf
+配置http-proxy.conf文件增加以下内容
+
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:8118"
+Environment="NO_PROXY=localhost,127.0.0.0/8,192.168.102.3:8001"
+
+注意：一定要将私库地址添加到no_proxy里，否则，无法向私库里面push镜像。
+
+daemon重新reload 并重启docker
+# systemctl daemon-reload
+# systemctl restart docker
+
+检查变量是否加载
+# systemctl show docker --property Environment
+
+
+
+```
 
 https://zzz.buzz/zh/gfw/2018/03/21/install-shadowsocks-client-on-centos-7/
 
-CentOS/RHEL 7 下安装 Shadowsocks 客户端
+
+### CentOS/RHEL 7 下安装 Shadowsocks 客户端
 2018 年 3 月 21 日 （最近更新：2018 年 5 月 22 日）
 安装 Shadowsocks
 验证安装

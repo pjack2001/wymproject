@@ -334,15 +334,24 @@ ansible-playbook 07.cluster-addon.yml
 # 一步安装
 #ansible-playbook 90.setup.yml
 [可选]对集群节点进行操作系统层面的安全加固 ansible-playbook roles/os-harden/os-harden.yml，详情请参考os-harden项目
+
 5.验证安装
 如果提示kubectl: command not found，退出重新ssh登陆一下，环境变量生效即可
 
 kubectl version
 kubectl get componentstatus # 可以看到scheduler/controller-manager/etcd等组件 Healthy
-kubectl cluster-info # 可以看到kubernetes master(apiserver)组件 running
+
 kubectl get node # 可以看到单 node Ready状态
 kubectl get pod --all-namespaces # 可以查看所有集群pod状态，默认已安装网络插件、coredns、metrics-server等
 kubectl get svc --all-namespaces # 可以查看所有集群服务状态
+
+kubectl cluster-info # 可以看到kubernetes master(apiserver)组件 running
+# 获取访问dashboard token 
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+# 使用浏览器访问前面``kubectl cluster-info ``获取的dashboard地址，最后一条命令获取的token登陆。
+
+
+
 6.安装主要组件
 # 安装kubedns，默认已集成安装
 #kubectl create -f /etc/ansible/manifests/kubedns

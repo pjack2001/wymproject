@@ -648,7 +648,7 @@ BBB/BBB               v1                  da4a80dd8424        28 hours ago      
 
 ```
 
-### 配置centos7解决 docker Failed to get D-Bus connection 报错
+### 配置centos8解决 docker Failed to get D-Bus connection 报错
 
 ```
 
@@ -656,6 +656,10 @@ BBB/BBB               v1                  da4a80dd8424        28 hours ago      
 在创建docker容器时添加--privileged
 这个的原因是因为dbus-daemon没能启动。其实systemctl并不是不可以使用。将你的CMD或者entrypoint设置为/usr/sbin/init即可。会自动将dbus等服务启动起来。
 然后就可以使用systemctl了。命令如下
+
+docker run -it --name cobbler --privileged=true jasonlix/docker-cobbler /usr/sbin/init
+
+
 ```
 
 ### 不使用sudo命令执行docker

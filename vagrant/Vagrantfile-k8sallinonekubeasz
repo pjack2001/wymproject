@@ -23,7 +23,8 @@ Vagrant.configure("2") do |config|
     sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
     sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
     sudo yum clean all && yum makecache
-    sudo yum install -y wget vim tree rsync docker-ce
+    sudo yum install -y wget vim tree python-pip privoxy rsync docker-ce
+    sudo pip install shadowsocks
     sudo systemctl start docker
     sudo systemctl enable docker
     sudo systemctl stop firewalld
