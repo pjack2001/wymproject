@@ -3,15 +3,37 @@
 #
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "centos7"
+  config.vm.box = "geerlingguy-centos7"
 
-  config.vm.define "kubeasz10" do | w1 |
-    w1.vm.hostname = "kubeasz10"
-    w1.vm.network "public_network", bridge: "em1", ip: "192.168.102.10"
-    w1.vm.network :forwarded_port, guest: 6443, host: 6443
-    #w1.vm.synced_folder "/home/y/tools", "/home/vagrant/tools"
+  config.vm.define "rm1" do | w1 |
+    w1.vm.hostname = "rmaster1"
+    w1.vm.network "public_network", bridge: "enp7s0f0", ip: "192.168.40.4"
+    w1.vm.network :forwarded_port, guest: 6443, host: 64434
+    w1.vm.synced_folder "/home/wym/docker/imagesbak", "/home/vagrant/imagesbak"
     w1.vm.provider "virtualbox" do |v|
-      v.name = "kubeasz10"
+      v.name = "r-m1"
+      v.memory = 4096
+    end
+  end
+  
+  config.vm.define "rn1" do | w1 |
+    w1.vm.hostname = "rnode1"
+    w1.vm.network "public_network", bridge: "enp7s0f0", ip: "192.168.40.5"
+    w1.vm.network :forwarded_port, guest: 6443, host: 64435
+    w1.vm.synced_folder "/home/wym/docker/imagesbak", "/home/vagrant/imagesbak"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "r-n1"
+      v.memory = 8192
+    end
+  end
+  
+  config.vm.define "rn2" do | w1 |
+    w1.vm.hostname = "rnode2"
+    w1.vm.network "public_network", bridge: "enp7s0f0", ip: "192.168.40.6"
+    w1.vm.network :forwarded_port, guest: 6443, host: 64436
+    w1.vm.synced_folder "/home/wym/docker/imagesbak", "/home/vagrant/imagesbak"
+    w1.vm.provider "virtualbox" do |v|
+      v.name = "r-n2"
       v.memory = 8192
     end
   end
@@ -37,7 +59,10 @@ Vagrant.configure("2") do |config|
     sudo yum install -y docker-ce-17.03.2.ce-1.el7.centos
     sudo systemctl start docker
     sudo systemctl enable docker
+    sudo pip install --upgrade pip
     sudo pip install shadowsocks
+    sudo echo 'vagrant ALL=(ALL) ALL' >> /etc/sudoers
+    sudo usermod -aG docker vagrant
   SHELL
 
 end

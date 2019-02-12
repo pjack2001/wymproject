@@ -69,6 +69,14 @@ sudo systemctl enable docker
 删除 Docker CE
 $ sudo yum remove docker-ce
 $ sudo rm -rf /var/lib/docker
+
+yum -y remove docker docker-common docker-selinux docker-engine docker-engine-selinux container-selinux docker-ce
+
+yum -y remove docker-ce-cli
+
+#查看是否已经安装的Docker软件包
+sudo yum list installed | grep docker
+
 ```
 
 ### 镜像加速
@@ -567,6 +575,157 @@ Login Succeeded
 ## docker常见问题
 
 
+
+### CentOS7中Docker-ce的卸载和安装
+
+```
+
+一、查看是否已安装了Docker软件包：
+#查看是否已经安装的Docker软件包
+sudo yum list installed | grep docker
+ 
+二、如果已安装不想要的docker/docker-engine/docker-ce软件包，卸载掉
+#如果已安装不想要docker、docker-engine、docker-ce相关的软件包，则卸载掉：
+sudo yum -y remove docker docker-common docker-selinux docker-engine docker-engine-selinux container-selinux docker-ce
+ 
+#删除所有的镜像、容器、数据卷、配置文件等
+sudo rm -rf /var/lib/docker
+ 
+三、安装Docker-ce
+#先安装yum-utils工具和device-mapper相关依赖包
+sudo yum install -y yum-utils \
+device-mapper-persistent-data \
+lvm2
+ 
+#添加docker-ce stable版本的仓库
+sudo yum-config-manager \
+  --add-repo \
+  https://download.docker.com/linux/centos/docker-ce.repo
+ 
+#更新yum缓存文件
+sudo yum makecache fast
+ 
+#查看所有可安装的docker-ce版本
+sudo yum list docker-ce --showduplicates | sort -r
+ 
+#安装docker-ce-selinux-17.03.2.ce，否则安装docker-ce会报错
+yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm 
+ 
+#安装指定版本docker-ce,这里安装的是docker-ce-17.03.2.ce
+sudo yum install docker-ce-17.03.2.ce-1.el7.centos 
+ 
+#允许开机启动docker-ce服务
+sudo systemctl enable docker.service
+ 
+#启动Docker-ce服务
+sudo systemctl start docker
+ 
+#检查是否正常安装：
+sudo yum list installed | grep docker
+sudo docker info
+#运行测试容器hello-world
+sudo docker run --rm hello-world
+ 
+ 
+参考链接：
+Docker官方文档（docker-ce）
+https://docs.docker.com/engine/installation/linux/docker-ce/centos/#install-using-the-repository 
+ 
+阿里云Docker CE 镜像源站
+https://yq.aliyun.com/articles/110806?commentId=11066 
+ 
+清华开源镜像站点docker-ce安装帮助
+https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/ 
+ 
+Docker官方文档（v1.12）
+https://docs.docker.com/v1.12/engine/installation/linux/centos/ 
+
+--------------------- 
+作者：Docker猫猫 
+来源：CSDN 
+原文：https://blog.csdn.net/CSDN_duomaomao/article/details/78997138 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
+```
+
+### centos 安装docker时出现依赖关系问题的解决办法
+
+```
+
+2018年12月19日 10:38:34 Summerplaying 阅读数：140
+版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/u010652906/article/details/85090379
+我们在安装老版本的docker时可能会出现：
+“正在处理依赖关系 docker-ce-selinux >= 17.03.0.ce-1.el7.centos，它被软件包 docker-ce-17.03.0.ce-1.el7.centos.x86_64 需要
+软件包 docker-ce-selinux 已经被 docker-ce-cli 取代，但是取代的软件包并未满足需求”
+
+等一大串的问题
+
+在这里插入图片描述
+
+这时我们需要通过 yum install 安装一个rpm包
+
+通过这个地址我们查看和我们安装docker版本一直的rpm包
+https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
+
+
+要先安装docker-ce-selinux-17.03.2.ce，否则安装docker-ce会报错
+
+yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm 
+1
+然后再安装 docker-ce-17.03.2.ce，就能正常安装
+
+sudo yum install docker-ce-17.03.2.ce-1.el7.centos
+
+无法安装软件包 docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch 。被已安装软件包 1:docker-ce-cli-18.09.0-3.el7.x86_64 标记为废除
+错误：无须任何处理
+[root@k8sm ~]# yum -y remove docker-ce-cli
+
+
+
+```
+### docker-ce-17.03.2 离线安装RPM包
+```
+https://www.cnblogs.com/liweiming/p/8656729.html
+[root@docker05 docker]# ll
+total 20796
+-rw-r--r-- 1 root root    75032 Mar 26 23:52 audit-libs-python-2.7.6-3.el7.x86_64.rpm
+-rw-r--r-- 1 root root   296980 Mar 26 23:52 checkpolicy-2.5-4.el7.x86_64.rpm
+-rw-r--r-- 1 root root 19529520 Mar 26 23:25 docker-ce-17.03.2.ce-1.el7.centos.x86_64.rpm
+-rw-r--r-- 1 root root    29108 Mar 26 23:25 docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm
+-rw-r--r-- 1 root root    66536 Mar 26 23:51 libcgroup-0.41-13.el7.x86_64.rpm
+-rw-r--r-- 1 root root   106604 Mar 26 23:50 libsemanage-python-2.5-8.el7.x86_64.rpm
+-rw-r--r-- 1 root root    50076 Mar 26 23:26 libtool-ltdl-2.4.2-22.el7_3.x86_64.rpm
+-rw-r--r-- 1 root root   456316 Mar 26 23:43 policycoreutils-python-2.5-17.1.el7.x86_64.rpm
+-rw-r--r-- 1 root root    32880 Mar 26 23:49 python-IPy-0.75-6.el7.noarch.rpm
+-rw-r--r-- 1 root root   626528 Mar 26 23:47 setools-libs-3.3.8-1.1.el7.x86_64.rpm
+
+[root@docker05 docker]# yum localinstall *.rpm
+
+
+使用 yum localinstall *.rpm 它会自动匹配依赖包
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+
+
+
 ### 让docker 容器开机自动启动
 
 ```
@@ -682,6 +841,78 @@ sudo usermod -aG docker your_username
 退出，然后重新登录，以便让权限生效。
 确认你可以直接运行docker命令。
 $ docker run hello-world
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+### 
+
+```
+
 
 ```
 
