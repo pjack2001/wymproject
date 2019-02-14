@@ -1,0 +1,48 @@
+hub:
+  image: selenium/hub
+  container_name: hub
+  ports:
+    - 5910:5900
+    - 4444:4444
+  environment:
+    GRID_MAX_SESSION: 30
+    GRID_TIMEOUT: 60
+    GRID_DEBUG: 'true'
+    GRID_NEW_SESSION_WAIT_TIMEOUT: 5000
+  volumes:
+    - /dev/shm/:/dev/shm/
+  restart: always
+node1:
+##  build: /work/selenium/Dockerfile
+  image: selenium/node-firefox-debug
+  ports:
+    - 5911:5900
+  volumes:
+    - /dev/shm:/dev/shm
+#  command: /bin/bash -c "apt-get update  && apt-get -y install ttf-wqy-microhei ttf-wqy-zenhei && apt-get clean" 
+  links:
+   - "hub"
+node2:
+#  build: /work/selenium/Dockerfile
+  image: selenium/node-chrome-debug 
+  ports:
+    - 5912:5900
+  links:
+   - "hub"
+  restart: always
+node3:
+#  build: /work/selenium/Dockerfile
+  image: selenium/node-firefox
+#  ports:
+#    - 5913:5900
+  links:
+   - "hub"
+  restart: always
+node4:
+#  build: /work/selenium/Dockerfile
+  image: selenium/node-chrome
+#  ports:
+#    - 5914:5900
+  links:
+   - "hub"
+  restart: always

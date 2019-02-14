@@ -39,6 +39,45 @@ SELINUX=disabled
 
 ## 安装
 
+### 官方安装
+```
+https://docs.docker.com/install/linux/docker-ce/centos/
+
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum repolist
+sudo yum install epel-release
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum list docker-ce --showduplicates | sort -r
+sudo yum install docker-ce docker-ce-cli containerd.io
+
+sudo systemctl start docker
+sudo systemctl enable docker
+
+$ curl -fsSL https://get.docker.com -o get-docker.sh
+$ sudo sh get-docker.sh
+
+如果您想将Docker用作非root用户，您现在应该考虑将您的用户添加到“docker”组，例如：
+sudo usermod -aG docker your-user
+
+$ sudo yum remove docker-ce
+$ sudo rm -rf /var/lib/docker
+
+
+安装低版本，解决依赖问题
+通过这个地址我们查看和我们安装docker版本一直的rpm包
+https://download.docker.com/linux/centos/7/x86_64/stable/Packages/
+
+要先安装docker-ce-selinux-17.03.2.ce，否则安装docker-ce会报错
+sudo yum install -y https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm 
+
+然后再安装 docker-ce-17.03.2.ce，就能正常安装
+sudo yum -y install docker-ce-17.03.2.ce docker-ce-cli-17.03.2.ce containerd.io
+
+
+```
+
+
 ### 更换阿里yum源，需要连外网
 
 ```
@@ -507,6 +546,268 @@ services:
 
 ```
 
+
+##  docker-machine
+
+
+```
+
+注意：使用/bin/bash
+
+https://rancher.com/docs/os/v1.x/en/quick-start-guide/
+使用Docker Machine启动RancherOS
+在继续之前，您需要安装Docker Machine和VirtualBox。一旦安装了VirtualBox和Docker Machine，它就只有一个命令可以让RancherOS运行。
+$ docker-machine create -d virtualbox \
+        --virtualbox-boot2docker-url https://releases.rancher.com/os/latest/rancheros.iso \
+        --virtualbox-memory 2048 \
+        <MACHINE-NAME>
+
+# docker-machine create -d virtualbox --virtualbox-boot2docker-url https://releases.rancher.com/os/latest/rancheros.iso --virtualbox-memory 2048 ros1
+
+# docker-machine create -d virtualbox --virtualbox-boot2docker-url rancheros.iso --virtualbox-memory 2048 ros1
+
+# docker-machine ls
+
+# docker-machine ssh ros1
+
+$ sudo system-docker run -d --net=host --name busydash husseingalal/busydash
+
+常用命令，许多命令需要联网
+
+# docker-machine create -d virtualbox --virtualbox-boot2docker-url rancheros1.4.3.iso --virtualbox-memory 2048 ros1
+
+# docker-machine
+# docker-machine ls
+# docker-machine ip ros1
+
+
+
+# docker-machine ssh ros1
+
+$ sudo system-docker ps
+$ docker ps
+
+$ sudo ros --version
+
+$ sudo ros os list
+$ sudo ros engine list
+
+切换到Docker 17.03.2，再次查看Docker版本
+$ sudo ros engine switch docker-17.03.2-ce
+
+$ sudo docker version
+
+配置镜像加速
+$ sudo ros config set rancher.docker.registry_mirror https://al9ikvwc.mirror.aliyuncs.com
+$ sudo ros config get rancher.docker.registry_mirror
+$ sudo system-docker restart docker
+
+测试镜像下载时间
+$ time sudo docker pull nginx
+
+$ sudo docker images
+
+$ sudo docker info
+
+$ sudo system-docker run -d --net=host --name busydash husseingalal/busydash
+
+sudo ros config -h
+
+
+#################################################################
+
+安装docker-machine
+https://docs.docker.com/machine/install-machine/
+https://github.com/docker/machine/releases
+
+If you are running Linux:
+现在最新的是0.16.1
+
+$ base=https://github.com/docker/machine/releases/download/v0.16.0 &&
+  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+  sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+或
+$ curl -L https://github.com/docker/machine/releases/download/v0.16.1/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && chmod +x /tmp/docker-machine && sudo cp /tmp/docker-machine /usr/local/bin/docker-machine
+
+$ docker-machine version
+docker-machine version 0.16.0, build 9371605
+
+
+Install bash completion scripts
+Machine存储库提供了几个bash脚本，可添加以下功能：
+
+命令完成
+一个在shell提示符下显示活动计算机的函数
+一个函数包装器，它添加一个docker-machine use子命令来切换活动机器
+确认版本并将脚本保存到/etc/bash_completion.d或 /usr/local/etc/bash_completion.d：
+
+base=https://raw.githubusercontent.com/docker/machine/v0.16.0
+for i in docker-machine-prompt.bash docker-machine-wrapper.bash docker-machine.bash
+do
+  sudo wget "$base/contrib/completion/bash/${i}" -P /etc/bash_completion.d
+done
+
+然后，您需要运行
+source /etc/bash_completion.d/docker-machine-prompt.bash
+
+在bash终端中，告诉您的设置，它可以找到您之前下载的文件docker-machine-prompt.bash 。
+
+要启用docker-machineshell提示，请添加 $(__docker_machine_ps1)到您的PS1设置中~/.bashrc。
+
+PS1='[\u@\h \W$(__docker_machine_ps1)]\$ '
+
+
+
+
+
+```
+
+
+## 安装virtualbox
+
+```
+https://www.virtualbox.org/wiki/Linux_Downloads
+https://www.virtualbox.org/wiki/Download_Old_Builds_5_2
+
+
+sudo curl -o /etc/yum.repos.d/virtualbox.repo https://download.virtualbox.org/virtualbox/rpm/el/virtualbox.repo
+
+# yum repolist ，选择y，下载virtualbox签名
+
+更新yum缓存
+yum clean all && yum makecache
+
+安装virtualbox
+yum --enablerepo=epel install -y dkms
+yum install -y VirtualBox-5.2
+
+# rpm -qa |grep VirtualBox
+
+$ VBoxManage list runningvms | grep <MACHINE-NAME>
+
+
+###################################################
+启动报错：
+WARNING: The vboxdrv kernel module is not loaded. Either there is no module available for the current kernel (3.10.0-957.1.3.el7.x86_64) or it failed to load. Please recompile the kernel module and install it by
+ sudo /sbin/vboxconfig
+
+# /sbin/vboxconfig 
+vboxdrv.sh: Stopping VirtualBox services.
+vboxdrv.sh: Starting VirtualBox services.
+vboxdrv.sh: Building VirtualBox kernel modules.
+This system is currently not set up to build kernel modules.
+Please install the Linux kernel "header" files matching the current kernel
+for adding new hardware support to the system.
+The distribution packages containing the headers are probably:
+    kernel-devel kernel-devel-3.10.0-957.1.3.el7.x86_64
+
+# yum --enablerepo=epel install kernel-devel kernel-devel-3.10.0-957.1.3.el7.x86_64
+
+# /sbin/vboxconfig 
+vboxdrv.sh: Stopping VirtualBox services.
+vboxdrv.sh: Starting VirtualBox services.
+vboxdrv.sh: Building VirtualBox kernel modules.
+
+出现vboxdrv.sh: Building VirtualBox kernel modules.说明编译成功
+
+
+重新编译内核模块前身/etc/init.d/vboxdrv设置它后来被设置为/sbin/rcvboxdrv。所以两个命令都可以 
+# /sbin/vboxconfig 
+# rcvboxdrv setup
+
+###################################################
+
+VBoxManage是VirtualBox的命令行接口。利用他，你可以在主机操作系统的命令行中完全地控制VirtualBox。VBoxManage支持GUI可访问的全部功能，而且更多。VBoxManage展示了虚拟化引擎的全部特征，包括GUI无法访问的。
+
+列一下，你需要使用命令行：
+使用主GUI之外的用户接口（例如，VBoxSDL或VBoxHeadLess服务器）；
+控制更多高级和实验性的配置。
+ 
+使用VBoxManage时要记住两件事：
+第一，VBoxManage必须和一个具体和“子命令”一起使用，比如“list”或“createvm“或“startvm”。
+第二，大多数子命令需要在其后指定特定的虚拟机。有两种方式：
+指定虚拟机的名称，和其在GUI中显示的一样。注意，如果名称包含空格，必须将全部名称包含在双引号中（和命令行参数包含空格时的要求一样）。
+例如：
+VBoxManage startvm "Windows XP"
+指定其UUID，VirtualBox用来引用虚拟机的内部唯一标识符。设上述名称为“Windows XP”的虚拟机有如下UUID，下面的命令有同样的效果：
+ 
+VBoxManage startvm 670e746d-abea-4ba6-ad02-2a3b043810a5
+使用VBoxManage list vms可列出当前注册的所有虚拟机的名称及其对应的UUID。
+
+
+常用命令
+VBoxManage startvm name|id --type [gui|headless|svd] #启动
+VBoxManage startvm name|id --type [gui|headless|svd] #启动
+VBoxManage list runningvms # 列出运行中的虚拟机
+VBoxManage controlvm XP acpipowerbutton # 关闭虚拟机，等价于点击系统关闭按钮，正常关机
+VBoxManage controlvm XP poweroff # 关闭虚拟机，等价于直接关闭电源，非正常关机
+VBoxManage controlvm XP pause # 暂停虚拟机的运行
+VBoxManage controlvm XP resume # 恢复暂停的虚拟机
+VBoxManage controlvm XP savestate # 保存当前虚拟机的运行状态
+
+
+
+
+VirtualBox 命令汇总
+
+在Linux平台安装的VirtualBox虚拟机，可以通过如下命令操作虚拟机：
+
+查看有哪些虚拟机
+VBoxManage list vms
+
+查看虚拟的详细信息
+VBoxManage list vms --long
+
+查看运行着的虚拟机
+VBoxManage list runningvms
+
+开启虚拟机在后台运行
+VBoxManage startvm backup -type headless
+
+开启虚拟机并开启远程桌面连接的支持
+VBoxManage startvm <vm_name> -type vrdp
+
+改变虚拟机的远程连接端口,用于多个vbox虚拟机同时运行
+VBoxManage controlvm <vm_name> vrdpprot <ports>
+
+关闭虚拟机
+VBoxManage controlvm <vm_name> acpipowerbutton
+
+强制关闭虚拟机
+VBoxManage controlvm <vm_name> poweroff
+
+杀掉某个虚拟机的进程方法（强制关闭虚拟机）
+
+经常遇到强制关闭虚拟机后，虚拟关不了的现象，状态一直是 stopping，而且一直卡死在这，没办法关闭，所以需要强制关闭这个虚拟机
+
+（1） 查看所有virtualbox进程
+
+ps -aux|grep virtualbox
+
+会查出如下 信息：(蓝色背景文字 为 进程id 和 虚拟机名)
+
+ vnc      19499 54.7  3.3 3746624 2177960 ?     Sl   15:46  55:49 /usr/lib/virtualbox/VirtualBox --comment SwiftSync2.0_Synctest25 --startvm 7fa1f49b-4dc2-4a7f-865d-5e0456f5482d --no-startvm-errormsgbox
+
+....
+
+然后强制杀进程id为 19499的进程，这个进程就是 虚拟机SwiftSync2.0_Synctest25的进程
+
+kill -9 194999
+
+
+
+
+
+
+
+
+
+
+
+
+```
+
+
 ## Docker私有仓库使用说明
 
     注：
@@ -569,6 +870,168 @@ Login Succeeded
 > $ sudo docker pull 192.168.102.3:8001/wymproject/busybox
 
 ### 7、项目管理员可以添加项目成员，删除镜像等操作
+
+
+
+
+## 使用docker-compose 大杀器来部署服务 
+
+```
+https://www.cnblogs.com/neptunemoon/p/6512121.html#toc_47
+
+docker   # docker 命令帮助
+
+Commands:
+    attach    Attach to a running container                 # 当前 shell 下 attach 连接指定运行镜像
+    build     Build an image from a Dockerfile              # 通过 Dockerfile 定制镜像
+    commit    Create a new image from a container's changes # 提交当前容器为新的镜像
+    cp        Copy files/folders from the containers filesystem to the host path
+              # 从容器中拷贝指定文件或者目录到宿主机中
+    create    Create a new container                        # 创建一个新的容器，同 run，但不启动容器
+    diff      Inspect changes on a container's filesystem   # 查看 docker 容器变化
+    events    Get real time events from the server          # 从 docker 服务获取容器实时事件
+    exec      Run a command in an existing container        # 在已存在的容器上运行命令
+    export    Stream the contents of a container as a tar archive   
+              # 导出容器的内容流作为一个 tar 归档文件[对应 import ]
+    history   Show the history of an image                  # 展示一个镜像形成历史
+    images    List images                                   # 列出系统当前镜像
+    import    Create a new filesystem image from the contents of a tarball  
+              # 从tar包中的内容创建一个新的文件系统映像[对应 export]
+    info      Display system-wide information               # 显示系统相关信息
+    inspect   Return low-level information on a container   # 查看容器详细信息
+    kill      Kill a running container                      # kill 指定 docker 容器
+    load      Load an image from a tar archive              # 从一个 tar 包中加载一个镜像[对应 save]
+    login     Register or Login to the docker registry server   
+              # 注册或者登陆一个 docker 源服务器
+    logout    Log out from a Docker registry server         # 从当前 Docker registry 退出
+    logs      Fetch the logs of a container                 # 输出当前容器日志信息
+    port      Lookup the public-facing port which is NAT-ed to PRIVATE_PORT
+              # 查看映射端口对应的容器内部源端口
+    pause     Pause all processes within a container        # 暂停容器
+    ps        List containers                               # 列出容器列表
+    pull      Pull an image or a repository from the docker registry server
+              # 从docker镜像源服务器拉取指定镜像或者库镜像
+    push      Push an image or a repository to the docker registry server
+              # 推送指定镜像或者库镜像至docker源服务器
+    restart   Restart a running container                   # 重启运行的容器
+    rm        Remove one or more containers                 # 移除一个或者多个容器
+    rmi       Remove one or more images                 
+              # 移除一个或多个镜像[无容器使用该镜像才可删除，否则需删除相关容器才可继续或 -f 强制删除]
+    run       Run a command in a new container
+              # 创建一个新的容器并运行一个命令
+    save      Save an image to a tar archive                # 保存一个镜像为一个 tar 包[对应 load]
+    search    Search for an image on the Docker Hub         # 在 docker hub 中搜索镜像
+    start     Start a stopped containers                    # 启动容器
+    stop      Stop a running containers                     # 停止容器
+    tag       Tag an image into a repository                # 给源中镜像打标签
+    top       Lookup the running processes of a container   # 查看容器中运行的进程信息
+    unpause   Unpause a paused container                    # 取消暂停容器
+    version   Show the docker version information           # 查看 docker 版本号
+    wait      Block until a container stops, then print its exit code   
+              # 截取容器停止时的退出状态值
+Run 'docker COMMAND --help' for more information on a command.
+
+
+
+docker-compose 常用命令
+
+Commands:
+  build              Build or rebuild services
+  bundle             Generate a Docker bundle from the Compose file
+  config             Validate and view the compose file
+  create             Create services
+  down               Stop and remove containers, networks, images, and volumes
+  events             Receive real time events from containers
+  exec               Execute a command in a running container
+  help               Get help on a command
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pull service images
+  push               Push service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  top                Display the running processes
+  unpause            Unpause services
+  up                 Create and start containers
+  version            Show the Docker-Compose version information
+解释一下
+
+build 构建或重建服务
+help 命令帮助
+kill 杀掉容器
+logs 显示容器的输出内容
+port 打印绑定的开放端口
+ps 显示容器
+pull 拉取服务镜像
+restart 重启服务
+rm 删除停止的容器
+run 运行一个一次性命令
+scale 设置服务的容器数目
+start 开启服务
+stop 停止服务
+up 创建并启动容器
+docker-compose 如何配置
+先看看我自己写的一个 docker-compose.yml
+
+version: '2'
+services:
+    nginx:
+            image: bitnami/nginx:latest
+            ports:
+                - '80:80'
+                - '1443:443'
+            volumes:
+                - /root/wp_yunlan/nginx/:/bitnami/nginx/
+    mariadb:
+            image: bitnami/mariadb:latest
+            volumes:
+                - /root/wp_yunlan/mariadb:/bitnami/mariadb
+    wordpress:
+            image: bitnami/wordpress:latest
+            depends_on:
+                - mariadb
+                - nginx
+            environment:
+                - WORDPRESS_USERNAME=neptunemoon    #这个账户你是自己设定的
+                - WORDPRESS_PASSWORD=123123         #这个密码是你自己设定的
+            ports:
+                - '8080:80'
+                - '8081:443'
+            volumes:
+                - /root/wp_yunlan/wordpress:/bitnami/wordpress
+                - /root/wp_yunlan/apache:/bitnami/apache
+                - /root/wp_yunlan/php:/bitnami/php
+nginx 和 mariadb，wordpress 是要启动的三个服务
+
+顺序不是重要的,我们看见wordpress中有个 depends_on: 的属性
+
+depends_on: 依赖
+代表wordpress 依赖于
+
+- mariadb
+- nginx
+两个服务， 所以他们两个会先启动
+
+image: 镜像
+就是你的 docker 镜像
+我们用
+docker search mariadb
+找到我们需要的镜像
+
+
+
+```
+
+
+
+
 
 
 
@@ -707,6 +1170,7 @@ total 20796
 ```
 
 
+
 ### 
 
 ```
@@ -841,14 +1305,6 @@ sudo usermod -aG docker your_username
 退出，然后重新登录，以便让权限生效。
 确认你可以直接运行docker命令。
 $ docker run hello-world
-
-```
-
-
-### 
-
-```
-
 
 ```
 
