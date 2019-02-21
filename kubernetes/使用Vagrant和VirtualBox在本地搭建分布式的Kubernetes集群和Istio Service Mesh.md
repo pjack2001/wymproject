@@ -4,6 +4,47 @@ https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster/blob/master/READ
 
 https://storage.googleapis.com/kubernetes-release/release/v1.13.1/kubernetes-server-linux-amd64.tar.gz
 
+https://storage.googleapis.com/kubernetes-release/release/v1.13.1/kubernetes-client-darwin-amd64.tar.gz
+
+
+## 注意,第8章重启命令
+
+https://172.17.8.101:8443
+
+eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi10b2tlbi1idzQyayIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJhZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjYxMWJjMGM5LTM1MjEtMTFlOS1hMzllLTUyNTQwMGFkM2I0MyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTphZG1pbiJ9.OrPBHL6ruz42xq4XbCJa8bMtXqEclbcHfhcdH494KnYM2QZDlVNaEaO3U9nlIP9ebTMrA0Nl0gmi1iJq3u5SONTpvkmTX-E9Xr_inPDzmaNkZ7aZ3hmTBVhEwiYLAUM5c3Ub5k6-L95buhKs128brm9tmWRAyzz-tEgf_fqTxYWKVtkzdnlPY1dNRg7PX-f9jYgasCuAj_zCV1koxg-csHcdc9lDlrmplikeWwcPLIsn2sAPucUe8p0O2wHgm5XedNHsUio7mBtHFPuoYNFK9D_qAoEBD4NYQbCJ3gvOhm9R4i4GezNt5VRObargMP6n0r4UNW23a919G3K6YjRBlA
+
+
+hack目录手工启动
+
+## 常用命令
+
+```
+# 查看版本
+kubectl version
+# 查看集群状态
+kubectl cluster-info
+# 获取可用的 node
+kubectl get nodes
+
+# 查看 pods 信息
+kubectl get pods
+# 查看服务信息
+kubectl get services
+
+# 列出部署
+kubectl get deployments
+
+
+# 包括 镜像、IP 等各类信息，describe 不仅可以用于 pods，node 和 deployment 都可以
+kubectl describe pods
+kubectl describe nodes
+kubectl describe nodes node1
+
+
+```
+
+
+
 
 ## 安装准备
 
@@ -45,6 +86,13 @@ https://storage.googleapis.com/kubernetes-release/release/v1.13.1/kubernetes-ser
 
 注意：如果您是第一次运行该部署程序，那么可以直接执行下面的命令vagrant up，它将自动帮你下载 Kubernetes 安装包，下一次你就不需要自己下载了，另外您也可以在这里找到Kubernetes的发行版下载地址，下载 Kubernetes发行版后重命名为kubernetes-server-linux-amd64.tar.gz，并移动到该项目的根目录下。
 
+下载kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.1/bin/linux/amd64/kubectl
+
+
+
+
+
 ### 3、安装NFS服务
 
 Ubuntu：sudo apt install nfs-kernel-server
@@ -56,14 +104,378 @@ CentOS：yum install -y nfs-utils
 因为该项目是使用 NFS 的方式挂载到虚拟机的 /vagrant 目录中的，所以在安装 NFS 的时候需要您输入密码授权。
 
 
+```
 
+### 4、下载 CentOS-7-x86_64-Vagrant-1801_02.VirtualBox.box
+
+```
+如果是首次部署，会自动下载centos/7的box，这需要花费一些时间，另外每个节点还需要下载安装一系列软件包，整个过程大概需要10几分钟。
+
+如果您在运行vagrant up的过程中发现无法下载centos/7的box，可以手动下载后将其添加到vagrant中。
+
+手动添加centos/7 box
+
+wget -c http://cloud.centos.org/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-1801_02.VirtualBox.box
+vagrant box add CentOS-7-x86_64-Vagrant-1801_02.VirtualBox.box --name centos/7
+这样下次运行vagrant up的时候就会自动读取本地的centos/7 box而不会再到网上下载。
+
+
+```
+
+
+
+### 5、安装
+
+```
+使用vagrant启动集群。
+
+vagrant up
 
 
 
 
 ```
 
-## 安装教程
+
+### 6、访问kubernetes集群 
+
+```
+访问Kubernetes集群的方式有三种：
+
+本地访问
+在VM内部访问
+Kubernetes dashboard
+通过本地访问
+
+可以直接在你自己的本地环境中操作该kubernetes集群，而无需登录到虚拟机中。
+
+要想在本地直接操作Kubernetes集群，需要在你的电脑里安装kubectl命令行工具，
+
+对于Mac用户执行以下步骤（下载的client报错，kubectl提示bash: /usr/local/bin/kubectl: 无法执行二进制文件: 可执行文件格式错误）：
+
+wget https://storage.googleapis.com/kubernetes-release/release/v1.11.0/kubernetes-client-darwin-amd64.tar.gz
+tar xvf kubernetes-client-darwin-amd64.tar.gz && cp kubernetes/client/bin/kubectl /usr/local/bin
+将conf/admin.kubeconfig文件放到~/.kube/config目录下即可在本地使用kubectl命令操作集群。
+
+mkdir -p ~/.kube
+cp conf/admin.kubeconfig ~/.kube/config
+我们推荐您使用这种方式。
+
+注意：在kubernetes-vagrant-centos-cluster目录下执行命令
+
+
+#### 安装执行正常
+对于linux用户
+
+https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+使用以下命令下载最新版本：
+
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+要下载特定版本，请将$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)命令部分替换为特定版本。
+
+例如，要在Linux上下载v1.13.1版，请键入：
+
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.13.1/bin/linux/amd64/kubectl
+
+制作kubectl二进制可执行文件。
+
+chmod +x ./kubectl
+将二进制文件移动到PATH中。
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+mkdir -p ~/.kube
+cp conf/admin.kubeconfig ~/.kube/config
+我们推荐您使用这种方式。
+
+注意：在kubernetes-vagrant-centos-cluster目录下执行命令
+
+
+在虚拟机内部访问
+
+如果有任何问题可以登录到虚拟机内部调试：
+
+vagrant ssh node1
+sudo -i
+kubectl get nodes
+Kubernetes dashboard
+
+还可以直接通过dashboard UI来访问：https://172.17.8.101:8443
+
+可以在本地执行以下命令获取token的值（需要提前安装kubectl）：
+
+kubectl -n kube-system describe secret `kubectl -n kube-system get secret|grep admin-token|cut -d " " -f1`|grep "token:"|tr -s " "|cut -d " " -f2
+注意：token的值也可以在vagrant up的日志的最后看到。
+
+```
+
+
+
+### 7、组件 
+
+```
+本地主机添加
+$ cat /etc/hosts
+127.0.0.1	localhost
+127.0.1.1	uw
+52.70.175.131 registry-1.docker.io
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.17.8.102 grafana.jimmysong.io
+172.17.8.102 traefik.jimmysong.io
+172.17.8.102 scope.weave.jimmysong.io
+172.17.8.102 grafana.istio.jimmysong.io
+172.17.8.102 prometheus.istio.jimmysong.io
+172.17.8.102 servicegraph.istio.jimmysong.io
+172.17.8.102 jaeger-query.istio.jimmysong.io
+
+
+
+Heapster监控
+
+创建Heapster监控：
+
+kubectl apply -f addon/heapster/
+访问Grafana
+
+使用Ingress方式暴露的服务，在本地/etc/hosts中增加一条配置：
+
+172.17.8.102 grafana.jimmysong.io
+访问Grafana：http://grafana.jimmysong.io
+
+Grafana动画
+
+Traefik
+
+部署Traefik ingress controller和增加ingress配置：
+kubectl apply -f addon/traefik-ingress
+
+在本地/etc/hosts中增加一条配置：
+172.17.8.102 traefik.jimmysong.io
+访问Traefik UI：http://traefik.jimmysong.io
+
+Traefik Ingress controller
+
+EFK
+
+使用EFK做日志收集。
+
+kubectl apply -f addon/efk/
+注意：运行EFK的每个节点需要消耗很大的CPU和内存，请保证每台虚拟机至少分配了4G内存。
+
+Helm
+
+用来部署helm。
+
+hack/deploy-helm.sh
+Service Mesh
+我们使用 istio 作为 service mesh。
+
+安装
+
+到Istio release 页面下载istio的安装包，安装istio命令行工具，将istioctl命令行工具放到你的$PATH目录下，对于Mac用户：
+
+wget https://github.com/istio/istio/releases/download/1.0.0/istio-1.0.0-osx.tar.gz
+tar xvf istio-1.0.0-osx.tar.gz
+mv bin/istioctl /usr/local/bin/
+在Kubernetes中部署istio：
+
+kubectl apply -f addon/istio/istio-demo.yaml
+kubectl apply -f addon/istio/istio-ingress.yaml
+运行示例
+
+我们开启了Sidecar自动注入。
+
+kubectl label namespace default istio-injection=enabled
+kubectl apply -n default -f yaml/istio-bookinfo/bookinfo.yaml
+kubectl apply -n default -f yaml/istio-bookinfo/bookinfo-gateway.yaml
+kubectl apply -n default -f yaml/istio-bookinfo/destination-rule-all.yaml
+在您自己的本地主机的/etc/hosts文件中增加如下配置项。
+
+172.17.8.102 grafana.istio.jimmysong.io
+172.17.8.102 prometheus.istio.jimmysong.io
+172.17.8.102 servicegraph.istio.jimmysong.io
+172.17.8.102 jaeger-query.istio.jimmysong.io
+我们可以通过下面的URL地址访问以上的服务。
+
+Service	URL
+grafana	http://grafana.istio.jimmysong.io
+servicegraph	http://servicegraph.istio.jimmysong.io/dotviz, http://servicegraph.istio.jimmysong.io/graph,http://servicegraph.istio.jimmysong.io/force/forcegraph.html
+tracing	http://jaeger-query.istio.jimmysong.io
+productpage	http://172.17.8.101:31380/productpage
+详细信息请参阅：https://istio.io/zh/docs/examples/bookinfo/
+
+Bookinfo Demo
+
+Vistio
+Vizceral是Netflix发布的一个开源项目，用于近乎实时地监控应用程序和集群之间的网络流量。Vistio是使用Vizceral对Istio和网格监控的改进。它利用Istio Mixer生成的指标，然后将其输入Prometheus。Vistio查询Prometheus并将数据存储在本地以允许重播流量。
+
+# Deploy vistio via kubectl
+在vagrant节点node1执行
+kubectl -n default apply -f addon/vistio/
+
+# Expose vistio-api
+在本地主机执行
+kubectl -n default port-forward $(kubectl -n default get pod -l app=vistio-api -o jsonpath='{.items[0].metadata.name}') 9091:9091 &
+
+# Expose vistio in another terminal window
+在本地主机执行
+kubectl -n default port-forward $(kubectl -n default get pod -l app=vistio-web -o jsonpath='{.items[0].metadata.name}') 8080:8080 &
+如果一切都已经启动并准备就绪，您就可以访问Vistio UI，开始探索服务网格网络，访问http://localhost:8080 您将会看到类似下图的输出。
+
+vistio animation
+
+更多详细内容请参考Vistio—使用Netflix的Vizceral可视化Istio service mesh。
+
+Kiali
+Kiali是一个用于提供Istio service mesh观察性的项目，更多信息请查看https://kiali.io。
+
+在本地该项目的根路径下执行下面的命令：
+
+kubectl apply -n istio-system -f addon/kiali
+Kiali web地址：http://172.17.8.101:31439
+
+用户名/密码：admin/admin
+
+kiali
+
+注意：Kilia使用Jaeger做追踪，请不用屏蔽kilia页面的弹出窗口。
+
+Weave scope
+Weave scope可用于监控、可视化和管理Docker&Kubernetes集群，详情见https://www.weave.works/oss/scope/
+
+在本地该项目的根路径下执行下面的命令：
+
+kubectl apply -f addon/weave-scope
+在本地的/etc/hosts下增加一条记录。
+
+172.17.8.102 scope.weave.jimmysong.io
+现在打开浏览器，访问http://scope.weave.jimmysong.io/
+
+
+```
+
+
+
+
+### 8、停机后重启 
+
+```
+重启
+停机后重启启动。
+
+vagrant halt
+vagrant up
+
+# login to node1
+vagrant ssh node1
+# run the prosivision scripts
+/vagrant/hack/k8s-init.sh
+exit
+
+# login to node2
+vagrant ssh node2
+# run the prosivision scripts
+/vagrant/hack/k8s-init.sh
+exit
+
+# login to node3
+vagrant ssh node3
+# run the prosivision scripts
+/vagrant/hack/k8s-init.sh
+sudo -i
+cd /vagrant/hack
+./deploy-base-services.sh
+exit
+
+现在你已经拥有一个完整的基础的kubernetes运行环境，在该repo的根目录下执行下面的命令可以获取kubernetes dahsboard的admin用户的token。
+hack/get-dashboard-token.sh
+
+根据提示登录即可。
+
+
+
+清理
+清理虚拟机。
+
+vagrant destroy
+rm -rf .vagrant
+注意
+仅做开发测试使用，不要在生产环境使用该项目。
+
+```
+
+
+### 
+
+```
+
+
+```
+
+
+
+### 
+
+```
+
+
+```
+
+
+
+### 
+
+```
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 原始安装教程
 
 ``` python
 使用Vagrant和VirtualBox在本地搭建分布式的Kubernetes集群和Istio Service Mesh
@@ -116,6 +528,7 @@ Istio service mesh
 Helm
 Vistio
 Kiali
+
 使用说明
 将该repo克隆到本地，下载Kubernetes的到项目的根目录。
 
@@ -317,12 +730,17 @@ Vistio
 Vizceral是Netflix发布的一个开源项目，用于近乎实时地监控应用程序和集群之间的网络流量。Vistio是使用Vizceral对Istio和网格监控的改进。它利用Istio Mixer生成的指标，然后将其输入Prometheus。Vistio查询Prometheus并将数据存储在本地以允许重播流量。
 
 # Deploy vistio via kubectl
+在vagrant节点node1执行
 kubectl -n default apply -f addon/vistio/
 
+
+
 # Expose vistio-api
+在本地主机执行
 kubectl -n default port-forward $(kubectl -n default get pod -l app=vistio-api -o jsonpath='{.items[0].metadata.name}') 9091:9091 &
 
 # Expose vistio in another terminal window
+在本地主机执行
 kubectl -n default port-forward $(kubectl -n default get pod -l app=vistio-web -o jsonpath='{.items[0].metadata.name}') 8080:8080 &
 如果一切都已经启动并准备就绪，您就可以访问Vistio UI，开始探索服务网格网络，访问http://localhost:8080 您将会看到类似下图的输出。
 
