@@ -216,15 +216,7 @@ kubectl -n kube-system describe secret `kubectl -n kube-system get secret|grep a
 ```
 本地主机添加
 $ cat /etc/hosts
-127.0.0.1	localhost
-127.0.1.1	uw
-52.70.175.131 registry-1.docker.io
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+
 172.17.8.102 grafana.jimmysong.io
 172.17.8.102 traefik.jimmysong.io
 172.17.8.102 scope.weave.jimmysong.io
@@ -249,6 +241,7 @@ kubectl apply -f addon/heapster/
 
 Grafana动画
 
+
 Traefik
 
 部署Traefik ingress controller和增加ingress配置：
@@ -256,9 +249,12 @@ kubectl apply -f addon/traefik-ingress
 
 在本地/etc/hosts中增加一条配置：
 172.17.8.102 traefik.jimmysong.io
+
 访问Traefik UI：http://traefik.jimmysong.io
 
 Traefik Ingress controller
+
+
 
 EFK
 
@@ -267,11 +263,14 @@ EFK
 kubectl apply -f addon/efk/
 注意：运行EFK的每个节点需要消耗很大的CPU和内存，请保证每台虚拟机至少分配了4G内存。
 
+
 Helm
 
 用来部署helm。
 
 hack/deploy-helm.sh
+
+
 Service Mesh
 我们使用 istio 作为 service mesh。
 
@@ -281,7 +280,8 @@ Service Mesh
 
 wget https://github.com/istio/istio/releases/download/1.0.0/istio-1.0.0-osx.tar.gz
 tar xvf istio-1.0.0-osx.tar.gz
-mv bin/istioctl /usr/local/bin/
+mv istio-1.0.0/bin/istioctl /usr/local/bin/
+
 在Kubernetes中部署istio：
 
 kubectl apply -f addon/istio/istio-demo.yaml
@@ -300,6 +300,7 @@ kubectl apply -n default -f yaml/istio-bookinfo/destination-rule-all.yaml
 172.17.8.102 prometheus.istio.jimmysong.io
 172.17.8.102 servicegraph.istio.jimmysong.io
 172.17.8.102 jaeger-query.istio.jimmysong.io
+
 我们可以通过下面的URL地址访问以上的服务。
 
 Service	URL
@@ -307,6 +308,7 @@ grafana	http://grafana.istio.jimmysong.io
 servicegraph	http://servicegraph.istio.jimmysong.io/dotviz, http://servicegraph.istio.jimmysong.io/graph,http://servicegraph.istio.jimmysong.io/force/forcegraph.html
 tracing	http://jaeger-query.istio.jimmysong.io
 productpage	http://172.17.8.101:31380/productpage
+
 详细信息请参阅：https://istio.io/zh/docs/examples/bookinfo/
 
 Bookinfo Demo
@@ -325,6 +327,7 @@ kubectl -n default port-forward $(kubectl -n default get pod -l app=vistio-api -
 # Expose vistio in another terminal window
 在本地主机执行
 kubectl -n default port-forward $(kubectl -n default get pod -l app=vistio-web -o jsonpath='{.items[0].metadata.name}') 8080:8080 &
+
 如果一切都已经启动并准备就绪，您就可以访问Vistio UI，开始探索服务网格网络，访问http://localhost:8080 您将会看到类似下图的输出。
 
 vistio animation
@@ -410,12 +413,81 @@ rm -rf .vagrant
 ```
 
 
-### 
+### 9、各节点镜像打包
+
+###
+
+
+```Ruby
+在node1批量打包所用到的镜像，1.13.1版本
+
+批量打包镜像:
+# docker save $(docker images | grep -v REPOSITORY | awk 'BEGIN{OFS=":";ORS=" "}{print $1,$2}') -o /vagrant/images/jimmysong-k8simages.tar
+
+筛选关键字
+# docker save $(docker images | grep jimmysong | awk 'BEGIN{OFS=":";ORS=" "}{print $1,$2}') -o /vagrant/images/jimmysong-k8simages.tar
+
+[vagrant@node1 ~]$ docker images
+REPOSITORY                                         TAG                 IMAGE ID            CREATED             SIZE
+docker.io/kiali/kiali                              latest              414df022b75e        36 hours ago        309 MB
+docker.io/traefik                                  latest              98768a8bf3fe        12 days ago         70.2 MB
+docker.io/istio/sidecar_injector                   1.0.4               e6f9c508a925        3 months ago        52.9 MB
+docker.io/istio/servicegraph                       1.0.4               621f2764509d        3 months ago        16.5 MB
+docker.io/istio/proxyv2                            1.0.4               9ba2fb984080        3 months ago        380 MB
+docker.io/istio/proxy_init                         1.0.4               522d8df67fc2        3 months ago        144 MB
+docker.io/istio/pilot                              1.0.4               95439b110591        3 months ago        313 MB
+docker.io/istio/mixer                              1.0.4               b4b177eef532        3 months ago        70 MB
+docker.io/istio/galley                             1.0.4               79b3d70e79fd        3 months ago        73.1 MB
+docker.io/istio/citadel                            1.0.4               f3200b258643        3 months ago        56.1 MB
+docker.io/grafana/grafana                          5.2.3               17a5ba3b1216        6 months ago        245 MB
+docker.io/weaveworks/scope                         1.9.1               4b07159e407b        7 months ago        68 MB
+docker.io/istio/examples-bookinfo-ratings-v1       1.8.0               10d548a15960        7 months ago        218 MB
+docker.io/istio/examples-bookinfo-reviews-v3       1.8.0               7e51add28c44        7 months ago        525 MB
+docker.io/istio/examples-bookinfo-reviews-v2       1.8.0               077d21bcb565        7 months ago        525 MB
+docker.io/istio/examples-bookinfo-reviews-v1       1.8.0               bb692bde5c11        7 months ago        525 MB
+docker.io/istio/examples-bookinfo-details-v1       1.8.0               21f25915c88e        7 months ago        254 MB
+docker.io/istio/examples-bookinfo-productpage-v1   1.8.0               a151027e867a        7 months ago        144 MB
+docker.io/coredns/coredns                          1.2.0               da1adafc0e78        7 months ago        34.2 MB
+docker.io/jimmysong/addon-resizer                  1.8.2               f1565c97177e        7 months ago        33.1 MB
+docker.io/prom/prometheus                          v2.3.1              b82ef1f3aa07        8 months ago        119 MB
+docker.io/nmnellis/vistio-web                      v0.1.0              74333f4324aa        8 months ago        415 MB
+docker.io/nmnellis/vistio-api                      v0.1.0              f49eca2151c8        8 months ago        18.1 MB
+docker.io/jaegertracing/all-in-one                 1.5                 93f16463fee4        9 months ago        48.4 MB
+docker.io/jimmysong/heapster-amd64                 v1.5.3              f57c75cd7b0a        10 months ago       75.3 MB
+docker.io/jimmysong/kubernetes-dashboard-amd64     v1.8.3              0c60bcf89900        12 months ago       102 MB
+docker.io/nghialv2607/k8s-config-reloader          v0.1.0              16b05619d312        16 months ago       17.7 MB
+docker.io/jimmysong/hyperkube                      v1.7.6_coreos.0     2faf6f7a322f        17 months ago       699 MB
+docker.io/jimmysong/heapster-influxdb-amd64        v1.3.3              577260d221db        17 months ago       12.5 MB
+docker.io/jimmysong/heapster-grafana-amd64         v4.4.3              8cb3de219af7        17 months ago       152 MB
+docker.io/jimmysong/pause-amd64                    3.0                 99e59f495ffa        2 years ago         747 kB
+[vagrant@node1 ~]$ 
 
 ```
 
 
+
+#### node1
+
+```Ruby
+
+
 ```
+
+#### node2
+
+```Ruby
+
+
+```
+
+
+#### node3
+
+```Ruby
+
+
+```
+
 
 
 
