@@ -45,10 +45,13 @@ netdata 默认访问端口是19999，http://127.0.0.1:19999
 
 ## ansible练习环境搭建
 
+相关的镜像 chusiang20190105.tar
+
+
 
 https://www.w3cschool.cn/automate_with_ansible/automate_with_ansible-oqiz27p6.html
 
-
+### 使用docker
 
 在终端机 (Terminal) 里启动 Jupyter 的容器，请依个人喜好选择 image，
 其 latest 标签 (tag) 是对应到 alpine-3.4。
@@ -63,8 +66,91 @@ $ docker run --name server1 -d -P chusiang/ansible-managed-node:ubuntu-16.04
 
 $ docker run --name server2 -d -P chusiang/ansible-managed-node:centos-7
 
+### 使用docker-compose
+
 或者使用docker-compose
 参见docker/ansiblejupyter
+
+/home/y/docker-compose/chusiangansible
+
+$ vi docker-compose.yml
+
+version: '2'
+services:
+
+  control_machine:
+    ports:
+      - 8004:8888/tcp
+    image: chusiang/ansible-jupyter:latest
+
+  server1:
+    ports:
+      - 4421:22/tcp
+    image: chusiang/ansible-managed-node:ubuntu-16.04
+
+  server2:
+    ports:
+      - 4422:22/tcp
+    image: chusiang/ansible-managed-node:centos-7
+
+  server3:
+    ports:
+      - 4423:22/tcp
+    image: chusiang/ansible-managed-node:centos-7
+
+$ docker-compose up -d
+$ docker-compose ps
+$ docker-compose stop
+$ docker-compose start
+$ docker-compose rm -f
+
+登录
+http://192.168.102.3:8004
+
+
+
+
+
+1.若不想通过 Jupyter 操作 Ansible，可直接进入容器里操作，但要记得切换到 /home 目录底下
+
+$ docker exec -it chusiangansible_control_machine_1 sh
+
+vi /home/inventory
+
+2、修改 inventory 档案，并填入步骤 1 取得的 IP 和步骤 2 取得的 OpenSSH port。这次容器的 Port mapping 将会依照 docker-compose.yml 所定义的内容建立，不像原先得一个个的手动设定。
+
+server1  ansible_ssh_host=192.168.102.3  ansible_ssh_port=4421
+server2  ansible_ssh_host=192.168.102.3  ansible_ssh_port=4422
+server3  ansible_ssh_host=192.168.102.3  ansible_ssh_port=4423
+
+3、环境建置完成！现在可以到 Control Managed (Jupyter + Ansible) 上对各个 Managed node (Ubuntu 14.04, CentOS 7, Debian 8) 进行操作了。
+
+Play Ansible
+现在我们可以通过 Ansible 操控 3 个 Managed node 了，记得把 inventory 的部份从 localhost 改成 all喔！
+
+
+
+
+$ ansible all -m ping
+
+$ ansible test -m shell -a 'cat /etc/hostname'
+$ ansible test -m shell -a 'cat /etc/hosts'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```

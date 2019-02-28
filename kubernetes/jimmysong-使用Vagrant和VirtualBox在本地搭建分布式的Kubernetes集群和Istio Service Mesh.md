@@ -6,12 +6,21 @@ https://storage.googleapis.com/kubernetes-release/release/v1.13.1/kubernetes-ser
 
 https://storage.googleapis.com/kubernetes-release/release/v1.13.1/kubernetes-client-darwin-amd64.tar.gz
 
+w：~/tool/vagrant/kubernetes-vagrant-centos-cluster
+
+40：/home/wym/vagrant/kubernetes-vagrant-centos-cluster
+
 
 ## 注意,第8章重启命令
 
+本机
 https://172.17.8.101:8443
 
-eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi10b2tlbi1idzQyayIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJhZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6IjYxMWJjMGM5LTM1MjEtMTFlOS1hMzllLTUyNTQwMGFkM2I0MyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTphZG1pbiJ9.OrPBHL6ruz42xq4XbCJa8bMtXqEclbcHfhcdH494KnYM2QZDlVNaEaO3U9nlIP9ebTMrA0Nl0gmi1iJq3u5SONTpvkmTX-E9Xr_inPDzmaNkZ7aZ3hmTBVhEwiYLAUM5c3Ub5k6-L95buhKs128brm9tmWRAyzz-tEgf_fqTxYWKVtkzdnlPY1dNRg7PX-f9jYgasCuAj_zCV1koxg-csHcdc9lDlrmplikeWwcPLIsn2sAPucUe8p0O2wHgm5XedNHsUio7mBtHFPuoYNFK9D_qAoEBD4NYQbCJ3gvOhm9R4i4GezNt5VRObargMP6n0r4UNW23a919G3K6YjRBlA
+eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi10b2tlbi14aGJyOSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJhZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImE5MmFlZWU2LTNhOTEtMTFlOS1hOTc1LTUyNTQwMGFkM2I0MyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTphZG1pbiJ9.BqeJasJk96OBkDVaWSV0HjD4DzzMozfXuQNKbIyZvGKL8syILFpR92hvQKvJpbpdI-UJ_-6916vtGWgcvbDMDa1wsA3Gd9Db5MiVmiE_CCEfklvgv2NR2qmBnpLNHeUGb9Un_WV-p61DuJr18YuTyNPBnwPn0sglA1nii7Y520Ospn2FU7ltsFnLy_U1AUi97HYE3wnua904k8e1Brkn30CADdAVW9lRxLm_UZGyLjzdEUKTuDMF9JuQ9sFDXJ2dYddMUbS604JvJvb_HVy9lrZdcs_L64OEuKbjKz5f3YgXNKw1FPD21by28HL-TnhaCGcBonkxT-R-3ejze46xCQ
+
+40.3服务器
+https://172.17.8.101:8443
+eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi10b2tlbi1zYjRtaiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJhZG1pbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6Ijk3NDI4MWViLTNhNWQtMTFlOS04NTE4LTUyNTQwMGFkM2I0MyIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDprdWJlLXN5c3RlbTphZG1pbiJ9.V7tuOZS_4cab9USjn0toJcvcnBuJ426W8lUF4PNeANDzzRYJfIYfNUlryUB7IFOXiPB8QRQrU7LfEfcRhKt-ONeLVbaR-JGK7gyFrxeJtmJYcn7vAZBbe-NOTG5_qBoK5xI-p9LYTx2doAODz1qjc3xp-PQIuD8ByxmlT2feySjqV5OKupL4eeZ81DXFoczSVK6h47S4Ts3pj8L0nl5MZPNw6SmtEEBG9g4a0fYw5dsvsYuiV2bwsLNOh5t6ktVUW9ImLaNhW0X6bp_AwsgSr4VKz1S3RZ-wsknSH_XxtVkYZNL9wV6dk1ReiB3ffz75ijdEi0xkAUa6L_MZJ8ukvg
 
 
 hack目录手工启动
@@ -53,6 +62,36 @@ kubectl describe nodes node1
 
 git clone https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster.git
 cd kubernetes-vagrant-centos-cluster
+
+$ cat Vagrantfile 
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box_check_update = false
+  config.vm.provider 'virtualbox' do |vb|
+   vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
+  end  
+  config.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_udp: false
+  $num_instances = 3
+  # curl https://discovery.etcd.io/new?size=3
+  $etcd_cluster = "node1=http://172.17.8.101:2380"
+  (1..$num_instances).each do |i|
+    config.vm.define "node#{i}" do |node|
+      node.vm.box = "centos/7"
+      node.vm.hostname = "node#{i}"
+      ip = "172.17.8.#{i+100}"
+      node.vm.network "private_network", ip: ip
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = "3072"
+        vb.cpus = 1
+        vb.name = "node#{i}"
+      end
+      node.vm.provision "shell", path: "install.sh", args: [i, ip, $etcd_cluster]
+    end
+  end
+end
+
 
 
 ```
@@ -161,7 +200,7 @@ mkdir -p ~/.kube
 cp conf/admin.kubeconfig ~/.kube/config
 我们推荐您使用这种方式。
 
-注意：在kubernetes-vagrant-centos-cluster目录下执行命令
+ 注意：在kubernetes-vagrant-centos-cluster目录下执行命令
 
 
 #### 安装执行正常
@@ -232,6 +271,7 @@ Heapster监控
 创建Heapster监控：
 
 kubectl apply -f addon/heapster/
+
 访问Grafana
 
 使用Ingress方式暴露的服务，在本地/etc/hosts中增加一条配置：
@@ -281,6 +321,11 @@ Service Mesh
 wget https://github.com/istio/istio/releases/download/1.0.0/istio-1.0.0-osx.tar.gz
 tar xvf istio-1.0.0-osx.tar.gz
 mv istio-1.0.0/bin/istioctl /usr/local/bin/
+
+
+sudo cp istio-1.0.0/bin/istioctl /usr/local/bin/
+
+注意：都在本地~/tool/vagrant/kubernetes-vagrant-centos-cluster目录下执行
 
 在Kubernetes中部署istio：
 
@@ -427,6 +472,11 @@ rm -rf .vagrant
 筛选关键字
 # docker save $(docker images | grep jimmysong | awk 'BEGIN{OFS=":";ORS=" "}{print $1,$2}') -o /vagrant/images/jimmysong-k8simages.tar
 
+```
+
+#### 各节点安装1.11.0时的镜像
+
+```
 [vagrant@node1 ~]$ docker images
 REPOSITORY                                         TAG                 IMAGE ID            CREATED             SIZE
 docker.io/kiali/kiali                              latest              414df022b75e        36 hours ago        309 MB
@@ -461,6 +511,17 @@ docker.io/jimmysong/heapster-influxdb-amd64        v1.3.3              577260d22
 docker.io/jimmysong/heapster-grafana-amd64         v4.4.3              8cb3de219af7        17 months ago       152 MB
 docker.io/jimmysong/pause-amd64                    3.0                 99e59f495ffa        2 years ago         747 kB
 [vagrant@node1 ~]$ 
+
+
+```
+
+#### 各节点安装1.13.1时的镜像
+```
+
+docker.io/istio镜像一样1.0.4和1.8.0
+docker.io/jimmysong镜像一样
+
+pull最新的：kiali，traefik，weaveworks
 
 ```
 

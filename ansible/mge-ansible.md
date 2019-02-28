@@ -1,6 +1,43 @@
-# 马哥2019全新ansible入门到精通-学习笔记
+# 
+
+
+
+## ansible笔记
+
+```
+运维自动化-Ansible ( 一 )
+https://blog.51cto.com/191226139/2066936
+运维自动化-Ansible ( 二 )
+https://blog.51cto.com/191226139/2067831
+运维自动化-Ansible ( 三 )
+https://blog.51cto.com/191226139/2068623
+运维自动化-Ansible ( 四 )
+https://blog.51cto.com/191226139/2069226
+
+```
+
+## 马哥2019全新ansible入门到精通-学习笔记
 
 ## ansible环境
+
+
+### 练习环境
+/home/y/docker-compose/chusiangansible/docker-compose.yml
+
+$ docker-compose up -d
+$ docker-compose ps
+$ docker-compose stop
+$ docker-compose start
+$ docker-compose rm -f
+
+登录
+http://192.168.102.3:8004
+
+或登录控制台
+$ docker exec -it chusiangansible_control_machine_1 sh
+vi /home/inventory
+
+
 
 ### 升级ansible
 
@@ -489,6 +526,25 @@ cd test 进入test主机列表
 ## ansible-galaxy
 
 
+ansible-galaxy 语法：
+
+ansible-galaxy [delete|import|info|init|install|list|login|remove|search|setup] [--help] [options] 
+
+ansible-galaxy search --author geerlingguy
+
+
+ 列出已安装的galaxy
+#ansible-galaxy list geerlingguy.mysql
+- geerlingguy.mysql, 2.8.1
+
+ 安装galaxy
+ansible-galaxy install geerlingguy.redis
+
+ 删除galaxy
+ansible-galaxy remove geerlingguy.redis
+
+
+
 $ vim /etc/ansible/ansible.cfg
 $ cd /etc/ansible/roles
 $ cd ~/.ansible/roles/
@@ -518,6 +574,9 @@ Password for pjack2001:
 
 ### 
 
+安装的剧本默认是存放在家目录的隐藏文件中。
+/root/.ansible
+
 $ ansible-galaxy list
 $ ansible-galaxy install geerlingguy.nginx
 $ ansible-galaxy remove geerlingguy.nginx
@@ -531,18 +590,131 @@ $ ansible-galaxy install geerlingguy.nginx
 
 下载的roles可以删除,改名等操作
 
-### 
-
-
-
-
-
+$ ansible-galaxy info geerlingguy.nginx
 
 
 ### 
 
 
+```javascript
 
+可以在一个文件中指定多个需要下载的roles
+
+# ansible-galaxy install -r roles.txt 
+# cat roles.txt 
+patrik.uytterhoeven.Zabbix-Agent
+patrik.uytterhoeven.Zabbix_Server
+
+
+ansible-galaxy search --author geerlingguy > temp.txt
+$ awk '{print $1}' temp.txt > geerlingguyroles.txt
+
+
+
+Found 96 roles matching your search:
+
+ Name                              Description
+ ----                              -----------
+ geerlingguy.setup                 A role to prepare the solr environment.
+ geerlingguy.adminer               Installs Adminer for Database management.
+ geerlingguy.ansible               Ansible for RedHat/CentOS/Debian/Ubuntu.
+ geerlingguy.ansible-role-packer   Packer for Linux
+ geerlingguy.apache                Apache 2.x for Linux.
+ geerlingguy.apache-php-fpm        Apache 2.4+ PHP-FPM support for Linux.
+ geerlingguy.aws-inspector         AWS Inspector installation for Linux.
+ geerlingguy.awx                   Installs and configures AWX (Ansible Tower's open source version).
+ geerlingguy.awx-container         Ansible AWX container for Docker.
+ geerlingguy.backup                Backup for Simple Servers.
+ geerlingguy.blackfire             Blackfire installation for Linux
+ geerlingguy.certbot               Installs and configures Certbot (for Let's Encrypt).
+ geerlingguy.clamav                ClamAV installation and configuration.
+ geerlingguy.collectd-signalfx     SignalFx Collectd installation for Linux.
+ geerlingguy.composer              Composer PHP Dependency Manager
+ geerlingguy.daemonize             Daemonize for Unix-like operating systems
+ geerlingguy.docker                Docker for Linux.
+ geerlingguy.docker_arm            Docker setup for Rasbperry Pi and ARM-based devices.
+ geerlingguy.dotfiles              Dotfile installation for UNIX/Linux.
+ geerlingguy.drupal                Deploy or install Drupal on your servers.
+ geerlingguy.drupal-console        Drupal Console
+ geerlingguy.drush                 Drush - command line shell for Drupal
+ geerlingguy.ecr_container_build   ECR docker image build and push management role.
+ geerlingguy.elasticsearch         Elasticsearch for Linux.
+ geerlingguy.elasticsearch-curator Elasticsearch curator for Linux.
+ geerlingguy.exim                  Exim installation for Linux.
+ geerlingguy.fathom                Fathom web analytics
+ geerlingguy.filebeat              Filebeat for Linux.
+ geerlingguy.firewall              Simple iptables firewall for most Unix-like systems.
+ geerlingguy.git                   Git version control software
+ geerlingguy.github-users          Create users based on GitHub accounts.
+ geerlingguy.gitlab                GitLab Git web interface
+ geerlingguy.glusterfs             GlusterFS installation for Linux.
+ geerlingguy.gogs                  Gogs: Go Git Service
+ geerlingguy.haproxy               HAProxy installation and configuration.
+ geerlingguy.hdparm                hdparm installation and configuration for Linux.
+ geerlingguy.homebrew              Homebrew for Mac OS X
+ geerlingguy.htpasswd              htpasswd installation and helper role for Linux servers.
+ geerlingguy.java                  Java for Linux
+ geerlingguy.jenkins               Jenkins CI
+ geerlingguy.k8s_manifests         Kubernetes manifest management role.
+ geerlingguy.kibana                Kibana for Linux.
+ geerlingguy.kubernetes            Kubernetes for Linux.
+ geerlingguy.logstash              Logstash for Linux.
+ geerlingguy.logstash-forwarder    Logstash Forwarder for Linux.
+ geerlingguy.mailhog               MailHog for Linux
+ geerlingguy.mas                   Mac App Store CLI installation for macOS
+ geerlingguy.memcached             Memcached for Linux
+ geerlingguy.munin                 Munin monitoring server for RedHat/CentOS or Debian/Ubuntu.
+ geerlingguy.munin-node            Munin node monitoring endpoint for RedHat/CentOS or Debian/Ubuntu.
+ geerlingguy.mysql                 MySQL server for RHEL/CentOS and Debian/Ubuntu.
+ geerlingguy.nfs                   NFS installation for Linux.
+ geerlingguy.nginx                 Nginx installation for Linux, FreeBSD and OpenBSD.
+ geerlingguy.nodejs                Node.js installation for Linux
+ geerlingguy.ntp                   NTP installation and configuration for Linux.
+ geerlingguy.packer-debian         Debian/Ubuntu configuration for Packer.
+ geerlingguy.packer-rhel           RedHat/CentOS configuration for Packer.
+ geerlingguy.passenger             Passenger installation for Linux/UNIX.
+ geerlingguy.phergie               Phergie - a PHP IRC bot
+ geerlingguy.php                   PHP for RedHat/CentOS/Fedora/Debian/Ubuntu.
+ geerlingguy.php-memcached         PHP Memcached support for Linux
+ geerlingguy.phpmyadmin            phpMyAdmin installation for Linux
+ geerlingguy.php-mysql             PHP MySQL support for Linux.
+ geerlingguy.php-pear              PHP PEAR library installation.
+ geerlingguy.php-pecl              PHP PECL extension installation.
+ geerlingguy.php-pgsql             PHP PostgreSQL support for Linux.
+ geerlingguy.php-redis             PhpRedis support for Linux
+ geerlingguy.php-tideways          Tideways PHP Profiler Extension for Linux
+ geerlingguy.php-versions          Allows different PHP versions to be installed.
+ geerlingguy.php-xdebug            PHP XDebug for Linux
+ geerlingguy.php-xhprof            PHP XHProf for Linux
+ geerlingguy.pimpmylog             Pimp my Log installation for Linux
+ geerlingguy.pip                   Pip (Python package manager) for Linux.
+ geerlingguy.postfix               Postfix for RedHat/CentOS or Debian/Ubuntu.
+ geerlingguy.postgresql            PostgreSQL server for Linux.
+ geerlingguy.puppet                Puppet for Linux.
+ geerlingguy.rabbitmq              RabbitMQ installation for Linux.
+ geerlingguy.raspberry-pi          Configures a Raspberry Pi.
+ geerlingguy.redis                 Redis for Linux
+ geerlingguy.repo-dotdeb           DotDeb repository for Debian.
+ geerlingguy.repo-epel             EPEL repository for RHEL/CentOS.
+ geerlingguy.repo-puias            PUIAS repository for RHEL/CentOS.
+ geerlingguy.repo-remi             Remi's RPM repository for RHEL/CentOS.
+ geerlingguy.ruby                  Ruby installation for Linux.
+ geerlingguy.samba                 Samba for RHEL/CentOS.
+ geerlingguy.security              Security software installation and configuration.
+ geerlingguy.solr                  Apache Solr for Linux.
+ geerlingguy.sonar                 SonarQube for Linux
+ geerlingguy.sonar-runner          Sonar Runner for Linux
+ geerlingguy.ssh-chroot-jail       Simple SSH chroot jail management.
+ geerlingguy.supervisor            Supervisor (process state manager) for Linux.
+ geerlingguy.svn                   SVN web server for Linux
+ geerlingguy.svn2git               Svn2Git VCS conversion software for Linux.
+ geerlingguy.swap                  Swap file and swap management for Linux.
+ geerlingguy.tomcat6               Tomcat 6 for RHEL/CentOS and Debian/Ubuntu.
+ geerlingguy.varnish               Varnish for Linux.
+(END)
+
+
+```
 
 
 
@@ -550,7 +722,21 @@ $ ansible-galaxy install geerlingguy.nginx
 ### 
 
 
+Ansible-vault
+功能：管理加密解密yml文件
 
+ansible-vault [create|decrypt|edit|encrypt|rekey|view]
+ ansible-vault encrypt hello.yml 加密
+ ansible-vault decrypt hello.yml 解密
+ ansible-vault view hello.yml 查看加密问题
+ ansible-vault edit hello.yml 编辑加密文件
+ ansible-vault rekey hello.yml 修改口令
+ ansible-vault create new.yml 创建新文件
+
+
+
+
+### 
 
 
 
@@ -559,7 +745,30 @@ $ ansible-galaxy install geerlingguy.nginx
 ## ansible-playbook
 
 ```
+Ansible-playbook
+语法：
 
+ansible-playbook <filename.yml> ... [options]
+常见选项
+--check 只检测可能会发生的改变，但不真正执行操作
+--list-hosts 列出运行任务的主机
+--list-tasks 列出此playbook中的所有任务
+--list-tags 列出此playbook中的所有的tags
+--limit 主机列表 只针对主机列表中的主机执行
+--step 一步一步执行脚本
+--flush-cache  清除fact缓存
+-C 文件名     执行前先检查语法。
+-D 显示出执行前后的变化内容
+-v 显示过程 -vv -vvv 更详细
+第一个playbook
+---
+
+- hosts: all
+  remote_user: root
+
+  tasks:
+    - name: test yml
+      command: /usr/bin/wall "hello world"
 
 
 
@@ -567,16 +776,6 @@ $ ansible-galaxy install geerlingguy.nginx
 
 
 ## ansible-galaxy
-
-```
-
-
-
-
-```
-
-
-##
 
 ```
 

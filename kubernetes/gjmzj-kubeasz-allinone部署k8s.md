@@ -1,21 +1,34 @@
 # kubeasz安装
+##
 
+```
+w：
+~/tool/vagrant/k8sallinone
+
+102：
+https://192.168.102.10:6443
+/home/y/vagrant/allinonekubeasz
+
+
+
+
+```
 
 ## 配置k8s.1-11-6.tar.gz成功
 
 在102.3上用Firefox可以正常访问,第一次登录admin/test1234,然后输入令牌即可
-$ ssh root@192.168.102.13
+$ ssh root@192.168.102.10
 # kubectl cluster-info 
-Kubernetes master is running at https://192.168.102.13:6443
-CoreDNS is running at https://192.168.102.13:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-kubernetes-dashboard is running at https://192.168.102.13:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+Kubernetes master is running at https://192.168.102.10:6443
+CoreDNS is running at https://192.168.102.10:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+kubernetes-dashboard is running at https://192.168.102.10:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
 
 # kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
 
 ```
 建立一个vagrant虚拟机centos7，8G内存，安装docker,配置文件Vagrantfile-k8sallinonekubeasz
 
-在主机使用ansible安装k8s到虚拟机192.168.102.13
+在主机使用ansible安装k8s到虚拟机192.168.102.10
 
 ansible安装及准备
 
@@ -27,7 +40,7 @@ pip install --no-cache-dir ansible -i http://mirrors.aliyun.com/pypi/simple/ --t
 
 # 配置ansible ssh密钥登陆
 ssh-keygen -t rsa -b 2048 回车 回车 回车
-ssh-copy-id 192.168.102.13 #$IP为本虚机地址，按照提示输入yes 和root密码
+ssh-copy-id 192.168.102.10 #$IP为本虚机地址，按照提示输入yes 和root密码
 
 
 下载项目源码
@@ -52,7 +65,7 @@ tar zxvf basic_images_kubeasz_0.4.tar.gz -C /etc/ansible/down
 配置集群参数
 cd /etc/ansible
 cp example/hosts.allinone.example hosts
-vim hosts           # 根据实际情况修改此hosts文件，所有节点改成虚拟机IP:192.168.102.13
+vim hosts           # 根据实际情况修改此hosts文件，所有节点改成虚拟机IP:192.168.102.10
 
 
 # 验证ansible安装，正常能看到每个节点返回 SUCCESS
