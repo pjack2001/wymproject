@@ -1,4 +1,4 @@
-- hosts: test
+- hosts: oracle
   remote_user: root
   tasks:
   - name: mkdir /root/.ssh

@@ -1,0 +1,15 @@
+- name: "Install oracle db"
+  hosts: oracle1
+
+  roles:
+    - role: "lean_delivery.oracle_db"
+      oracle_version: 11
+      patch_version: 11.2.0.4
+      transport: "local"
+      transport_local: "/home/w/tool/oralce"
+      oracle_images:
+        - "p13390677_112040_Linux-x86-64_1of7.zip"
+        - "p13390677_112040_Linux-x86-64_2of7.zip"
+        - "p13390677_112040_Linux-x86-64_3of7.zip"
+      oracle_db_swapfile: "/oracle-swapfile-11"
+      oracle_db_swap_count: 2048

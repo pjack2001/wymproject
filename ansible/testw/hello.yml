@@ -1,8 +1,0 @@
----
-- hosts: test
-  remote_user: root
-  tasks:
-  - name: hostname
-    command: hostname
-  - name: ls /home
-    shell: ls /home

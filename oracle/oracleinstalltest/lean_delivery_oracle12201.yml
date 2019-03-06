@@ -1,0 +1,11 @@
+- name: "Install oracle db"
+  hosts: 172.17.8.242
+
+  roles:
+    - role: "lean_delivery.oracle_db"
+      oracle_version: 12
+      patch_version: 12.2.0.1
+      transport: "local"
+      transport_local: "/home/w/tool/oralce"
+      oracle_images:
+        - "linuxx64_12201_database.zip"
