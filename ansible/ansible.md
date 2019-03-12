@@ -63,25 +63,123 @@ $ docker exec -it chusiangansible_control_machine_1 sh
 vi /home/inventory
 
 
-本机
+#### 本机
 
-使用vagrant虚拟机，root和vagrant用户密码都是vagrant
-~/tool/vagrant/oracle
+使用vagrant虚拟机，~/tool/vagrant/oracle
+
+ansible-galaxy的roles默认下载到/home/w/.ansible/roles，
+拷贝到/media/xh/i/linuxtool/ansible/roles，压缩保存
+拷贝到/etc/ansible/roles修改验证，
+
+验证通过的拷贝到/media/xh/i/linuxtool/ansible/roles/modified
+或
+/media/xh/i/python/wymproject/ansible/testw/modified
+
+
+```yml
+$ cat Vagrantfile 
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box_check_update = false
+  config.vm.provider 'virtualbox' do |vb|
+   vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
+  end  
+#config.vm.synced_folder ".", "/oracle", type: "nfs", nfs_udp: false
+  config.vm.synced_folder "/home/w/tool/oralce/", "/oracle", type: "nfs", nfs_udp: false
+  $num_instances = 2
+  # curl https://discovery.etcd.io/new?size=3
+  #i$etcd_cluster = "node1=http://172.17.8.101:2380"
+  (1..$num_instances).each do |i|
+    config.vm.define "oracle#{i}" do |node|
+      node.vm.box = "centos/7"
+      node.vm.hostname = "oracle#{i}"
+      ip = "172.17.8.#{i+240}"
+      node.vm.network "private_network", ip: ip
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = "3072"
+        vb.cpus = 1
+        vb.name = "oracle#{i}"
+      end
+  # node.vm.provision "shell", path: "install.sh", args: [i, ip, $etcd_cluster]
+    end
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+    sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+    sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+#sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+#sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+#sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+    sudo yum install -y wget vim tree
+#sudo yum install -y docker-ce
+#sudo systemctl start docker
+#sudo systemctl enable docker
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    sudo systemctl restart sshd
+
+  SHELL
+
+end
+
+
+
+root和vagrant用户密码都是vagrant
+
 ssh root@172.17.8.241
 ssh root@172.17.8.242
+
+如果重建虚拟机，清除公钥
+ssh-keygen -f "/home/w/.ssh/known_hosts" -R "172.17.8.241"
+ssh-keygen -f "/home/w/.ssh/known_hosts" -R "172.17.8.242"
 
 
 如果不能ssh登录，登录后修改ssh配置
 $ vagrant ssh oracle1
 sudo vim /etc/ssh/sshd_config
-增加如下修改
+删除注释的#号
+#   PasswordAuthentication yes
 PasswordAuthentication yes
 
 sudo systemctl restart sshd
 
 
 修改PushKey.yml文件里的hosts，上传公钥
-ansible-playbook PushKey.yml -u root -k
+$ ansible-playbook /media/xh/i/python/wymproject/ansible/testw/Verified/PushKey.yml -u root -k
+
+
+
+```
+
+### temp
+
+```
+
+$ ansible 172.17.8.241 -m lineinfile -a 'dest=/etc/selinux/config regexp='^SELINUX=enforcing' line='SELINUX=disabled''
+
+$ ansible 172.17.8.241 -m service -a 'name=sshd state=restarted'
+
+
+
+   - name: seline modify enforcing
+      lineinfile:
+         dest: /etc/selinux/config
+         regexp: '^SELINUX='
+         line: 'SELINUX=enforcing'
+
+
+
+```
+
 
 
 
@@ -400,8 +498,8 @@ $ sudo chmod 777 /var/log/ansible.log
 $ vim /etc/ansible/hosts
 
 [oracle]
-172.17.8.241
-172.17.8.242
+172.17.8.241 ansible_ssh_user=root ansible_ssh_passwd=vagrant
+172.17.8.242 ansible_ssh_user=root ansible_ssh_passwd=vagrant
 
 
 [test]
@@ -981,7 +1079,7 @@ $ ansible test -m group -a 'name=oracle state=absent'
 ### get_url模块
 
 
-```
+```yml
 
 功能：从 HTTP, HTTPS, or FTP 下载文件
 
@@ -1000,6 +1098,7 @@ backup:创建一个包含时间戳信息的备份文件
     "changed": false, 
     "checksum_dest": "8c9e20bd25525c3ed04ebaa407097fe875f02b2c", 
     "checksum_src": "8c9e20bd25525c3ed04ebaa407097fe875f02b2c", 
+
 ```
 
 
@@ -1035,6 +1134,14 @@ regexp: 正则表达式
     path: /etc/selinux/config
     regexp: '^SELINUX='
     line: 'SELINUX=enforcing'
+
+正则匹配，更改某个关键参数值
+
+   - name: seline modify enforcing
+      lineinfile:
+         dest: /etc/selinux/config
+         regexp: '^SELINUX='
+         line: 'SELINUX=enforcing'
 
 - lineinfile:
     path: /etc/sudoers
@@ -1490,7 +1597,7 @@ $ cat hello.yml
 ansible-playbook -C hello.yml
 
 真正执行
-$ ansible-playbook hello.yml
+$ ansible-playbook hello.yml -vv
 
 
 ```
@@ -1874,18 +1981,28 @@ roles中的tags
 ####  geerlingguy roles
 
 
-```javascript
+```yml
 
 可以在一个文件中指定多个需要下载的roles
 
-# ansible-galaxy install -r roles.txt 
-# cat roles.txt 
-patrik.uytterhoeven.Zabbix-Agent
-patrik.uytterhoeven.Zabbix_Server
+$ ansible-galaxy search database
+
+$ ansible-galaxy search --author geerlingguy > temp.txt
+$ awk '{print $1}' temp.txt > requirements.yml
+
+vim requirements.yml
+删除开头几行
+:%s/geerlingguy/- src: geerlingguy/g
+
+$ ansible-galaxy install -r geerlingguy.yml --ignore-errors -vv
+
+$ ansible-galaxy install -r robertdebock.yml --ignore-errors -vv
 
 
-ansible-galaxy search --author geerlingguy > temp.txt
-$ awk '{print $1}' temp.txt > geerlingguyroles.txt
+ansible-galaxy install dj-wasabi.zabbix-agent
+
+
+
 
 
 
@@ -1999,9 +2116,119 @@ Found 96 roles matching your search:
 
 
 
-##
+#### 详解Ansible(Roles)自动化部署配置LAMP架构
 
-```
+```yml
+
+https://blog.51cto.com/13630803/2154767
+
+详解Ansible(Roles)自动化部署配置LAMP架构
+若此生无缘关注0人评论1061人阅读2018-08-04 20:52:13
+Roles简介
+Ansible为了层次化、结构化地组织Playbook，使用了角色（roles）。Roles能够根据层次型结构自动装载变量文件、task以及handlers等。简单来讲，roles就是通过分别将变量、文件、任务、模块及处理器放置于单独的目录中，并可以便捷地include它们，roles一般用于基于主机构建服务的场景中，但也可以用于构建守护进程等场景中。
+ 
+
+创建Roles
+创建roles时一般需要以下步骤：首先创建以roles命名的目录。然后在roles目标下分别创建以个角色名称命令的目录，如websevers等，在每个角色命令的目录中分别创建files、handlers、tasks、templates、meta、defaults和vars目录，用不到的目录可以创建为空目录。最后在Playbook文件中调用各角色进行使用
+
+roles内各目录含义解释
+files：用来存放由copy模块或script模块调用的文件。
+templates：用来存放jinjia2模板，template模块会自动在此目录中寻找jinjia2模板文件。
+tasks：此目录应当包含一个main.yml文件，用于定义此角色的任务列表，此文件可以使用include包含其它的位于此目录的task文件。
+handlers：此目录应当包含一个main.yml文件，用于定义此角色中触发条件时执行的动作。
+vars：此目录应当包含一个main.yml文件，用于定义此角色用到的变量。
+defaults：此目录应当包含一个main.yml文件，用于为当前角色设定默认变量。
+meta：此目录应当包含一个main.yml文件，用于定义此角色的特殊设定及其依赖关系。
+
+案例：使用roles安装LAMP架构
+1：创建httpd、mysql、php角色名称目录，并在其目录下创建files、handlers、tasks、templates、meta、defaults和vars目录
+
+# mkdir /etc/ansible/roles/httpd/{files,templates,tasks,handlers,vars,defaults,meta} -p
+# mkdir /etc/ansible/roles/mysql/{files,templates,tasks,handlers,vars,defaults,meta} -p
+# mkdir /etc/ansible/roles/php/{files,templates,tasks,handlers,vars,defaults,meta} -p
+
+mkdir -pv /etc/ansible/roles/{httpd,mysql,php}/{tasks,files,templates,meta,handlers,vars,defaults}
+
+# touch /etc/ansible/roles/httpd/{defaults,vars,tasks,meta,handlers}/main.yml
+# touch /etc/ansible/roles/mysql/{defaults,vars,tasks,meta,handlers}/main.yml
+# touch /etc/ansible/roles/php/{defaults,vars,tasks,meta,handlers}/main.yml
+
+touch /etc/ansible/roles/{httpd,mysql,php}/{defaults,vars,tasks,meta,handlers}/main.yml
+
+编写httpd模块
+安装httpd服务
+修改httpd.conf配置文件
+
+# vim /etc/ansible/roles/httpd/tasks/main.yml
+    - name: ensure apache is at the latest version 
+      yum: pkg={{ servicenames}} state=latest
+      template: src=/etc/ansible/templates/httpd.conf.j2 dest=/etc/httpd/conf/httpd.conf
+    - name: restart httpd server
+      service: name=httpd enabled=true state=restarted
+定义变量
+
+# vim /etc/ansible/roles/httpd/vars/main.yml
+# servicenames: httpd
+编写mysql模块
+并且定义变量
+
+# vi /etc/ansible/roles/mysql/tasks/main.yml
+- name: ensure mysql is at the latest version 
+  yum: pkg={{ servicenames}} state=latest
+
+# vi /etc/ansible/roles/mysql/vars/main.yml
+servicenames: mariadb*
+编写php模块
+并且定义变量
+
+# vi /etc/ansible/roles/php/tasks/main.yml
+- name: ensure php is at the latest version
+  yum: pkg={{ servicenames}} state=latest
+
+# vi /etc/ansible/roles/php/vars/main.yml
+servicenames: php
+修改httpd配置文件模板
+监听IP 和域名 设为变量 方便其他主机使用这个模块
+详解Ansible(Roles)自动化部署配置LAMP架构详解Ansible(Roles)自动化部署配置LAMP架构详解Ansible(Roles)自动化部署配置LAMP架构详解Ansible(Roles)自动化部署配置LAMP架构
+
+在/etc/ansible/hosts文件中设置变量
+详解Ansible(Roles)自动化部署配置LAMP架构
+
+创建Playbook文件调用上面各角色安装LAMP
+
+[root@rabbitmq01 ansible# vim /etc/ansible/site.yml
+---
+- hosts: abc
+    remote_user: root
+    roles:
+     - httpd
+     - mysql
+     - php
+
+[root@rabbitmq01 ansible]# ansible-playbook site.yml --syntax-check  //检测语法
+
+playbook: site.yml
+[root@rabbitmq01 ansible]# ansible-playbook site.yml    //执行剧本
+详解Ansible(Roles)自动化部署配置LAMP架构
+
+ 
+
+测试验证
+去192.168.200.129主机上写一个PHP测试页面
+
+# echo "<?php phpinfo();?>" > /var/www/html/index.php
+# systemctl restart httpd
+打开浏览器输入192.168.200.129/index.php
+
+
+
+
+
+
+
+
+
+
 
 
 

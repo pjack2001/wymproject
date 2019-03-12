@@ -1,0 +1,4 @@
+---
+- hosts: 172.17.8.242
+  roles:
+    - { role: geerlingguy.nginx }

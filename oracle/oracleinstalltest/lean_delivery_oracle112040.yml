@@ -1,5 +1,5 @@
 - name: "Install oracle db"
-  hosts: oracle1
+  hosts: oracle2
 
   roles:
     - role: "lean_delivery.oracle_db"

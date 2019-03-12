@@ -2,5 +2,6 @@
 172.17.0.4
 
 [oracle]
-172.17.8.241
-172.17.8.242
+172.17.8.241 ansible_ssh_user=root ansible_ssh_passwd=vagrant
+172.17.8.242 ansible_ssh_user=root ansible_ssh_passwd=vagrant
+

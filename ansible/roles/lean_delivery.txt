@@ -1,0 +1,39 @@
+
+Found 34 roles matching your search:
+
+ Name                                    Description
+ ----                                    -----------
+ lean_delivery.atg_crs                   Lean Delivery ATG Commerce Reference Store install
+ lean_delivery.atg_csc                   Lean Delivery ATG Commerce Service Center install
+ lean_delivery.atg_platform              Lean Delivery ATG Platform install
+ lean_delivery.atg_platform_patching     Lean Delivery ATG Platform Patches/Fix Packs install
+ lean_delivery.docker                    Lean Delivery Docker install
+ lean_delivery.elasticsearch             Role for elasticsearch installation
+ lean_delivery.endeca_cas                Lean Delivery Oracle Endeca CAS install
+ lean_delivery.endeca_mdex               Lean Delivery Endeca MDEX Engine install
+ lean_delivery.endeca_platformservices   Lean Delivery Oracle Endeca PlatformServices install
+ lean_delivery.endeca_toolsandframeworks Lean Delivery Oracle Endeca ToolsAndFrameworks install
+ lean_delivery.filebeat                  Role for filebeat installation
+ lean_delivery.gitlab                    Lean Delivery gitlab installation and/or configuration
+ lean_delivery.gitlab_runner             Lean Delivery Gitlab Runner install
+ lean_delivery.hybris_bootstrap_node     Lean Delivery hybris node preparation
+ lean_delivery.hybris_deploy_artifacts   Role for deployment of Hybris artifacts to configured Hybris instance
+ lean_delivery.java                      Lean Delivery Java install
+ lean_delivery.jboss                     Lean Delivery Jboss install
+ lean_delivery.jenkins                   Jenkins installation and configuration
+ lean_delivery.jenkins_slave             Jenkins Slave Role
+ lean_delivery.kibana                    Role for kibana installation
+ lean_delivery.mysql                     MySQL server for RHEL/CentOS/Debian.
+ lean_delivery.nodejs                    Node.js and global packages installation
+ lean_delivery.oracle_db                 Lean Delivery Oracle Database install
+ lean_delivery.oracle_instant_client     Lean Delivery Oracle Instant Client install
+ lean_delivery.solr_cloud                Solr Cloud configuration role for Ansible
+ lean_delivery.solr_hybris_config        Lean Delivery Solr configuration for usage with SAP Hybris
+ lean_delivery.solr_master               Lean Delivery Solr configuration as master
+ lean_delivery.solr_slave                Lean Delivery Solr configuration as slave
+ lean_delivery.solr_standalone           Lean Delivery Solr installation and configurationn
+ lean_delivery.solr_uninstall            Lean Delivery solr uninstall
+ lean_delivery.sonarqube                 Lean Delivery SonarQube server install
+ lean_delivery.weblogic                  Lean Delivery Oracle WebLogic server install
+ lean_delivery.zabbix_agent              Ansible role for installing and configuring Zabbix Agent
+ lean_delivery.zookeeper                 ZooKeeper playbook for Ansible

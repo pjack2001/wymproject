@@ -1,0 +1,24 @@
+
+Found 19 roles matching your search:
+
+ Name                                            Description
+ ----                                            -----------
+ klewan.ansible_role_oracle                      Oracle Common Role
+ klewan.ansible_role_oracle_asm_metadata         Backup ASM metadata
+ klewan.ansible_role_oracle_download_patches     Download patches from My Oracle Support directly to the server
+ klewan.ansible_role_oracle_gatherinfo_databases Discover Oracle Homes and gather data about registered Oracle databases
+ klewan.ansible_role_oracle_gatherinfo_dbconsole Discover Oracle DB Console services (both standalone and registered in Grid Infrastructure)
+ klewan.ansible_role_oracle_gatherinfo_gi        Discover Oracle Grid Home and gather Grid Infrastructure data
+ klewan.ansible_role_oracle_gatherinfo_listener  Discover Oracle Listeners (both standalone and registered in Grid Infrastructure)
+ klewan.ansible_role_oracle_homes_backup         Backup ORACLE_HOME
+ klewan.ansible_role_oracle_host_cron            Manage Oracle Database Server cron
+ klewan.ansible_role_oracle_manage_dbstate       Manage Oracle Database state (startup/shutdown)
+ klewan.ansible_role_oracle_manage_patches       Manage Oracle patches
+ klewan.ansible_role_postgresql                  PostgreSQL Common Role
+ klewan.ansible_role_postgresql_dbsw_compile     PostgreSQL source code compliation
+ klewan.ansible_role_postgresql_host             Database Server Configuration
+ klewan.ansible_role_postgresql_host_cron        Manage PostgreSQL Database Server cron
+ klewan.ansible_role_postgresql_instance         PostgreSQL instance (cluster) management
+ klewan.ansible_role_postgresql_nagios           Manage Nagios monitoring for a PostgreSQL instance
+ klewan.ansible_role_postgresql_nsr_backup       EMC Networker backup configuration for PostgreSQL databases
+ klewan.ansible_role_postgresql_role_transition  Manage PostgreSQL Role Transitions (Switchover and Failover)

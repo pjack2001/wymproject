@@ -1,0 +1,13 @@
+
+Found 8 roles matching your search:
+
+ Name                         Description
+ ----                         -----------
+ dj-wasabi.ossec-agent        Installing and maintaining the ossec-agent.
+ dj-wasabi.ossec-server       Installing and maintaining the ossec-server.
+ dj-wasabi.telegraf           Installing and configuring Telegraf
+ dj-wasabi.zabbix-agent       Installing and maintaining zabbix-agent for RedHat/Debian/Ubuntu/Windows/Suse.
+ dj-wasabi.zabbix-javagateway Installing and maintaining zabbix-javagateway for RedHat/Debian/Ubuntu.
+ dj-wasabi.zabbix-proxy       Installing and maintaining zabbix-proxy for RedHat/Debian/Ubuntu.
+ dj-wasabi.zabbix-server      Installing and maintaining zabbix-server for RedHat/Debian/Ubuntu.
+ dj-wasabi.zabbix-web         Installing and maintaining zabbix-web for RedHat/Debian/Ubuntu.

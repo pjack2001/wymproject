@@ -1,0 +1,16 @@
+
+Found 11 roles matching your search:
+
+ Name                           Description
+ ----                           -----------
+ cloudalchemy.alertmanager      Prometheus Alertmanager service
+ cloudalchemy.blackbox-exporter Prometheus Blackbox Exporter
+ cloudalchemy.ebpf_exporter     Cloudflare eBPF exporter
+ cloudalchemy.fluentd           Install Fluentd (td-agent version)
+ cloudalchemy.grafana           Grafana - platform for analytics and monitoring
+ cloudalchemy.mysqld_exporter   Prometheus Mysqld Exporter
+ cloudalchemy.node-exporter     Prometheus Node Exporter
+ cloudalchemy.prometheus        Prometheus monitoring system configuration and management
+ cloudalchemy.pushgateway       Prometheus Pushgateway
+ cloudalchemy.skeleton          Deploy <<APPLICATION>>
+ cloudalchemy.snmp-exporter     Prometheus SNMP Exporter

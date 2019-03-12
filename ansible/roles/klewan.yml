@@ -1,0 +1,11 @@
+- src: klewan.ansible_role_oracle
+- src: klewan.ansible_role_oracle_asm_metadata
+- src: klewan.ansible_role_oracle_download_patches
+- src: klewan.ansible_role_oracle_gatherinfo_databases
+- src: klewan.ansible_role_oracle_gatherinfo_dbconsole
+- src: klewan.ansible_role_oracle_gatherinfo_gi
+- src: klewan.ansible_role_oracle_gatherinfo_listener
+- src: klewan.ansible_role_oracle_homes_backup
+- src: klewan.ansible_role_oracle_host_cron
+- src: klewan.ansible_role_oracle_manage_dbstate
+- src: klewan.ansible_role_oracle_manage_patches

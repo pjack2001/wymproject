@@ -1,0 +1,53 @@
+
+Found 48 roles matching your search:
+
+ Name                                                Description
+ ----                                                -----------
+ abessifi.osb                                        Install and configure Oracle Service Bus
+ abessifi.sqlplus                                    Install and configure SQLPLUS tool
+ Actifio.ansible_ondemand_backup                     Ansible role for on-demand backup with Actifio.
+ Actifio.appaware_mount                              Ansible role for Actifio AppAware mounts
+ amarao.flyway                                       Install flyway command line tool from www.flywaydb.org
+ arbouin-consulting.atlassian-confluence             Ansible rols which installs and configures a basic Atlassian Confluence Installation
+ azavea.oracle-instantclient                         An Ansible role for installing Oracle Instant Client.
+ china-awifi.clustercontrol                          ClusterControl for RHEL/CentOS and Debian/Ubuntu.
+ ChristopherDavenport.ellucian-tomcat                Ellucian Tomcat Installer
+ ChristopherDavenport.universal-oracle-client        Universal Oracle Client Installer
+ CyVerse-Ansible.irods-cfg                           An ansible role for configuring an iRODS server
+ datadog-galaxy.sonarqube                            SonarQube provision role
+ Dynatrace.Dynatrace-Server                          An Ansible role for automated deployments of the Dynatrace Server.
+ embedit-ansible.oracle_ee_11g                       Install Oracle 11g EE
+ embedit-ansible.oracle-tools-create_restore_point   Create Oracle Database Restore Point
+ embedit-ansible.oracle-tools-flashback              Flashback Oracle database to restore point and reset flashback
+ fogartyp.oradb-create                               Create Oracle Database. Taken from oravirt's "oravirt/ansible-oracle" github repo.
+ IBM.infosvr-metadata-asset-manager                  Automates data connectivity configuration through IBM Metadata Asset Manager
+ ilmarkerm.oracle-deinstall                          Role to deinstall Oracle RDBMS homes
+ ilmarkerm.oracle-meta                               Role to maintain metadata for Oracle RDBMS home management
+ jeqo.oracle-database                                Ansible Role to install Oracle Database software and create and configure instances and listeners.
+ JJasveer.OracleDB                                   Ansible playbook to install Oracle Database 11g and 12c
+ klewan.ansible_role_oracle                          Oracle Common Role
+ klewan.ansible_role_oracle_download_patches         Download patches from My Oracle Support directly to the server
+ klewan.ansible_role_oracle_gatherinfo_databases     Discover Oracle Homes and gather data about registered Oracle databases
+ klewan.ansible_role_oracle_gatherinfo_gi            Discover Oracle Grid Home and gather Grid Infrastructure data
+ klewan.ansible_role_oracle_host_cron                Manage Oracle Database Server cron
+ klewan.ansible_role_oracle_manage_dbstate           Manage Oracle Database state (startup/shutdown)
+ klewan.ansible_role_oracle_manage_patches           Manage Oracle patches
+ kosalaat.oracle_install                             Ansible playbook to install Oracle Database 11g and 12c
+ lean_delivery.mysql                                 MySQL server for RHEL/CentOS/Debian.
+ lean_delivery.oracle_db                             Lean Delivery Oracle Database install
+ limepepper.mysql                                    Install mysql, perform basic security hardening, run tests
+ lrk.flyway                                          An Ansible Role that install Flyway.
+ lrk.sonarqube                                       An Ansible Role that install SonarQube.
+ mesaguy.prometheus                                  Installs and manages Prometheus and Prometheus exporters
+ msteinhoff.ansible-atlassian-confluence-application Installs and configures an Atlassian Confluence instance.
+ rdwinter2.oracledb_preinstall                       A role to prepare for an Oracle Enterprise Database install
+ severalnines.clustercontrol                         ClusterControl for RHEL/CentOS and Debian/Ubuntu.
+ stuvusIT.confluence                                 Install Confluence and generate configuration files
+ stuvusIT.jira                                       Install JIRA and generate configuration files
+ sysco-middleware.oracle-database                    Ansible Role to install Oracle Database software and create and configure instances and listeners.
+ sysco-middleware.oracle-database-instance           Ansible role to create and configure Oracle Database instances.
+ sysco-middleware.oracle-database-instant-client     Install and configure Oracle Database Instant Client
+ sysco-middleware.oracle-database-sql                generate and execute oracle database sql scripts
+ vladislavtomenko.dbforbix                           ansible role to install dbforbix module for zabbix
+ Voronenko.developer_recipes                         unsorted set of recipes used to quickly get workplace up
+ yannallandit.rsf-oracle-prerequisites               Presales consultant

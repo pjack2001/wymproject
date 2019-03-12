@@ -1,0 +1,30 @@
+---
+- name: geerlingguy-test
+  hosts: 172.17.8.242
+
+  roles:
+    - geerlingguy.repo-epel
+    - geerlingguy.pip
+    #- geerlingguy.ansible
+    #- geerlingguy.docker
+    #- geerlingguy.firewall
+    #- geerlingguy.apache
+    #- geerlingguy.htpasswd
+    #- geerlingguy.nginx
+    #- geerlingguy.haproxy
+    #- geerlingguy.redis
+    #- geerlingguy.nodejs
+    #- geerlingguy.git
+    #- geerlingguy.gitlab
+    #- geerlingguy.gogs
+    #- geerlingguy.mysql
+    #- geerlingguy.jenkins
+    #- geerlingguy.sonar
+    #- geerlingguy.sonar-runner
+    #- geerlingguy.kubernetes
+    #- geerlingguy.samba
+    #- geerlingguy.nfs
+    #- geerlingguy.glusterfs
+    #- geerlingguy.ntp
+    #- geerlingguy.supervisor
+    #- geerlingguy.tomcat6

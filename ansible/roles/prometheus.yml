@@ -1,0 +1,16 @@
+- src: cloudalchemy.alertmanager
+- src: cloudalchemy.blackbox-exporter
+- src: cloudalchemy.ebpf_exporter
+- src: cloudalchemy.fluentd
+- src: cloudalchemy.grafana
+- src: cloudalchemy.mysqld_exporter
+- src: cloudalchemy.node-exporter
+- src: cloudalchemy.prometheus
+- src: cloudalchemy.pushgateway
+- src: cloudalchemy.skeleton
+- src: cloudalchemy.snmp-exporter
+- src: UnderGreen.prometheus-node-exporter
+- src: UnderGreen.prometheus-exporters-common 
+- src: UnderGreen.prometheus-alertmanager
+- src: UnderGreen.prometheus
+- src: UnderGreen.mongodb

@@ -1,0 +1,7 @@
+---
+- name: geerlingguy-test
+  hosts: 172.17.8.242
+
+  roles:
+    - geerlingguy.repo-epel
+    - geerlingguy.ansible

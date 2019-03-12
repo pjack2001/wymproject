@@ -1,0 +1,181 @@
+
+Found 176 roles matching your search:
+
+ Name                              Description
+ ----                              -----------
+ debops.ansible                    Install Ansible on Debian/Ubuntu host using Ansible
+ debops.ansible_plugins            A set of custom Ansible plugins used by DebOps roles
+ debops.apache                     Manage and configure the Apache HTTP Server
+ debops.apparmor                   Install and configure AppArmor
+ debops.apt                        Manage APT repositories and keys
+ debops.apt_cacher_ng              Install and manage the caching HTTP proxy Apt-Cacher NG
+ debops.apt_install                Install APT packages on Debian and other compatible systems
+ debops.apt_listchanges            Manage apt-listchanges service
+ debops.apt_mark                   Set desired APT package state using apt-mark
+ debops.apt_preferences            Manage APT pins in /etc/apt/preferences.d/
+ debops.apt_proxy                  Manage APT proxy configuration
+ debops.atd                        Install and configure atd service
+ debops.auth                       Set up basic user authentication and authorization
+ debops.authorized_keys            Manage SSH public keys in /etc/ssh/authorized_keys/
+ debops.avahi                      Install and configure Avahi service
+ debops.bitcoind                   Setup and manage bitcoind
+ debops.bootstrap                  Prepare a host for Ansible management
+ debops.boxbackup                  Install and configure BoxBackup as a centralized backup service
+ debops.btrfs                      Manage Btrfs
+ debops.console                    Configure system console and terminal-related options
+ debops.core                       Install a set of Ansible local facts on remote host
+ debops.cran                       Manage the Comprehensive R Archive Network (CRAN) packages
+ debops.cron                       Manage cron jobs using Ansible inventory
+ debops.cryptsetup                 Setup and manage encrypted filesystems
+ debops.debops                     Install DebOps scripts, playbooks and roles using Ansible
+ debops.debops_api                 Setup and manage a DebOps API server.
+ debops.debops_fact                Manage Ansible local facts for other roles
+ debops.debops_legacy              Clean up legacy files, directories, packages or diversions
+ debops.dhcpd                      Install and configure ISC DHCP Server
+ debops.dhcp_probe                 Configure DHCP Probe service
+ debops.dhparam                    Manage one or multiple sets of Diffie-Hellman Ephemeral parameters
+ debops.dnsmasq                    Install and configure dnsmasq
+ debops.docker                     Install and configure Docker Engine
+ debops.docker_gen                 Install and manage docker-gen, file generator which uses Docker metadata
+ debops.dokuwiki                   Install DokuWiki, a text-based wiki written in PHP5
+ debops.dovecot                    Configure Dovecot IMAP/POP3 service
+ debops.dropbear_initramfs         Setup the dropbear ssh server in initramfs
+ debops.elastic_co                 Configure Elastic APT repositories
+ debops.elasticsearch              Install and manage Elasticsearch database clusters
+ debops.environment                Manage system environment variables
+ debops.etc_aliases                Manage mail alias database in /etc/aliases
+ debops.etckeeper                  Put /etc under version control using etckeeper
+ debops.etc_services               Manage service definitions in /etc/services
+ debops.etherpad                   Install and manage Etherpad Lite
+ debops.fail2ban                   Install and configure fail2ban service
+ debops.fcgiwrap                   Configure fcgiwrap, a lightweight FastCGI server
+ debops.ferm                       Manage iptables firewall using ferm
+ debops.firejail                   Setup and configure Firejail
+ debops.foodsoft                   Setup and manage Foodsoft
+ debops.freeradius                 Install and configure FreeRADIUS
+ debops.fuse                       Install and configure Filesystem in Userspace (FUSE)
+ debops.gitlab                     Install, upgrade and manage GitLab instance
+ debops.gitlab_runner              Manage GitLab Runner instances
+ debops.gitusers                   Manage user accounts based around git-shell
+ debops.golang                     Install Go language (golang) support using Debian packages
+ debops.grub                       Manage GRUB configuration
+ debops.gunicorn                   Manage Gunicorn Debian service
+ debops.hashicorp                  Securely install HashiCorp applications
+ debops.homeassistant              Setup and manage Home Assistant
+ debops.hwraid                     Configure HWRaid repository and install packages for recognized RAID storage arrays
+ debops.icinga                     Manage Icinga 2 installation
+ debops.icinga_db                  Manage Icinga 2 database
+ debops.icinga_web                 Manage Icinga 2 Web installation
+ debops.ifupdown                   Manage network interface configuration in /etc/network/interfaces
+ debops.ipxe                       Manage iPXE configuration scripts
+ debops.iscsi                      Manage iSCSI Initiator configuration
+ debops.java                       Manage Java OpenJRE/OpenJDK environment
+ debops.kibana                     Install and manage Kibana dashboard
+ debops.kmod                       Manage kernel modules
+ debops.kodi                       Setup and manage Kodi
+ debops.librenms                   Install LibreNMS, an Open Source Network Monitoring System
+ debops.libvirt                    Manage local or remote libvirt instance
+ debops.libvirtd                   Manage libvirt virtualization host
+ debops.libvirtd_qemu              Manage libvirtd QEMU configuration
+ debops.locales                    Configure localization and internationalization
+ debops.logrotate                  Manage log rotation configuration
+ debops.lvm                        Configure Logical Volume Manager (LVM)
+ debops.lxc                        Configure and manage LXC
+ debops.machine                    Manage local machine information and MOTD
+ debops.mailman                    Install and manage Mailman, Mailing List Manager
+ debops.mariadb                    Install and manage a MariaDB / MySQL client
+ debops.mariadb_server             Install and manage a MariaDB / MySQL server
+ debops.memcached                  Install and configure memcached instance
+ debops.monit                      Install and configure Monit service
+ debops.mosquitto                  Manage a Mosquitto MQTT broker
+ debops.mount                      Manage local device and bind mounts
+ debops.netbase                    Configure local host and network database
+ debops.netbox                     Deploy and manage NetBox, IPAM/DCIM management tool
+ debops.neurodebian                Install packages from the NeuroDebian repository
+ debops.nfs                        Configure NFS4 client
+ debops.nfs_server                 Manage NFS server using Ansible
+ debops.nginx                      Install and manage nginx webserver
+ debops.nodejs                     Install NodeJS and NPM packages
+ debops.nsswitch                   Manage Name Service Switch configuration
+ debops.ntp                        Manage time synchronization, NTP server and timezone
+ debops.nullmailer                 Manage nullmailer SMTP server
+ debops.opendkim                   Install and configure OpenDKIM service
+ debops.openvz                     Set up OpenVZ environment on Debian Wheezy
+ debops.owncloud                   Install and manage ownCloud instance
+ debops.persistent_paths           Ensure paths are stored on persistent storage
+ debops.php                        Install and manage PHP environment
+ debops.phpipam                    Install phpIPAM, an Open Source IP Address Manager
+ debops.phpmyadmin                 Install and configure PHPMyAdmin on a MySQL database server
+ debops.pki                        Bootstrap and manage internal PKI, Certificate Authorities and OpenSSL/GnuTLS certificates
+ debops.postconf                   Configure Postfix SMTP service via debops.postfix
+ debops.postfix                    Install and manage Postfix SMTP service
+ debops.postgresql                 Manage local or remote PostgreSQL roles and databases
+ debops.postgresql_server          Install and manage PostgreSQL Server
+ debops.postscreen                 Manage Postscreen Postfix service
+ debops.postwhite                  Manage Postwhite, Postscreen SPF Whitelist Generator
+ debops.preseed                    Provide Debian Preseed configuration files over HTTP
+ debops.proc_hidepid               Configure /proc hidepid= options
+ debops.prosody                    Lightweight Jabber/XMPP server
+ debops.python                     Manage Python environment
+ debops.rabbitmq_management        Install and configure RabbitMQ Management Console
+ debops.rabbitmq_server            Manage RabbitMQ service
+ debops.radvd                      Manage radvd (IPv6 router advertisement daemon)
+ debops.rails_deploy               Deploy and monitor rails applications
+ debops.redis_sentinel             Configure Redis Sentinel instances
+ debops.redis_server               Configure Redis Server instances
+ debops.reprepro                   Create local APT repository with reprepro
+ debops.resources                  Manage custom file resources through Ansible inventory
+ debops.root_account               Manage the root account
+ debops.roundcube                  Manage Roundcube, a browser-based IMAP client written in PHP
+ debops.rsnapshot                  Configure rsnapshot and rsync to backup a set of servers remotely
+ debops.rstudio_server             Configure RStudio Server, an Integrated Development Environment for R
+ debops.rsyslog                    Manage rsyslog configuration
+ debops.ruby                       Install Ruby packages and gems
+ debops.salt                       Install and configure Salt Master service
+ debops.samba                      Install and configure Samba file sharing server.
+ debops.saslauthd                  Manage Cyrus SASL authentication service
+ debops.secret                     Manage sensitive data in a separate directory relative to Ansible inventory
+ debops.sftpusers                  Manage user accounts restricted to SFTP access
+ debops.sks                        Install and manage SKS Keyserver cluster
+ debops.slapd                      Manage slapd - OpenLDAP server
+ debops.smstools                   Create an TCP-SMS and mail-SMS gateway using GSM modem
+ debops.snapshot_snapper           Configure snapshots with snapper
+ debops.snmpd                      Install and configure SNMP service
+ debops.sshd                       Configure OpenSSH server
+ debops.stunnel                    Create an encrypted TCP tunnel between two hosts using stunnel and SSL
+ debops.sudo                       Configure sudo support on a host
+ debops.swapfile                   Configure one or multiple swap files on a Linux system
+ debops.sysctl                     Manage kernel parameters using sysctl
+ debops.sysfs                      Manage kernel /sys filesystem using sysfsutils
+ debops.sysnews                    Manage System News for UNIX accounts
+ debops.system_groups              Manage UNIX system groups
+ debops.tcpwrappers                Manage host access rules in /etc/hosts.{allow,deny}
+ debops.tftpd                      Manage standalone TFTP server
+ debops.tgt                        Configure iSCSI Targets using tgt
+ debops.tinc                       Configure tinc mesh VPN network
+ debops.tor                        FIXME
+ debops.unattended_upgrades        Configure unattended upgrades on Debian-based hosts
+ debops.unbound                    Install and configure Unbound, local DNS resolver
+ debops.users                      Create and manage user accounts using Ansible inventory
+ debops.volkszaehler               Setup and manage volkszaehler
+ debops.x2go_server                Setup and manage the server-side of X2Go
+ debops-contrib.apparmor           Install and configure AppArmor
+ debops-contrib.bitcoind           Setup and manage bitcoind
+ debops-contrib.btrfs              Manage Btrfs
+ debops-contrib.checkmk_agent      Setup Check_MK monitoring agent
+ debops-contrib.checkmk_server     Setup Check_MK monitoring server
+ debops-contrib.dropbear_initramfs Setup the dropbear ssh server in initramfs
+ debops-contrib.elasticbeats       Manage Elastic Beats data shippers
+ debops-contrib.etckeeper          Put /etc under version control using etckeeper
+ debops-contrib.firejail           Setup and configure Firejail
+ debops-contrib.foodsoft           Setup and manage Foodsoft
+ debops-contrib.fuse               Install and configure Filesystem in Userspace (FUSE)
+ debops-contrib.gdnsd              Install and manage gdnsd, an authoritative-only DNS server
+ debops-contrib.homeassistant      Setup and manage Home Assistant
+ debops-contrib.kernel_module      Manage Linux kernel modules
+ debops-contrib.kibana             Manage Kibana analytics and visualization platform
+ debops-contrib.neurodebian        Install packages from the NeuroDebian repository
+ debops-contrib.roundcube          Manage Roundcube, a browser-based IMAP client written in PHP
+ debops-contrib.snapshot_snapper   Configure snapshots with snapper
+ debops-contrib.volkszaehler       Setup and manage volkszaehler
+ debops-contrib.x2go_server        Setup and manage the server-side of X2Go

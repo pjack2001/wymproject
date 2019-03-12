@@ -1,0 +1,7 @@
+- src: sysco-middleware.oracle-database
+- src: sysco-middleware.oracle-database-instance
+- src: sysco-middleware.oracle-database-instant-client
+- src: sysco-middleware.oracle-database-sql
+- src: sysco-middleware.oracle-soa
+- src: sysco-middleware.oracle-weblogic
+- src: sysco-middleware.oracle-wlst

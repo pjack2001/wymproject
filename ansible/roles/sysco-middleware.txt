@@ -1,0 +1,12 @@
+
+Found 7 roles matching your search:
+
+ Name                                            Description
+ ----                                            -----------
+ sysco-middleware.oracle-database                Ansible Role to install Oracle Database software and create and configure instances and listeners.
+ sysco-middleware.oracle-database-instance       Ansible role to create and configure Oracle Database instances.
+ sysco-middleware.oracle-database-instant-client Install and configure Oracle Database Instant Client
+ sysco-middleware.oracle-database-sql            generate and execute oracle database sql scripts
+ sysco-middleware.oracle-soa                     Install and configure Oracle SOA Suite
+ sysco-middleware.oracle-weblogic                install and configure oracle weblogic server
+ sysco-middleware.oracle-wlst                    generate and execute wlst scripts

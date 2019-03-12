@@ -1,0 +1,11 @@
+
+Found 6 roles matching your search:
+
+ Name                             Description
+ ----                             -----------
+ ilmarkerm.oracle-addnode         This role runs addnode.sh in case of Oracle RAC installation.
+ ilmarkerm.oracle-deinstall       Role to deinstall Oracle RDBMS homes
+ ilmarkerm.oracle-home-management This is a main metadata role to pull in all dependent roles needed for full Oracle RDBMS home management solution.
+ ilmarkerm.oracle-install         Install and patch Oracle RDBMS homes
+ ilmarkerm.oracle-install-lock    Role to determine if current host is the master in RAC cluster and could perform the initial software install
+ ilmarkerm.oracle-meta            Role to maintain metadata for Oracle RDBMS home management

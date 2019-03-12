@@ -1,0 +1,42 @@
+
+Found 37 roles matching your search:
+
+ Name                                     Description
+ ----                                     -----------
+ entercloudsuite.ansible-mcrouter         Playbook for mcrouter.
+ entercloudsuite.ansible-mongodb          Playbook for mongodb.
+ entercloudsuite.ansible_portus           Playbook for portus.
+ entercloudsuite.ansible_redis            Playbook for redis.
+ entercloudsuite.ansible_telegraf         Playbook for telegraf.
+ entercloudsuite.auditbeat                Playbook for auditbeat.
+ entercloudsuite.automium                 Playbook for automium
+ entercloudsuite.backup                   Playbook for backup.
+ entercloudsuite.beats                    Playbook for beats.
+ entercloudsuite.consul                   Playbook for consul.
+ entercloudsuite.consul-template          Playbook for consul-template.
+ entercloudsuite.docker                   Playbook for Docker CE
+ entercloudsuite.elasticsearch            Playbook for Elasticsearch.
+ entercloudsuite.etcd                     Playbook for etcd
+ entercloudsuite.example                  Playbook for Prometheus
+ entercloudsuite.filebeat                 Playbook for filebeat.
+ entercloudsuite.filesystem               Creating partition, filesystem and mounting it
+ entercloudsuite.haproxy                  Playbook for HAProxy.
+ entercloudsuite.icinga2-client           Playbook for icinga2-client.
+ entercloudsuite.icinga2-master           Playbook for Icinga2 Master.
+ entercloudsuite.jenkins                  Playbook for Jenkins
+ entercloudsuite.keepalived               Playbook for keepalived.
+ entercloudsuite.kibana                   Playbook for kibana.
+ entercloudsuite.kubernetes               Playbook for Kubernetes
+ entercloudsuite.memcached                Playbook for memcached.
+ entercloudsuite.mysql                    Playbook for mysql.
+ entercloudsuite.mysql-innobackupex       Playbook for mysql-innobackupex.
+ entercloudsuite.orchestrator             Playbook for orchestrator.
+ entercloudsuite.pmm_client               Playbook for pmm-client.
+ entercloudsuite.pmm_server               Playbook for pmm-server.
+ entercloudsuite.postgres                 Playbook for PostgreSQL.
+ entercloudsuite.postgres-slave-init      Playbook for postgres-slave-init.
+ entercloudsuite.prometheus               Playbook for Prometheus.
+ entercloudsuite.prometheus-exporter      Playbook for prometheus-exporter.
+ entercloudsuite.prometheus-node-exporter Deploy Prometheus Node Exporter
+ entercloudsuite.strongswan               Playbook for strongswan.
+ entercloudsuite.varnish                  Playbook for varnish.

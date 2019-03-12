@@ -1,0 +1,6 @@
+- src: ilmarkerm.oracle-addnode
+- src: ilmarkerm.oracle-deinstall
+- src: ilmarkerm.oracle-home-management
+- src: ilmarkerm.oracle-install
+- src: ilmarkerm.oracle-install-lock
+- src: ilmarkerm.oracle-meta

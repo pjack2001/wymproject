@@ -1,0 +1,108 @@
+
+Found 103 roles matching your search:
+
+ Name                          Description
+ ----                          -----------
+ alikins.ansible_play2         Play2 role to install play2 versions for a given app and the init.d necessary to run it.
+ alikins.some_role             some_role
+ alikins.some_role             some_role
+ alikins.some_role             some_role
+ alikins.some_role             some_role
+ alikins.some_role             some_role
+ alikins.some_role             some_role
+ alikins.aole_role             Aole Role
+ alikins.bole_role             Bole Role
+ alikins.cole_role             Cole Role
+ alikins.some_role             some_role
+ alikins.adminer               Installs Adminer for Database management.
+ alikins.ansible               Ansible for RedHat/CentOS/Debian/Ubuntu.
+ alikins.apache                Apache 2.x for Linux.
+ alikins.apache_php_fpm        Apache 2.4+ PHP-FPM support for Linux.
+ alikins.aws_inspector         AWS Inspector installation for Linux.
+ alikins.awx                   Installs and configures AWX (Ansible Tower's open source version).
+ alikins.backup                Backup for Simple Servers.
+ alikins.blackfire             Blackfire installation for Linux
+ alikins.certbot               Installs and configures Certbot (for Let's Encrypt).
+ alikins.clamav                ClamAV installation and configuration.
+ alikins.collectd_signalfx     SignalFx Collectd installation for Linux.
+ alikins.composer              Composer PHP Dependency Manager
+ alikins.daemonize             Daemonize for Unix-like operating systems
+ alikins.docker                Docker for Linux.
+ alikins.dotfiles              Dotfile installation for UNIX/Linux.
+ alikins.drupal                Deploy or install Drupal on your servers.
+ alikins.drupal_console        Drupal Console
+ alikins.drush                 Drush - command line shell for Drupal
+ alikins.ecr_container_build   ECR docker image build and push management role.
+ alikins.elasticsearch         Elasticsearch for Linux.
+ alikins.elasticsearch_curator Elasticsearch curator for Linux.
+ alikins.exim                  Exim installation for Linux.
+ alikins.filebeat              Filebeat for Linux.
+ alikins.firewall              Simple iptables firewall for most Unix-like systems.
+ alikins.git                   Git version control software
+ alikins.github_users          Create users based on GitHub accounts.
+ alikins.gitlab                GitLab Git web interface
+ alikins.glusterfs             GlusterFS installation for Linux.
+ alikins.gogs                  Gogs: Go Git Service
+ alikins.haproxy               HAProxy installation and configuration.
+ alikins.hdparm                hdparm installation and configuration for Linux.
+ alikins.homebrew              Homebrew for Mac OS X
+ alikins.htpasswd              htpasswd installation and helper role for Linux servers.
+ alikins.java                  Java for Linux
+ alikins.jenkins               Jenkins CI
+ alikins.k8s_manifests         Kubernetes manifest management role.
+ alikins.kibana                Kibana for Linux.
+ alikins.kubernetes            Kubernetes for Linux.
+ alikins.logstash              Logstash for Linux.
+ alikins.logstash_forwarder    Logstash Forwarder for Linux.
+ alikins.mailhog               MailHog for Linux
+ alikins.mas                   Mac App Store CLI installation for macOS
+ alikins.memcached             Memcached for Linux
+ alikins.munin                 Munin monitoring server for RedHat/CentOS or Debian/Ubuntu.
+ alikins.munin_node            Munin node monitoring endpoint for RedHat/CentOS or Debian/Ubuntu.
+ alikins.mysql                 MySQL server for RHEL/CentOS and Debian/Ubuntu.
+ alikins.nfs                   NFS installation for Linux.
+ alikins.nginx                 Nginx installation for Linux, FreeBSD and OpenBSD.
+ alikins.nodejs                Node.js installation for Linux
+ alikins.ntp                   NTP installation and configuration for Linux.
+ alikins.packer                Packer for Linux
+ alikins.packer_debian         Debian/Ubuntu configuration for Packer.
+ alikins.packer_rhel           RedHat/CentOS configuration for Packer.
+ alikins.passenger             Passenger installation for Linux/UNIX.
+ alikins.phergie               Phergie - a PHP IRC bot
+ alikins.php                   PHP for RedHat/CentOS/Fedora/Debian/Ubuntu.
+ alikins.php_memcached         PHP Memcached support for Linux
+ alikins.phpmyadmin            phpMyAdmin installation for Linux
+ alikins.php_mysql             PHP MySQL support for Linux.
+ alikins.php_pear              PHP PEAR library installation.
+ alikins.php_pecl              PHP PECL extension installation.
+ alikins.php_pgsql             PHP PostgreSQL support for Linux.
+ alikins.php_redis             PhpRedis support for Linux
+ alikins.php_tideways          Tideways PHP Profiler Extension for Linux
+ alikins.php_versions          Allows different PHP versions to be installed.
+ alikins.php_xdebug            PHP XDebug for Linux
+ alikins.php_xhprof            PHP XHProf for Linux
+ alikins.pimpmylog             Pimp my Log installation for Linux
+ alikins.pip                   Pip (Python package manager) for Linux.
+ alikins.postfix               Postfix for RedHat/CentOS or Debian/Ubuntu.
+ alikins.postgresql            PostgreSQL server for Linux.
+ alikins.puppet                Puppet for Linux.
+ alikins.rabbitmq              RabbitMQ installation for Linux.
+ alikins.raspberry_pi          Configures a Raspberry Pi.
+ alikins.redis                 Redis for Linux
+ alikins.repo_dotdeb           DotDeb repository for Debian.
+ alikins.repo_epel             EPEL repository for RHEL/CentOS.
+ alikins.repo_puias            PUIAS repository for RHEL/CentOS.
+ alikins.repo_remi             Remi's RPM repository for RHEL/CentOS.
+ alikins.ruby                  Ruby installation for Linux.
+ alikins.samba                 Samba for RHEL/CentOS.
+ alikins.security              Security software installation and configuration.
+ alikins.solr                  Apache Solr for Linux.
+ alikins.sonar                 SonarQube for Linux
+ alikins.sonar_runner          Sonar Runner for Linux
+ alikins.ssh_chroot_jail       Simple SSH chroot jail management.
+ alikins.supervisor            Supervisor (process state manager) for Linux.
+ alikins.svn                   SVN web server for Linux
+ alikins.svn2git               Svn2Git VCS conversion software for Linux.
+ alikins.swap                  Swap file and swap management for Linux.
+ alikins.tomcat6               Tomcat 6 for RHEL/CentOS and Debian/Ubuntu.
+ alikins.varnish               Varnish for Linux.
