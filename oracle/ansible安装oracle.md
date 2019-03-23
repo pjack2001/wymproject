@@ -5,7 +5,7 @@
 
 ###
 
-```
+```yml
 $ ansible-galaxy search database
 
 ansible-galaxy search --author sysco-middleware > sysco-middleware.txt
@@ -32,9 +32,11 @@ $ ansible-galaxy list
 
 出现问题加-vv 参数显示详细信息
 
-TASK [lean_delivery.oracle_db : Check unziped folder] **************************
-task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:65
-ok: [172.17.8.242] => {"changed": false, "stat": {"exists": false}}
+TASK [lean_delivery.oracle_db : Create db] **********************************************************************************
+task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/oracle-db-11-12.yml:38
+
+
+
 
 
 
@@ -103,8 +105,7 @@ $ tree -L 2
 
 0、首先要修改执行的lean_delivery_oracle112040.yml
 
-
-$ cd /media/xh/i/python/wymproject/ansible/testw/oracleinstalltest
+$ cat /media/xh/i/python/wymproject/oracle/oracleinstalltest/lean_delivery_oracle12201.yml
 
 $ cat lean_delivery_oracle112040.yml.yml 
 - name: "Install oracle db"
@@ -121,18 +122,32 @@ $ cat lean_delivery_oracle112040.yml.yml
         - "p13390677_112040_Linux-x86-64_2of7.zip"
         - "p13390677_112040_Linux-x86-64_3of7.zip"
 
+$ cat lean_delivery_oracle12201.yml.yml 
+- name: "Install oracle db"
+  hosts: 172.17.8.242
 
+  roles:
+    - role: "lean_delivery.oracle_db"
+      oracle_version: 12
+      patch_version: 12.2.0.1
+      transport: "local"
+      transport_local: "/home/w/tool/oralce"
+      oracle_images:
+        - "linuxx64_12201_database.zip"
 
 
 调用关系，用-vvv参数执行ansible-playbook lean_delivery_oracle112040.yml.yml会有输出
 
-lean_delivery_oracle112040.yml->lean_delivery.oracle_db roles->
-
 
 $ ansible all --list
 
-$ ansible-playbook lean_delivery_oracle112040.yml -vv
 
+$ ansible-playbook /media/xh/i/python/wymproject/oracle/oracleinstalltest/lean_delivery_oracle112040.yml -vv
+
+
+$ ansible-playbook /media/xh/i/python/wymproject/oracle/oracleinstalltest/lean_delivery_oracle12201.yml -vv
+
+##################################################
 
 1、/etc/ansible/roles/lean_delivery.oracle_db/defaults/main.yml
 
@@ -157,6 +172,8 @@ oracle_images:
 
 2、/etc/ansible/roles/lean_delivery.oracle_db/vars/oracle11.yml
 包括需要的软件包列表
+
+/etc/ansible/roles/lean_delivery.oracle_db/vars/oracle12.yml只添加glibc.i686即可
 
   install_requirements:
     - "binutils"
@@ -196,6 +213,7 @@ oracle_images:
 
 
 3、注释掉/etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml里
+第71行
 - name: "Unzip oracle installer"的    #remote_src: True
 
 4、安装Oracle12c，
@@ -203,10 +221,24 @@ oracle_images:
 oracle.install.db.OSRACDBA_GROUP={{ oracledb.dba_group }}
 
 
+
+
+
+
+
+
+相关日志导出
+
+$ scp root@172.17.8.242:/tmp/OraInstall2019-03-05_08-49-40AM/installActions2019-03-05_08-49-40AM.log /media/xh/i/python/wymproject/oracle
+
+/opt/oracledb/product/12.2.0.1/db_1/cfgtoollogs/oui/configActions2019-03-12_11-03-25-AM.log
+
+
+
 ```
 
 
-#### 安装oracle 11g过程
+#### 安装oracle 11g过程，安装12c也是这个错误
 
 TASK [lean_delivery.oracle_db : Create db] *********************************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/oracle-db-11-12.yml:38
@@ -216,7 +248,8 @@ task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/oracle-db-11-12.yml:
 ```yml
 首先要修改lean_delivery_oracle112040.yml，
 # w @ uw in /media/xh/i/python/wymproject/oracle/oracleinstalltest on git:master x [19:04:05] 
-$ ansible-playbook lean_delivery_oracle112040.yml -vv                                    
+$ ansible-playbook lean_delivery_oracle112040.yml -vv
+
 ansible-playbook 2.7.8
   config file = /etc/ansible/ansible.cfg
   configured module search path = ['/home/w/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
@@ -302,7 +335,7 @@ task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:4
 FAILED - RETRYING: Install requirements (10 retries left).
 FAILED - RETRYING: Install requirements (9 retries left).
 FAILED - RETRYING: Install requirements (8 retries left).
-changed: [172.17.8.242] => {"attempts": 4, "changed": true, "msg": "warning: /var/cache/yum/x86_64/7/base/packages/compat-libcap1-1.10-7.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY\nImporting GPG key 0xF4A80EB5:\n Userid     : \"CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>\"\n Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5\n Package    : centos-release-7-4.1708.el7.centos.x86_64 (@anaconda)\n From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7\n", "rc": 0, "results": ["binutils-2.25.1-32.base.el7_4.1.x86_64 providing binutils is already installed", "glibc-2.17-196.el7_4.2.x86_64 providing glibc is already installed", "glibc-common-2.17-196.el7_4.2.x86_64 providing glibc-common is already installed", "libaio-0.3.109-13.el7.x86_64 providing libaio is already installed", "libgcc-4.8.5-16.el7_4.1.x86_64 providing libgcc is already installed", "libstdc++-4.8.5-16.el7_4.1.x86_64 providing libstdc++ is already installed", "1:make-3.82-23.el7.x86_64 providing make is already installed", "Loaded plugins: fastestmirror\nLoading mirror speeds from cached hostfile\n * base: mirror.lzu.edu.cn\n * extras: mirrors.tuna.tsinghua.edu.cn\n * updates: mirrors.nwsuaf.edu.cn\nResolving Dependencies\n--> Running transaction check\n---> Package compat-libcap1.x86_64 0:1.10-7.el7 will be installed\n---> Package compat-libstdc++-33.x86_64 0:3.2.3-72.el7 will be installed\n---> Package gcc.x86_64 0:4.8.5-36.el7 will be installed\n--> Processing Dependency: libgomp = 4.8.5-36.el7 for package: gcc-4.8.5-36.el7.x86_64\n--> Processing Dependency: cpp = 4.8.5-36.el7 for package: gcc-4.8.5-36.el7.x86_64\n--> Processing Dependency: libgcc >= 4.8.5-36.el7 for package: gcc-4.8.5-36.el7.x86_64\n--> Processing Dependency: libmpfr.so.4()(64bit) for package: gcc-4.8.5-36.el7.x86_64\n--> Processing Dependency: libmpc.so.3()(64bit) for package: gcc-4.8.5-36.el7.x86_64\n---> Package gcc-c++.x86_64 0:4.8.5-36.el7 will be installed\n---> Package glibc.i686 0:2.17-260.el7_6.3 will be installed\n--> Processing Dependency: glibc-common = 2.17-260.el7_6.3 for package: glibc-2.17-260.el7_6.3.i686\n--> Processing Dependency: libfreebl3.so(NSSRAWHASH_3.12.3) for package: glibc-2.17-260.el7_6.3.i686\n--> Processing Dependency: libfreebl3.so for package: glibc-2.17-260.el7_6.3.i686\n---> Package glibc-devel.i686 0:2.17-260.el7_6.3 will be installed\n---> Package glibc-devel.x86_64 0:2.17-260.el7_6.3 will be installed\n---> Package glibc-headers.x86_64 0:2.17-260.el7_6.3 will be installed\n--> Processing Dependency: kernel-headers >= 2.2.1 for package: glibc-headers-2.17-260.el7_6.3.x86_64\n--> Processing Dependency: kernel-headers for package: glibc-headers-2.17-260.el7_6.3.x86_64\n---> Package ksh.x86_64 0:20120801-139.el7 will be installed\n---> Package libX11.x86_64 0:1.6.5-2.el7 will be installed\n--> Processing Dependency: libX11-common >= 1.6.5-2.el7 for package: libX11-1.6.5-2.el7.x86_64\n--> Processing Dependency: libxcb.so.1()(64bit) for package: libX11-1.6.5-2.el7.x86_64\n---> Package libXau.x86_64 0:1.0.8-2.1.el7 will be installed\n---> Package libXext.x86_64 0:1.3.3-3.el7 will be installed\n---> Package libXi.i686 0:1.7.9-1.el7 will be installed\n--> Processing Dependency: libXext.so.6 for package: libXi-1.7.9-1.el7.i686\n--> Processing Dependency: libX11.so.6 for package: libXi-1.7.9-1.el7.i686\n---> Package libXi.x86_64 0:1.7.9-1.el7 will be installed\n---> Package libXtst.i686 0:1.2.3-1.el7 will be installed\n---> Package libXtst.x86_64 0:1.2.3-1.el7 will be installed\n---> Package libaio.i686 0:0.3.109-13.el7 will be installed\n---> Package libaio-devel.i686 0:0.3.109-13.el7 will be installed\n---> Package libaio-devel.x86_64 0:0.3.109-13.el7 will be installed\n---> Package libstdc++.i686 0:4.8.5-36.el7 will be installed\n--> Processing Dependency: libgcc_s.so.1(GLIBC_2.0) for package: libstdc++-4.8.5-36.el7.i686\n--> Processing Dependency: libgcc_s.so.1(GCC_4.2.0) for package: libstdc++-4.8.5-36.el7.i686\n--> Processing Dependency: libgcc_s.so.1(GCC_3.3) for package: libstdc++-4.8.5-36.el7.i686\n--> Processing Dependency: libgcc_s.so.1(GCC_3.0) for package: libstdc++-4.8.5-36.el7.i686\n--> Processing Dependency: libgcc_s.so.1 for package: libstdc++-4.8.5-36.el7.i686\n---> Package libstdc++-devel.i686 0:4.8.5-36.el7 will be installed\n---> Package libstdc++-devel.x86_64 0:4.8.5-36.el7 will be installed\n--> Processing Dependency: libstdc++(x86-64) = 4.8.5-36.el7 for package: libstdc++-devel-4.8.5-36.el7.x86_64\n---> Package sysstat.x86_64 0:10.1.5-17.el7 will be installed\n--> Processing Dependency: libsensors.so.4()(64bit) for package: sysstat-10.1.5-17.el7.x86_64\n---> Package unixODBC.x86_64 0:2.3.1-11.el7 will be installed\n--> Processing Dependency: libltdl.so.7()(64bit) for package: unixODBC-2.3.1-11.el7.x86_64\n---> Package unixODBC-devel.x86_64 0:2.3.1-11.el7 will be installed\n---> Package unzip.x86_64 0:6.0-19.el7 will be installed\n---> Package zlib-devel.x86_64 0:1.2.7-18.el7 will be installed\n--> Processing Dependency: zlib = 1.2.7-18.el7 for package: zlib-devel-1.2.7-18.el7.x86_64\n--> Running transaction check\n---> Package cpp.x86_64 0:4.8.5-36.el7 will be installed\n---> Package glibc-common.x86_64 0:2.17-196.el7_4.2 will be updated\n--> Processing Dependency: glibc-common = 2.17-196.el7_4.2 for package: glibc-2.17-196.el7_4.2.x86_64\n---> Package glibc-common.x86_64 0:2.17-260.el7_6.3 will be an update\n---> Package kernel-headers.x86_64 0:3.10.0-957.5.1.el7 will be installed\n---> Package libX11.i686 0:1.6.5-2.el7 will be installed\n--> Processing Dependency: libxcb.so.1 for package: libX11-1.6.5-2.el7.i686\n---> Package libX11-common.noarch 0:1.6.5-2.el7 will be installed\n---> Package libXext.i686 0:1.3.3-3.el7 will be installed\n---> Package libgcc.x86_64 0:4.8.5-16.el7_4.1 will be updated\n---> Package libgcc.i686 0:4.8.5-36.el7 will be installed\n---> Package libgcc.x86_64 0:4.8.5-36.el7 will be an update\n---> Package libgomp.x86_64 0:4.8.5-16.el7_4.1 will be updated\n---> Package libgomp.x86_64 0:4.8.5-36.el7 will be an update\n---> Package libmpc.x86_64 0:1.0.1-3.el7 will be installed\n---> Package libstdc++.x86_64 0:4.8.5-16.el7_4.1 will be updated\n---> Package libstdc++.x86_64 0:4.8.5-36.el7 will be an update\n---> Package libtool-ltdl.x86_64 0:2.4.2-22.el7_3 will be installed\n---> Package libxcb.x86_64 0:1.13-1.el7 will be installed\n---> Package lm_sensors-libs.x86_64 0:3.4.0-6.20160601gitf9185e5.el7 will be installed\n---> Package mpfr.x86_64 0:3.1.1-4.el7 will be installed\n---> Package nss-softokn-freebl.x86_64 0:3.28.3-8.el7_4 will be updated\n---> Package nss-softokn-freebl.i686 0:3.36.0-5.el7_5 will be installed\n--> Processing Dependency: nss-util >= 3.36.0-1 for package: nss-softokn-freebl-3.36.0-5.el7_5.i686\n--> Processing Dependency: nspr >= 4.19.0 for package: nss-softokn-freebl-3.36.0-5.el7_5.i686\n---> Package nss-softokn-freebl.x86_64 0:3.36.0-5.el7_5 will be an update\n---> Package zlib.x86_64 0:1.2.7-17.el7 will be updated\n---> Package zlib.x86_64 0:1.2.7-18.el7 will be an update\n--> Running transaction check\n---> Package glibc.x86_64 0:2.17-196.el7_4.2 will be updated\n---> Package glibc.x86_64 0:2.17-260.el7_6.3 will be an update\n---> Package libxcb.i686 0:1.13-1.el7 will be installed\n--> Processing Dependency: libXau.so.6 for package: libxcb-1.13-1.el7.i686\n---> Package nspr.x86_64 0:4.13.1-1.0.el7_3 will be updated\n---> Package nspr.x86_64 0:4.19.0-1.el7_5 will be an update\n---> Package nss-util.x86_64 0:3.28.4-3.el7 will be updated\n---> Package nss-util.x86_64 0:3.36.0-1.1.el7_6 will be an update\n--> Running transaction check\n---> Package libXau.i686 0:1.0.8-2.1.el7 will be installed\n--> Finished Dependency Resolution\n\nDependencies Resolved\n\n================================================================================\n Package              Arch    Version                            Repository\n                                                                           Size\n================================================================================\nInstalling:\n compat-libcap1       x86_64  1.10-7.el7                         base      19 k\n compat-libstdc++-33  x86_64  3.2.3-72.el7                       base     191 k\n gcc                  x86_64  4.8.5-36.el7                       base      16 M\n gcc-c++              x86_64  4.8.5-36.el7                       base     7.2 M\n glibc                i686    2.17-260.el7_6.3                   updates  4.3 M\n glibc-devel          i686    2.17-260.el7_6.3                   updates  1.1 M\n glibc-devel          x86_64  2.17-260.el7_6.3                   updates  1.1 M\n glibc-headers        x86_64  2.17-260.el7_6.3                   updates  683 k\n ksh                  x86_64  20120801-139.el7                   base     885 k\n libX11               x86_64  1.6.5-2.el7                        base     606 k\n libXau               x86_64  1.0.8-2.1.el7                      base      29 k\n libXext              x86_64  1.3.3-3.el7                        base      39 k\n libXi                i686    1.7.9-1.el7                        base      40 k\n libXi                x86_64  1.7.9-1.el7                        base      40 k\n libXtst              i686    1.2.3-1.el7                        base      20 k\n libXtst              x86_64  1.2.3-1.el7                        base      20 k\n libaio               i686    0.3.109-13.el7                     base      24 k\n libaio-devel         i686    0.3.109-13.el7                     base      13 k\n libaio-devel         x86_64  0.3.109-13.el7                     base      13 k\n libstdc++            i686    4.8.5-36.el7                       base     318 k\n libstdc++-devel      i686    4.8.5-36.el7                       base     1.5 M\n libstdc++-devel      x86_64  4.8.5-36.el7                       base     1.5 M\n sysstat              x86_64  10.1.5-17.el7                      base     315 k\n unixODBC             x86_64  2.3.1-11.el7                       base     413 k\n unixODBC-devel       x86_64  2.3.1-11.el7                       base      55 k\n unzip                x86_64  6.0-19.el7                         base     170 k\n zlib-devel           x86_64  1.2.7-18.el7                       base      50 k\nInstalling for dependencies:\n cpp                  x86_64  4.8.5-36.el7                       base     5.9 M\n kernel-headers       x86_64  3.10.0-957.5.1.el7                 updates  8.0 M\n libX11               i686    1.6.5-2.el7                        base     610 k\n libX11-common        noarch  1.6.5-2.el7                        base     164 k\n libXau               i686    1.0.8-2.1.el7                      base      29 k\n libXext              i686    1.3.3-3.el7                        base      39 k\n libgcc               i686    4.8.5-36.el7                       base     109 k\n libmpc               x86_64  1.0.1-3.el7                        base      51 k\n libtool-ltdl         x86_64  2.4.2-22.el7_3                     base      49 k\n libxcb               i686    1.13-1.el7                         base     230 k\n libxcb               x86_64  1.13-1.el7                         base     214 k\n lm_sensors-libs      x86_64  3.4.0-6.20160601gitf9185e5.el7     base      42 k\n mpfr                 x86_64  3.1.1-4.el7                        base     203 k\n nss-softokn-freebl   i686    3.36.0-5.el7_5                     base     211 k\nUpdating for dependencies:\n glibc                x86_64  2.17-260.el7_6.3                   updates  3.7 M\n glibc-common         x86_64  2.17-260.el7_6.3                   updates   12 M\n libgcc               x86_64  4.8.5-36.el7                       base     102 k\n libgomp              x86_64  4.8.5-36.el7                       base     157 k\n libstdc++            x86_64  4.8.5-36.el7                       base     304 k\n nspr                 x86_64  4.19.0-1.el7_5                     base     127 k\n nss-softokn-freebl   x86_64  3.36.0-5.el7_5                     base     222 k\n nss-util             x86_64  3.36.0-1.1.el7_6                   updates   78 k\n zlib                 x86_64  1.2.7-18.el7                       base      90 k\n\nTransaction Summary\n================================================================================\nInstall  27 Packages (+14 Dependent packages)\nUpgrade              (  9 Dependent packages)\n\nTotal download size: 69 M\nDownloading packages:\nNo Presto metadata available for base\nPublic key for compat-libcap1-1.10-7.el7.x86_64.rpm is not installed\nPublic key for glibc-common-2.17-260.el7_6.3.x86_64.rpm is not installed\n--------------------------------------------------------------------------------\nTotal                                              559 kB/s |  69 MB  02:05     \nRetrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7\nRunning transaction check\nRunning transaction test\nTransaction test succeeded\nRunning transaction\n  Updating   : libgcc-4.8.5-36.el7.x86_64                                  1/59 \n  Updating   : glibc-common-2.17-260.el7_6.3.x86_64                        2/59 \n  Updating   : nss-softokn-freebl-3.36.0-5.el7_5.x86_64                    3/59 \n  Updating   : glibc-2.17-260.el7_6.3.x86_64                               4/59 \n  Updating   : nspr-4.19.0-1.el7_5.x86_64                                  5/59 \n  Updating   : nss-util-3.36.0-1.1.el7_6.x86_64                            6/59 \n  Updating   : zlib-1.2.7-18.el7.x86_64                                    7/59 \n  Installing : mpfr-3.1.1-4.el7.x86_64                                     8/59 \n  Installing : libmpc-1.0.1-3.el7.x86_64                                   9/59 \n  Updating   : libstdc++-4.8.5-36.el7.x86_64                              10/59 \n  Installing : libX11-common-1.6.5-2.el7.noarch                           11/59 \n  Installing : libstdc++-devel-4.8.5-36.el7.x86_64                        12/59 \n  Installing : cpp-4.8.5-36.el7.x86_64                                    13/59 \n  Installing : libtool-ltdl-2.4.2-22.el7_3.x86_64                         14/59 \n  Installing : unixODBC-2.3.1-11.el7.x86_64                               15/59 \n  Updating   : libgomp-4.8.5-36.el7.x86_64                                16/59 \n  Installing : lm_sensors-libs-3.4.0-6.20160601gitf9185e5.el7.x86_64      17/59 \n  Installing : libXau-1.0.8-2.1.el7.x86_64                                18/59 \n  Installing : libxcb-1.13-1.el7.x86_64                                   19/59 \n  Installing : libX11-1.6.5-2.el7.x86_64                                  20/59 \n  Installing : libXext-1.3.3-3.el7.x86_64                                 21/59 \n  Installing : libXi-1.7.9-1.el7.x86_64                                   22/59 \n  Installing : kernel-headers-3.10.0-957.5.1.el7.x86_64                   23/59 \n  Installing : glibc-headers-2.17-260.el7_6.3.x86_64                      24/59 \n  Installing : glibc-devel-2.17-260.el7_6.3.x86_64                        25/59 \n  Installing : libXtst-1.2.3-1.el7.x86_64                                 26/59 \n  Installing : sysstat-10.1.5-17.el7.x86_64                               27/59 \n  Installing : unixODBC-devel-2.3.1-11.el7.x86_64                         28/59 \n  Installing : zlib-devel-1.2.7-18.el7.x86_64                             29/59 \n  Installing : ksh-20120801-139.el7.x86_64                                30/59 \n  Installing : compat-libcap1-1.10-7.el7.x86_64                           31/59 \n  Installing : compat-libstdc++-33-3.2.3-72.el7.x86_64                    32/59 \n  Installing : unzip-6.0-19.el7.x86_64                                    33/59 \n  Installing : libaio-devel-0.3.109-13.el7.x86_64                         34/59 \n  Installing : nss-softokn-freebl-3.36.0-5.el7_5.i686                     35/59 \n  Installing : glibc-2.17-260.el7_6.3.i686                                36/59 \n  Installing : glibc-devel-2.17-260.el7_6.3.i686                          37/59 \n  Installing : gcc-4.8.5-36.el7.x86_64                                    38/59 \n  Installing : libaio-0.3.109-13.el7.i686                                 39/59 \n  Installing : libXau-1.0.8-2.1.el7.i686                                  40/59 \n  Installing : libxcb-1.13-1.el7.i686                                     41/59 \n  Installing : libX11-1.6.5-2.el7.i686                                    42/59 \n  Installing : libXext-1.3.3-3.el7.i686                                   43/59 \n  Installing : libXi-1.7.9-1.el7.i686                                     44/59 \n  Installing : libgcc-4.8.5-36.el7.i686                                   45/59 \n  Installing : libaio-devel-0.3.109-13.el7.i686                           46/59 \n  Installing : gcc-c++-4.8.5-36.el7.x86_64                                47/59 \n  Installing : libstdc++-4.8.5-36.el7.i686                                48/59 \n  Installing : libstdc++-devel-4.8.5-36.el7.i686                          49/59 \n  Installing : libXtst-1.2.3-1.el7.i686                                   50/59 \n  Cleanup    : nss-util-3.28.4-3.el7.x86_64                               51/59 \n  Cleanup    : libstdc++-4.8.5-16.el7_4.1.x86_64                          52/59 \n  Cleanup    : libgomp-4.8.5-16.el7_4.1.x86_64                            53/59 \n  Cleanup    : zlib-1.2.7-17.el7.x86_64                                   54/59 \n  Cleanup    : glibc-common-2.17-196.el7_4.2.x86_64                       55/59 \n  Cleanup    : nspr-4.13.1-1.0.el7_3.x86_64                               56/59 \n  Cleanup    : nss-softokn-freebl-3.28.3-8.el7_4.x86_64                   57/59 \n  Cleanup    : glibc-2.17-196.el7_4.2.x86_64                              58/59 \n  Cleanup    : libgcc-4.8.5-16.el7_4.1.x86_64                             59/59 \n  Verifying  : libXext-1.3.3-3.el7.x86_64                                  1/59 \n  Verifying  : libXi-1.7.9-1.el7.x86_64                                    2/59 \n  Verifying  : libaio-devel-0.3.109-13.el7.i686                            3/59 \n  Verifying  : libXtst-1.2.3-1.el7.i686                                    4/59 \n  Verifying  : libXext-1.3.3-3.el7.i686                                    5/59 \n  Verifying  : libgcc-4.8.5-36.el7.x86_64                                  6/59 \n  Verifying  : libX11-common-1.6.5-2.el7.noarch                            7/59 \n  Verifying  : sysstat-10.1.5-17.el7.x86_64                                8/59 \n  Verifying  : nss-util-3.36.0-1.1.el7_6.x86_64                            9/59 \n  Verifying  : glibc-2.17-260.el7_6.3.x86_64                              10/59 \n  Verifying  : libXi-1.7.9-1.el7.i686                                     11/59 \n  Verifying  : zlib-devel-1.2.7-18.el7.x86_64                             12/59 \n  Verifying  : gcc-4.8.5-36.el7.x86_64                                    13/59 \n  Verifying  : kernel-headers-3.10.0-957.5.1.el7.x86_64                   14/59 \n  Verifying  : libtool-ltdl-2.4.2-22.el7_3.x86_64                         15/59 \n  Verifying  : zlib-1.2.7-18.el7.x86_64                                   16/59 \n  Verifying  : libxcb-1.13-1.el7.i686                                     17/59 \n  Verifying  : libstdc++-4.8.5-36.el7.i686                                18/59 \n  Verifying  : libXtst-1.2.3-1.el7.x86_64                                 19/59 \n  Verifying  : libaio-0.3.109-13.el7.i686                                 20/59 \n  Verifying  : libxcb-1.13-1.el7.x86_64                                   21/59 \n  Verifying  : gcc-c++-4.8.5-36.el7.x86_64                                22/59 \n  Verifying  : glibc-devel-2.17-260.el7_6.3.i686                          23/59 \n  Verifying  : libX11-1.6.5-2.el7.i686                                    24/59 \n  Verifying  : libstdc++-devel-4.8.5-36.el7.x86_64                        25/59 \n  Verifying  : glibc-devel-2.17-260.el7_6.3.x86_64                        26/59 \n  Verifying  : cpp-4.8.5-36.el7.x86_64                                    27/59 \n  Verifying  : libstdc++-devel-4.8.5-36.el7.i686                          28/59 \n  Verifying  : libgomp-4.8.5-36.el7.x86_64                                29/59 \n  Verifying  : ksh-20120801-139.el7.x86_64                                30/59 \n  Verifying  : lm_sensors-libs-3.4.0-6.20160601gitf9185e5.el7.x86_64      31/59 \n  Verifying  : unixODBC-2.3.1-11.el7.x86_64                               32/59 \n  Verifying  : libX11-1.6.5-2.el7.x86_64                                  33/59 \n  Verifying  : compat-libcap1-1.10-7.el7.x86_64                           34/59 \n  Verifying  : libaio-devel-0.3.109-13.el7.x86_64                         35/59 \n  Verifying  : libmpc-1.0.1-3.el7.x86_64                                  36/59 \n  Verifying  : nss-softokn-freebl-3.36.0-5.el7_5.i686                     37/59 \n  Verifying  : libgcc-4.8.5-36.el7.i686                                   38/59 \n  Verifying  : glibc-headers-2.17-260.el7_6.3.x86_64                      39/59 \n  Verifying  : libXau-1.0.8-2.1.el7.x86_64                                40/59 \n  Verifying  : unixODBC-devel-2.3.1-11.el7.x86_64                         41/59 \n  Verifying  : glibc-common-2.17-260.el7_6.3.x86_64                       42/59 \n  Verifying  : nspr-4.19.0-1.el7_5.x86_64                                 43/59 \n  Verifying  : mpfr-3.1.1-4.el7.x86_64                                    44/59 \n  Verifying  : compat-libstdc++-33-3.2.3-72.el7.x86_64                    45/59 \n  Verifying  : libXau-1.0.8-2.1.el7.i686                                  46/59 \n  Verifying  : unzip-6.0-19.el7.x86_64                                    47/59 \n  Verifying  : nss-softokn-freebl-3.36.0-5.el7_5.x86_64                   48/59 \n  Verifying  : glibc-2.17-260.el7_6.3.i686                                49/59 \n  Verifying  : libstdc++-4.8.5-36.el7.x86_64                              50/59 \n  Verifying  : nspr-4.13.1-1.0.el7_3.x86_64                               51/59 \n  Verifying  : libgomp-4.8.5-16.el7_4.1.x86_64                            52/59 \n  Verifying  : glibc-2.17-196.el7_4.2.x86_64                              53/59 \n  Verifying  : nss-util-3.28.4-3.el7.x86_64                               54/59 \n  Verifying  : libgcc-4.8.5-16.el7_4.1.x86_64                             55/59 \n  Verifying  : glibc-common-2.17-196.el7_4.2.x86_64                       56/59 \n  Verifying  : libstdc++-4.8.5-16.el7_4.1.x86_64                          57/59 \n  Verifying  : zlib-1.2.7-17.el7.x86_64                                   58/59 \n  Verifying  : nss-softokn-freebl-3.28.3-8.el7_4.x86_64                   59/59 \n\nInstalled:\n  compat-libcap1.x86_64 0:1.10-7.el7                                            \n  compat-libstdc++-33.x86_64 0:3.2.3-72.el7                                     \n  gcc.x86_64 0:4.8.5-36.el7                                                     \n  gcc-c++.x86_64 0:4.8.5-36.el7                                                 \n  glibc.i686 0:2.17-260.el7_6.3                                                 \n  glibc-devel.i686 0:2.17-260.el7_6.3                                           \n  glibc-devel.x86_64 0:2.17-260.el7_6.3                                         \n  glibc-headers.x86_64 0:2.17-260.el7_6.3                                       \n  ksh.x86_64 0:20120801-139.el7                                                 \n  libX11.x86_64 0:1.6.5-2.el7                                                   \n  libXau.x86_64 0:1.0.8-2.1.el7                                                 \n  libXext.x86_64 0:1.3.3-3.el7                                                  \n  libXi.i686 0:1.7.9-1.el7                                                      \n  libXi.x86_64 0:1.7.9-1.el7                                                    \n  libXtst.i686 0:1.2.3-1.el7                                                    \n  libXtst.x86_64 0:1.2.3-1.el7                                                  \n  libaio.i686 0:0.3.109-13.el7                                                  \n  libaio-devel.i686 0:0.3.109-13.el7                                            \n  libaio-devel.x86_64 0:0.3.109-13.el7                                          \n  libstdc++.i686 0:4.8.5-36.el7                                                 \n  libstdc++-devel.i686 0:4.8.5-36.el7                                           \n  libstdc++-devel.x86_64 0:4.8.5-36.el7                                         \n  sysstat.x86_64 0:10.1.5-17.el7                                                \n  unixODBC.x86_64 0:2.3.1-11.el7                                                \n  unixODBC-devel.x86_64 0:2.3.1-11.el7                                          \n  unzip.x86_64 0:6.0-19.el7                                                     \n  zlib-devel.x86_64 0:1.2.7-18.el7                                              \n\nDependency Installed:\n  cpp.x86_64 0:4.8.5-36.el7                                                     \n  kernel-headers.x86_64 0:3.10.0-957.5.1.el7                                    \n  libX11.i686 0:1.6.5-2.el7                                                     \n  libX11-common.noarch 0:1.6.5-2.el7                                            \n  libXau.i686 0:1.0.8-2.1.el7                                                   \n  libXext.i686 0:1.3.3-3.el7                                                    \n  libgcc.i686 0:4.8.5-36.el7                                                    \n  libmpc.x86_64 0:1.0.1-3.el7                                                   \n  libtool-ltdl.x86_64 0:2.4.2-22.el7_3                                          \n  libxcb.i686 0:1.13-1.el7                                                      \n  libxcb.x86_64 0:1.13-1.el7                                                    \n  lm_sensors-libs.x86_64 0:3.4.0-6.20160601gitf9185e5.el7                       \n  mpfr.x86_64 0:3.1.1-4.el7                                                     \n  nss-softokn-freebl.i686 0:3.36.0-5.el7_5                                      \n\nDependency Updated:\n  glibc.x86_64 0:2.17-260.el7_6.3                                               \n  glibc-common.x86_64 0:2.17-260.el7_6.3                                        \n  libgcc.x86_64 0:4.8.5-36.el7                                                  \n  libgomp.x86_64 0:4.8.5-36.el7                                                 \n  libstdc++.x86_64 0:4.8.5-36.el7                                               \n  nspr.x86_64 0:4.19.0-1.el7_5                                                  \n  nss-softokn-freebl.x86_64 0:3.36.0-5.el7_5                                    \n  nss-util.x86_64 0:3.36.0-1.1.el7_6                                            \n  zlib.x86_64 0:1.2.7-18.el7                                                    \n\nComplete!\n"]}
+changed: [172.17.8.242] => {"attempts": 4, "changed": true, "msg": "warning: /var/cache/yum/x86_64/7/base/packages/compat-libcap1-1.10-7.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY\nImporting GPG key 0xF4A80EB5:\n Userid     : \"CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>\"\n Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5\n Package    : centos-release-7-4.1708.el7.centos.x86_64 (@anaconda)\n From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7\n", "rc": 0, "results": --> Finished 
 
 TASK [lean_delivery.oracle_db : Fetch artifact with local transport] *******************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:57
@@ -455,7 +488,7 @@ PLAY RECAP *********************************************************************
 172.17.8.242               : ok=44   changed=26   unreachable=0    failed=1   
 
 
-
+$ /bin/bash /opt/oracledb/product/12.2.0.1/db_1/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/opt/install/oracledb/pwd.rsp
 
 
 
@@ -474,90 +507,7 @@ PLAY RECAP *********************************************************************
 
 失败记录
 
-1、TASK [lean_delivery.oracle_db : Install requirements]
 
-登录节点，查看能否yum安装，yum update试试
-
-2、TASK [lean_delivery.oracle_db : Unzip oracle installer] ************************
-failed: [172.17.8.241] (item=/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip) => {"changed": false, "item": "/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip", "msg": "Source '/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip' does not exist"}
-failed: [172.17.8.241] (item=/home/w/tool/oralce/p13390677_112040_Linux-x86-64_2of7.zip) => {"changed": false, "item": "/home/w/tool/oralce/p13390677_112040_Linux-x86-64_2of7.zip", "msg": "Source '/home/w/tool/oralce/p13390677_112040_Linux-x86-64_2of7.zip' does not exist"}
-failed: [172.17.8.241] (item=/home/w/tool/oralce/p13390677_112040_Linux-x86-64_3of7.zip) => {"changed": false, "item": "/home/w/tool/oralce/p13390677_112040_Linux-x86-64_3of7.zip", "msg": "Source '/home/w/tool/oralce/p13390677_112040_Linux-x86-64_3of7.zip' does not exist"}
-
-
-注释掉/etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml里
-- name: "Unzip oracle installer"的    #remote_src: True
-
-
-
-
-3、TASK [lean_delivery.oracle_db : Install Oracle RDBMS] ******************************************************
-task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/oracle-db-11-12.yml:3
- [WARNING]: Module remote_tmp /home/oracle/.ansible/tmp did not exist and was created with a mode of 0700,
-this may cause issues when running as another user. To avoid this, create the remote_tmp dir with the
-correct permissions manually
-
-fatal: [172.17.8.241]: FAILED! => {"changed": true, "cmd": ["/opt/install/oracledb/database/runInstaller", "-silent", "-waitforcompletion", "-ignorePrereq", "-responseFile", "/opt/install/oracledb/db.rsp"], "delta": "0:00:00.029401", "end": "2019-03-05 07:09:12.093062", "failed_when_result": true, "msg": "non-zero return code", "rc": 126, "start": "2019-03-05 07:09:12.063661", "stderr": "/opt/install/oracledb/database/runInstaller: /opt/install/oracledb/database/install/.oui: /lib/ld-linux.so.2: bad ELF interpreter: 没有那个文件或目录", "stderr_lines": ["/opt/install/oracledb/database/runInstaller: /opt/install/oracledb/database/install/.oui: /lib/ld-linux.so.2: bad ELF interpreter: 没有那个文件或目录"], "stdout": "", "stdout_lines": []}
-
-
-
-
-解决linux安装软件：/lib/ld-linux.so.2: bad ELF interpreter: 没有那个文件或目录
-在linux系统中安装软件：/lib/ld-linux.so.2: bad ELF interpreter怎么解决
-
-常用的安装因为系统软件位数问题，如:64位系统中安装了32位程序了，
-
-是因为64位系统中安装了32位程序  
-
-解决方法：
-
-yum install glibc.i686
-
-需要在需求列表里面增加 glibc.i686
-根据版本不同，比如11g修改/etc/ansible/roles/lean_delivery.oracle_db/vars/oracle11.yml，增加glibc.i686软件包名
-
-
-4、TASK [lean_delivery.oracle_db : Install Oracle RDBMS] ******************************************************
-task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/oracle-db-11-12.yml:3
-fatal: [172.17.8.241]: FAILED! => {"changed": true, "cmd": ["/opt/install/oracledb/database/runInstaller", "-silent", "-waitforcompletion", "-ignorePrereq", "-responseFile", "/opt/install/oracledb/db.rsp"], "delta": "0:00:07.210807", "end": "2019-03-05 07:22:48.666419", "failed_when_result": true, "msg": "non-zero return code", "rc": 255, "start": "2019-03-05 07:22:41.455612", "stderr": "", "stderr_lines": [], "stdout": "正在启动 Oracle Universal Installer...\n\n检查临时空间: 必须大于 80 MB。   实际为 33098 MB    通过\n检查交换空间: 必须大于 150 MB。   实际为 3583 MB    通过\n准备从以下地址启动 Oracle Universal Installer /tmp/OraInstall2019-03-05_07-22-41AM. 请稍候...[FATAL] [INS-10105] 指定的响应文件/opt/install/oracledb/db.rsp无效。\n   原因: 响应文件在语法上不正确。在响应文件中指定了意外的变量或未指定预期的变量。\n  
-
-
-
-
-
-http://blog.itpub.net/26736162/viewspace-1588810/
-最后检查了一下metalink，发现oracle还居然在专门的文档ID 883714.1描述了这个问题，错误原因是：
-
-'My Oracle Support' Account user name and password were not specified in the response file.
-
-而解决方法居然就是：
-
-Specify the My Oracle Support Account User name and password in your response file
-
-不过从Oracle对于metalink帐号要求越来越严格，也可以看出Oracle策略的趋势。
-
- 
-$ scp root@172.17.8.242:/opt/install/oracledb/db.rsp /media/xh/i/python/wymproject/oracle
-
-[oracle@oracle1 ~]$ /opt/install/oracledb/database/runInstaller -silent -waitforcompletion -ignorePrereq -responseFile /opt/install/oracledb/db.rsp
-
-
-
-5、在172.17.8.242上安装Oracle12c，也报错
-
-TASK [lean_delivery.oracle_db : Install Oracle RDBMS] **************************
-task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/oracle-db-11-12.yml:3
- [WARNING]: Module remote_tmp /home/oracle/.ansible/tmp did not exist and was
-created with a mode of 0700, this may cause issues when running as another
-user. To avoid this, create the remote_tmp dir with the correct permissions
-manually
-
-fatal: [172.17.8.242]: FAILED! => {"changed": true, "cmd": ["/opt/install/oracledb/database/runInstaller", "-silent", "-waitforcompletion", "-ignorePrereq", "-responseFile", "/opt/install/oracledb/db.rsp"], "delta": "0:00:20.855850", "end": "2019-03-05 08:50:00.816883", "failed_when_result": true, "msg": "non-zero return code", "rc": 254, "start": "2019-03-05 08:49:39.961033", "stderr": "", "stderr_lines": [], "stdout": "正在启动 Oracle Universal Installer...\n\n检查临时空间: 必须大于 500 MB。   实际为 29499 MB    通过\n检查交换空间: 必须大于 150 MB。   实际为 5805 MB    通过\n准备从以下地址启动 Oracle Universal Installer /tmp/OraInstall2019-03-05_08-49-40AM. 请稍候...[FATAL] [INS-35344] 没有为Real Application Cluster administrative (OSRACDBA) group指定值。\n   操作: 为Real Application Cluster administrative (OSRACDBA) group指定有效的组名。\n此会话的日志当前已保存为: /tmp/OraInstall2019-03-05_08-49-40AM/installActions2019-03-05_08-49-40AM.log。如果要保留此日志, Oracle 建议将它从临时位置中转移。", "stdout_lines": ["正在启动 Oracle Universal Installer...", "", "检查临时空间: 必须大于 500 MB。   实际为 29499 MB    通过", "检查交换空间: 必须大于 150 MB。   实际为 5805 MB    通过", "准备从以下地址启动 Oracle Universal Installer /tmp/OraInstall2019-03-05_08-49-40AM. 请稍候...[FATAL] [INS-35344] 没有为Real Application Cluster administrative (OSRACDBA) group指定值。", "   操作: 为Real Application Cluster administrative (OSRACDBA) group指定有效的组名。", "此会话的日志当前已保存为: /tmp/OraInstall2019-03-05_08-49-40AM/installActions2019-03-05_08-49-40AM.log。如果要保留此日志, Oracle 建议将它从临时位置中转移。"]}
-        to retry, use: --limit @/media/xh/i/python/wymproject/oracle/oracleinstalltest/oracle12201.retry
-
-$ scp root@172.17.8.242:/tmp/OraInstall2019-03-05_08-49-40AM/installActions2019-03-05_08-49-40AM.log /media/xh/i/python/wymproject/oracle
-
-修改/etc/ansible/roles/lean_delivery.oracle_db/templates/db.rsp.12.j2，添加
-oracle.install.db.OSRACDBA_GROUP={{ oracledb.dba_group }}
 
 
 6、TASK [lean_delivery.oracle_db : Create db] *********************************************************************************
@@ -615,7 +565,8 @@ The action configuration has failed its perform method
 
 
 ### Example Playbook
-```
+
+```yml
 
 https://github.com/lean-delivery/ansible-role-oracle-db
 
@@ -706,7 +657,7 @@ Installing Oracle XE
 
 ### 12c安装过程
 
-```
+```yml
 # w @ uw in /media/xh/i/python/wymproject/oracle/oracleinstalltest on git:master x [18:19:17] C:2
 $ ansible-playbook lean_delivery_oracle12201.yml -vv
 ansible-playbook 2.7.5
@@ -906,6 +857,13 @@ fatal: [172.17.8.242]: FAILED! => {"changed": false, "cmd": ["/bin/bash", "/opt/
 PLAY RECAP ****************************************************************************************************************
 172.17.8.242               : ok=32   changed=5    unreachable=0    failed=1 
 
+
+
+
+
+$ /bin/bash /opt/oracledb/product/12.2.0.1/db_1/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/opt/install/oracledb/pwd.rsp
+
+
 ```
 
 
@@ -992,10 +950,9 @@ SYSTEMPASSWORD = welcome1
 
 ```yml
 
-修改配置（可以不修改，写到sysco_oracle11204.yml文件里优先级最高）
-
 /etc/ansible/roles/sysco-middleware.oracle-database
 
+1、修改配置（可以不修改，写到sysco_oracle11204.yml文件里优先级最高）
 
 /etc/ansible/roles/sysco-middleware.oracle-database/defaults/main.yml
 oracle_database_version: 11g # supported versions: [11g, 12c]
@@ -1005,15 +962,51 @@ oracle_database_installer_directory: /oracle/oracle11.2.0.4/database
 
 
 
-/etc/ansible/roles/sysco-middleware.oracle-database/vars/oracle-database.yml
-此文件包括需要原装的软件包列表、内核参数，修改改为最新版本格式和参数
+2./etc/ansible/roles/sysco-middleware.oracle-database/vars/oracle-database.yml
+此文件包括需要安装的软件包列表、内核参数，修改改为最新版本格式和参数
 
-/etc/ansible/roles/sysco-middleware.oracle-database/tasks/prepare.yml
-预安装要求
+oracle_database_kernel_params:
+  sysctl:
+    - {name: "fs.file-max", value: "6815744"}
+    - {name: "kernel.sem", value: "250 32000 100 128"}
+    - {name: "kernel.shmmni", value: "4096"}
+    - {name: "kernel.shmall", value: "1073741824"}
+    - {name: "kernel.shmmax", value: "4398046511104"}
+    - {name: "net.core.rmem_default", value: "262144"}
+    - {name: "net.core.rmem_max", value: "4194304"}
+    - {name: "net.core.wmem_default", value: "262144"}
+    - {name: "net.core.wmem_max", value: "1048576"}
+    - {name: "fs.aio-max-nr", value: "1048576"}
+    - {name: "net.ipv4.ip_local_port_range", value: "9000 65500"}
 
 
-$ ansible-playbook sysco_oracle11204.yml -vv
 
+3./etc/ansible/roles/sysco-middleware.oracle-database/tasks/prepare.yml
+修改第四行，预安装要求，新ansible版本已经弃用的循环方式
+- name: "Install requirements"
+  package:
+    name: "{{ oracle_database_packages_list }}"
+    state: present
+  register: status
+  retries: 10
+  delay: 2
+  until: status is success
+  become: True
+
+20多行
+- name: "Change kernel parameters"
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    ignoreerrors: True
+    reload: True
+  loop: "{{ oracle_database_kernel_params.sysctl }}"
+  become: True
+
+
+4、执行
+$ ansible-playbook /media/xh/i/python/wymproject/oracle/oracleinstalltest/sysco_oracle11204.yml -vv
 
 
 ```
@@ -1022,27 +1015,6 @@ $ ansible-playbook sysco_oracle11204.yml -vv
 
 ```yml
 
-1、TASK [sysco-middleware.oracle-database : install required libraries] *************
-task path: /etc/ansible/roles/sysco-middleware.oracle-database/tasks/prepare.yml:4
-[DEPRECATION WARNING]: Invoking "yum" only once while using a loop via 
-squash_actions is deprecated. Instead of using a loop to supply multiple items 
-and specifying `name: "{{ item }}"`, please use `name: '{{ 
-oracle_database_packages_list }}'` and remove the loop. This feature will be 
-removed in version 2.11. Deprecation warnings can be disabled by setting 
-deprecation_warnings=False in ansible.cfg.
-
-
-新ansible版本已经弃用的循环方式
-
-修改/etc/ansible/roles/sysco-middleware.oracle-database/tasks/prepare.yml的第4行
-
-
-2、TASK [sysco-middleware.oracle-database : Change kernel parameters] ******************
-task path: /etc/ansible/roles/sysco-middleware.oracle-database/tasks/prepare.yml:29
-fatal: [172.17.8.241]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'dict object' has no attribute 'key'\n\nThe error appears to have been in '/etc/ansible/roles/sysco-middleware.oracle-database/tasks/prepare.yml': line 29, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n- name: \"Change kernel parameters\"\n  ^ here\n"}
-
-修改脚本，把lean_delivery的这部分拷贝过来
-
 
 
 ```
@@ -1050,7 +1022,8 @@ fatal: [172.17.8.241]: FAILED! => {"msg": "The task includes an option with an u
 
 
 #### 安装过程记录
-```
+
+```yml
 # w @ uw in /media/xh/i/python/wymproject/oracle/oracleinstalltest on git:master x [11:30:55] C:2
 $ ansible-playbook sysco_oracle11204.yml -vv
 ansible-playbook 2.7.5

@@ -65,6 +65,9 @@ vi /home/inventory
 
 #### 本机
 
+
+```yml
+
 使用vagrant虚拟机，~/tool/vagrant/oracle
 
 ansible-galaxy的roles默认下载到/home/w/.ansible/roles，
@@ -76,7 +79,158 @@ ansible-galaxy的roles默认下载到/home/w/.ansible/roles，
 /media/xh/i/python/wymproject/ansible/testw/modified
 
 
+vagrant up
+vagrant ssh-config
+vagrant snapshop save
+
+快照的名字写错了，写成了oralce1
+vagrant snapshot save oralce1
+vagrant snapshot restore oralce1
+
+
+$ ansible all --list
+$ ansible all -m ping
+
+$ ansible-playbook /home/w/tool/vagrant/oracle/testinstall.yml -vv
+
+如果需要root权限，要加-b参数
+$ ansible-playbook -b testinstall.yml -vv 
+
+
+执行安装oracle
+$ ansible-playbook /media/xh/i/python/wymproject/oracle/oracleinstalltest/sysco_oracle11204.yml -vv
+
+```
+### keepalived+nginx
+
+
 ```yml
+
+
+$ ansible all --list
+$ ansible all -m ping
+
+测试roles
+
+$ cat testinstall.yml 
+- name: "Install"
+  hosts: all
+
+  roles:
+    # - uzer.keepalived
+    - geerlingguy.nginx
+    - geerlingguy.docker
+
+$ ansible-playbook /home/w/tool/vagrant/oracle/testinstall.yml -vv
+
+如果需要root权限，要加-b参数
+$ ansible-playbook -b testinstall.yml -vv 
+
+
+
+$ ansible all -b -m yum -a 'name=keepalived state=present' -vv
+
+安装，多个软件用,隔开
+$ ansible test -b -m yum -a 'name=tree,vim,dstat state=present'
+
+
+各节点分别拷贝
+
+ansible oracle1 -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/wm.keepalived.conf  dest=/etc/keepalived/keepalived.conf backup=yes'
+
+ansible oracle2 -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/wb.keepalived.conf  dest=/etc/keepalived/keepalived.conf backup=yes'
+
+全部节点执行
+
+ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx_check.sh  dest=/etc/keepalived backup=yes'
+
+ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/nginx.conf  dest=/etc/nginx backup=yes'
+
+恢复原始备份nginx.conf
+$ ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/nginx.conf.bak  dest=/etc/nginx/nginx.conf backup=yes'
+
+$ ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/nginx.conf-w dest=/etc/nginx/nginx.conf backup=yes'
+
+ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/8080.conf  dest=/etc/nginx/conf.d backup=yes'
+
+注意：/etc/nginx/conf.d/default.conf已经侦听80端口，所以新建的监听端口不能重复，或者default.conf改后缀名
+
+
+$ ansible all -b -m shell -a 'echo $HOSTNAME > /usr/share/nginx/html/index.html'
+
+$ ansible all -b -m service -a 'name=nginx state=restarted enabled=yes'
+
+$ ansible all -b -m service -a 'name=keepalived state=restarted enabled=yes'
+
+$ ansible all -b -m shell -a 'rm -rf /etc/nginx/conf.d/80*'
+
+$ ansible all -b -m shell -a 'rm -rf /etc/nginx/nginx.conf.*'
+
+
+
+```
+
+
+###
+
+
+```yml
+# w @ uw in ~/tool/vagrant/oracle [13:05:32] 
+$ tree
+.
+├── ansible.cfg
+├── docker-compose.yml
+├── hosts
+├── mysite.template
+└── Vagrantfile
+
+
+
+
+$ cd /home/w/tool/vagrant/oracle
+建立两个虚拟机
+
+$ vagrant ssh-config
+Host oracle1
+  HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/w/tool/vagrant/oracle/.vagrant/machines/oracle1/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+Host oracle2
+  HostName 127.0.0.1
+  User vagrant
+  Port 2200
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/w/tool/vagrant/oracle/.vagrant/machines/oracle2/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
+
+在本地目录建立主机清单，关闭主机秘钥检查host_key_checking = False，这样就可以在重建vagrant虚拟机的时候，方便再次ssh登录。
+
+$ cat ansible.cfg 
+[defaults]
+inventory = hosts
+remote_user = vagrant
+#private_key_file = .vagrant/machines/default/virtualbox/private_key #注意路径
+host_key_checking = False
+
+$ cat hosts 
+oracle1 ansible_host=127.0.0.1 ansible_port=2222 ansible_private_key_file=.vagrant/machines/oracle1/virtualbox/private_key
+oracle2 ansible_host=127.0.0.1 ansible_port=2200 ansible_private_key_file=.vagrant/machines/oracle2/virtualbox/private_key
+
+$ ansible all --list
+$ ansible all -m ping
+
+
 $ cat Vagrantfile 
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
@@ -132,9 +286,9 @@ Vagrant.configure("2") do |config|
 end
 
 
-
 root和vagrant用户密码都是vagrant
 
+#如果上面的做了，应该就可以ssh登录了
 ssh root@172.17.8.241
 ssh root@172.17.8.242
 
@@ -233,7 +387,19 @@ $ ansible-doc -l |wc -l
 ### Ansible 配置文件ansible.cfg
 
 
-```
+```yml
+
+
+ansible.cfg文件查找顺序
+1、ANSIBLE_CONFIG环境变量所指定的文件
+2、./ansible.cfg 当前目录下
+3、 ～/.ansible.cfg 主目录下
+4、 /etc/ansible/ansible.cfg
+
+通常可以把ansible.cfg文件和playbook一起放在某个目录，就可以用git来管理
+
+
+
 Ansible 配置文件/etc/ansible/ansible.cfg （一般保持默认）
  [defaults]
  #inventory = /etc/ansible/hosts # 主机列表配置文件
@@ -495,6 +661,10 @@ $ sudo chmod 777 /var/log/ansible.log
 ## 主机列表
 
 ```
+
+
+
+
 $ vim /etc/ansible/hosts
 
 [oracle]
@@ -581,6 +751,7 @@ $ ansible-playbook PushKey.yml -u root -k
 默认command模块,参数可以省略,command模块不适合管道、变量、重定向、特殊符合之类的命令
 $ ansible test -a 'df -h' -u root -k
 $ ansible test -m command -a 'df -h' -u root -k
+$ ansible test -m command -a uptime
 
 ### shell模块
 

@@ -1,5 +1,5 @@
-- name: oracle database 11g (11.2.0.4)
-  hosts: 172.17.8.241
+- name: oracle database 12c (12.2.0.1)
+  hosts: 172.17.8.242
 
   roles:
     #- role: nfs
@@ -11,12 +11,12 @@
     #      server_host: 10.0.0.1
     - role: sysco-middleware.oracle-database
       # installation variables
-      oracle_database_version: 11g # supported versions: [11g]
-      oracle_database_release: 11.2.0.4 # supported releases: [11.2.0.4]
+      oracle_database_version: 12g # supported versions: [11g]
+      oracle_database_release: 12.2.0.1 # supported releases: [11.2.0.4]
       oracle_database_edition: EE # supported editions: [SE,EE]
-      oracle_database_installer_directory: /oracle/oracle11.2.0.4/database
+      oracle_database_installer_directory: /oracle/oracle12.2.0.1/database
       # installers
-      oracle_database_installer: /oracle/oracle11.2.0.4/database/runInstaller
+      oracle_database_installer: /oracle/oracle12.2.0.1/database/runInstaller
     - role: sysco-middleware.oracle-database-instance
       oracle_database_version: 11g # supported versions: [11g]
       # instance variables
