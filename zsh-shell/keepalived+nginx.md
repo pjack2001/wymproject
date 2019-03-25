@@ -1,8 +1,152 @@
 ## keepalived+nginx
 
-### keepalived
+
+### 测试环境
+
+```yml
+
+
+集群:vagrant建立两个虚拟机
+安装keepalived+nginx
+
+VIP:172.17.8.244
+Oracle1：172.17.8.241
+Oracle2：172.17.8.242
+
+两个web应用：nginx容器，80端口映射出来
+
+127.0.0.1:8041
+127.0.0.1:8042
+
+公司的wlan分配IP192.168.157.118，根据实际情况修改IP
+http://192.168.157.118:8041/
+http://192.168.157.118:8042/
+
 
 ```
+
+
+
+### keepalived
+
+```yml
+
+
+环境：vagrant建立两个centos虚拟机
+
+MASTER节点：172.17.8.241
+BACKUP节点：172.17.8.242
+
+
+安装
+源码安装、yum安装、docker镜像
+
+keepalived配置，主从结构，浮动IP在master节点，
+如果master节点失效，backup节点接管，master节点正常后会重新接管
+
+
+$ tree /etc/keepalived/
+/etc/keepalived/
+|-- keepalived.conf
+|-- nginx_check.sh
+
+
+
+master节点：172.17.8.241
+
+# vi /etc/keepalived/keepalived.conf
+! Configuration File for keepalived
+global_defs {
+	router_id oracle1
+    script_user root
+	enable_script_security
+}
+vrrp_script chk_nginx {
+	script "/etc/keepalived/nginx_check.sh"
+	interval 2
+	weight -20
+}
+vrrp_instance VI_1 {
+	state MASTER
+	interface eth1
+	virtual_router_id 33
+	mcast_src_ip 172.17.8.241
+	priority 100
+	nopreempt
+	advert_int 1
+	authentication {
+		auth_type PASS
+		auth_pass 1111
+	}
+	track_script {
+		chk_nginx
+	}
+	virtual_ipaddress {
+		172.17.8.244
+	}
+}
+
+
+backup节点：172.17.8.242
+
+# vi /etc/keepalived/keepalived.conf
+
+! Configuration File for keepalived
+global_defs {
+	router_id oracle2
+    script_user root
+	enable_script_security
+}
+vrrp_script chk_nginx {
+	script "/etc/keepalived/nginx_check.sh"
+	interval 2
+	weight -20
+}
+vrrp_instance VI_1 {
+	state BACKUP
+	interface eth1
+	virtual_router_id 33
+	mcast_src_ip 172.17.8.242
+	priority 90
+	advert_int 1
+	authentication {
+		auth_type PASS
+		auth_pass 1111
+	}
+	track_script {
+		chk_nginx
+	}
+	virtual_ipaddress {
+		172.17.8.244
+	}
+}
+
+
+两个节点都有：
+# cat /etc/keepalived/nginx_check.sh
+#!/bin/bash
+#时间变量,用于记录时间
+d=`date --date today +%y%m%d_%H:%M:%S`
+#计算nginx进程数
+A=`ps -C nginx --no-heading | wc -l`
+#如果进程为0，则启动nginx，并且再次检测nginx进程数
+#如果还为0，说明nginx无法启动，此时需要关闭keeppalived
+if [ $A -eq 0 ];then
+         /usr/local/nginx/sbin/nginx
+         B=`ps -C nginx --no-heading|wc -l`
+         if [ $B -eq 0 ];then
+              echo "$d nginx down, keepalived will stop" >> /var/log/check_ngx.log
+              systemctl stop keepalived
+         fi
+fi
+
+
+
+
+
+
+
+
 
 
 
@@ -11,9 +155,126 @@
 
 ### nginx
 
+
+```yml
+
+官方docker镜像
+https://github.com/nginxinc/docker-nginx
+
 [Nginx中文文档](http://www.nginx.cn/doc/index.html)
 
 http://www.nginx.cn/doc/example/fullexample.html
+
+
+
+制作docker镜像
+https://hub.docker.com/_/nginx
+
+goaccess可以实时监控日志
+
+
+
+一、建立nginx源
+
+vim /etc/yum.repos.d/nginx.repo
+
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/7/$basearch/
+gpgcheck=0
+enabled=1
+
+二、安装
+
+yum -y install nginx
+
+
+
+
+```
+
+
+
+#### 
+
+```yml
+
+wlan分配IP192.168.157.118，根据实际情况修改IP
+
+$ cat /etc/nginx/ninx.conf
+
+worker_processes  1;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+
+    sendfile        on;
+
+    keepalive_timeout  65;
+
+upstream myweb {
+    server 192.168.157.118:8041 weight=1  fail_timeout=30s;
+    server 192.168.157.118:8042 weight=1  fail_timeout=30s;
+    }
+
+    server {
+        listen       80;
+        server_name  localhost;
+        charset utf-8;
+
+        location / {
+            root /usr/share/nginx/html;
+            proxy_pass http://myweb;
+            index  index.html index.htm;
+        }
+
+        #虚拟的二级目录demo,不需要真实的demo目录,http://172.17.8.241/demo/
+        location /demo/ {
+            alias /usr/share/nginx/html/;
+            index  index.html index.htm;
+        }
+
+        #root指定，必须有真实的test目录，下面的nginx1和nginx2也同样
+        location /test/ {
+            root /usr/share/nginx/html;
+            proxy_pass http://myweb;
+            index  index.html index.htm;
+        }
+
+        location /nginx1/ {
+            root /usr/share/nginx/html;
+            proxy_pass http://192.168.157.118:8041;
+            index  index.html index.htm;
+        }
+
+        location /nginx2/ {
+            root /usr/share/nginx/html;
+            proxy_pass http://192.168.157.118:8042;
+            index  index.html index.htm;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+    }
+
+}
+
+```
+
+
+
+
+
 
 #### Nginx（一）------简介与安装
 ```yml

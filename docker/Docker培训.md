@@ -127,7 +127,9 @@ yum localinstall -y --nogpgcheck supervisor-3.1.4-1.el7.noarch.rpm \
 [root@oracle2 createrepo]# rpm -ivh python-deltarpm-3.6-3.el7.x86_64.rpm 
 [root@oracle2 createrepo]# rpm -ivh createrepo-0.9.9-28.el7.noarch.rpm
 
-
+centos7.4默认已经安装的
+deltarpm-3.6-3.el7.x86_64
+libxml2-python-2.9.1-6.el7_2.3.x86_64
 
 createrepo构建本地软件源
 
@@ -159,6 +161,8 @@ gpgcheck=0
 创建缓存，yum makecache
 查看本地源是否成功，通过yum list是否输出新的rpm包。查询到则证明成功
 
+# yum info nginx
+# yum info docker-ce
 
 
 在目标机安装目标软件

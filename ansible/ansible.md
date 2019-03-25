@@ -168,6 +168,26 @@ $ ansible all -b -m shell -a 'rm -rf /etc/nginx/nginx.conf.*'
 
 
 
+
+集群:vagrant虚拟机oracle
+安装keepalived+nginx
+
+VIP:172.17.8.244
+172.17.8.241
+172.17.8.242
+
+两个web应用：nginx容器，80端口映射出来
+
+127.0.0.1:8041
+127.0.0.1:8042
+
+http://192.168.157.118:8041/
+http://192.168.157.118:8042/
+
+
+
+
+
 ```
 
 
