@@ -11,12 +11,18 @@ fi
 #/opt/wokishell/software
 # read -p "Please input the path which had mounted the CD:" CDPath
 read -p "请输入本地rpm包路径:" CDPath
-if [[ ! -d $CDPath ]]; then
-	echo -e "Info: The path is not a directory"
-	exit 1
+if [ -z "$CDPath" ];then
+    CDPath="/opt/wokishell/software"
 fi
+#if [[ ! -d $CDPath ]]; then
+#	echo -e "Info: The path is not a directory"
+#	exit 1
+#fi
 
+echo -n -e "\e[1;31m========== 本地rpm包路径:\e[0m"
+echo $CDPath
 # 使用createrepo生成符合要求的yum仓库
+
 createrepo $CDPath
 
 #CDFile=`echo $CDPath | cut -d ' ' -f 1`
@@ -31,6 +37,10 @@ createrepo $CDPath
 #localrepo
 #read -p "Please input the local yum repository name:" name
 read -p "请输入本地rpm包源名称:" name
+if [ -z "$name" ];then
+    name="localrepo"
+fi
+
 repoName="$name".repo
 repoPath="/etc/yum.repos.d/${name}.repo"
  
@@ -48,5 +58,6 @@ echo "gpgcheck=0" >> $repoPath
  
 yum clean all
 yum makecache
- 
-echo -e "Info: The local yum repository create, Success"
+
+echo -e $(yum repolist)
+echo -e "\e[1;31m========== 本地rpm包YUM源安装成功 ==========\e[0m"

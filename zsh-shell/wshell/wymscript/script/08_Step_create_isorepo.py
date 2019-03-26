@@ -8,17 +8,17 @@ import  os
 #mount -t iso9660 -o loop /oracle/CentOS-7-x86_64-DVD-1804.iso /opt/cdrom/
 
 # 打印当前路径
-print '当前目录：',os.getcwd() #获取当前工作目录路径
+print '========== 当前目录：',os.getcwd() #获取当前工作目录路径
 
 # 设置光盘挂载文件路径
 softwaredir = os.getcwd() + '/cdrom'
-print '光盘挂载路径=',softwaredir
+print '========== 光盘挂载路径:',softwaredir
 
 # 配置光盘挂载目录
 def install_isorepo():
     os.system("mkdir -p /opt/cdrom")
     os.system("mount -t iso9660 -o loop /oracle/CentOS-7-x86_64-DVD-1804.iso /opt/cdrom/")
-    print('挂载光盘:')
+    print('========== 挂载光盘 ==========')
 
 install_isorepo()
 
@@ -31,7 +31,7 @@ softwaredir = os.getcwd() + '/cdrom'
 
 def create_yum_isorepo():
     os.system("sh create_isorepo.sh")
-    print '创建光盘yum源:'
+    print '========== 创建光盘yum源 =========='
 
 create_yum_isorepo()
 
@@ -39,12 +39,12 @@ create_yum_isorepo()
 def install_tree():
     os.system("yum install -y tree")
 
-print '使用光盘yum源测试安装tree'
+print '========== 使用光盘yum源测试安装tree =========='
 install_tree()
 
 ## 删除
 def remove_tree():
     os.system("yum remove -y tree")
 
-print '测试完成，删除tree'
+print '========== 测试完成，删除tree =========='
 remove_tree()

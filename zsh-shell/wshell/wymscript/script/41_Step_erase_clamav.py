@@ -8,19 +8,19 @@ import  os
 
 def remove_wget():
     os.system("yum remove -y wget vim tree net-tools ntp")
-    print '卸载wget vim tree net-tools ntp'
+    print '========== 卸载wget vim tree net-tools ntp =========='
 
 remove_wget()
 
 def remove_ansible():
     os.system("yum remove -y ansible")
-    print '卸载ansible'
+    print '========== 卸载ansible =========='
 
 remove_ansible()
 
 ## 卸载docker-ce-18.06.1.ce
 def remove_docker():
     os.system("yum remove -y docker-ce-18.06.1.ce")
-    print '卸载docker-ce-18.06.1.ce'
+    print '========== 卸载docker-ce-18.06.1.ce =========='
 
 remove_docker()

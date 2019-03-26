@@ -12,8 +12,9 @@
 
 ## 搜集的shell命令
 
-马哥2019-王晓春
+### 马哥2019-王晓春
 
+```yml
 $ df
 $ df | tr -s " "|cut -d " " -f5|tr -d "%"
 $ df -h | tr -s " "|cut -d " " -f4|tr -d "%"
@@ -25,7 +26,368 @@ $ ifconfig wlp2s0 |grep -o "[0-9.]\{7,\}" |head -n1
 
 $ nmap -v -sP 192.168.31.0/24 |grep -B1 "up"
 $ nmap -v -sP 192.168.31.0/24 |grep -B1 "up" |grep scan |cut -d" " -f5
+```
 
+### shell命令-系统信息
+
+
+```yml
+
+显示版本
+rpm -qi centos-release
+
+cat /etc/redhat-release
+cat /etc/issue
+
+软件版本
+rpm -q --qf '%{NAME}-%{VERSION}-%{RELEASE}(%{ARCH})\n'  httpd
+
+# rpm -q --qf %{version} centos-release;echo
+7
+# rpm -q --qf %{arch} centos-release;echo
+x86_64
+
+
+
+
+echo -e "\e[1;31m==========本地网络YUM源安装成功==========\e[0m"
+
+#This is red text?\e[1;31m 将颜色设置为红色
+#?\e[0m 将颜色重新置回
+#颜色码：重置=0，黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，洋红=35，青色=36，白色=37
+
+用echo命令打印带有色彩的文字：
+
+文字色：
+
+echo -e "\e[1;31mThis is red text\e[0m"
+This is red text?\e[1;31m 将颜色设置为红色
+?\e[0m 将颜色重新置回
+颜色码：重置=0，黑色=30，红色=31，绿色=32，黄色=33，蓝色=34，洋红=35，青色=36，白色=37
+
+背景色：
+
+echo -e "\e[1;42mGreed Background\e[0m"
+Greed Background颜色码：重置=0，黑色=40，红色=41，绿色=42，黄色=43，蓝色=44，洋红=45，青色=46，白色=47
+
+文字闪动：
+
+echo -e "\033[37;31;5mMySQL Server Stop...\033[39;49;0m"
+红色数字处还有其他数字参数：0 关闭所有属性、1 设置高亮度（加粗）、4 下划线、5 闪烁、7 反显、8 消隐
+
+echo -n 不换行输出
+$echo -n "123"
+$echo "456"
+
+
+
+
+
+
+```
+
+
+
+### shell脚本
+
+```yml
+linux 脚本实现程序自动安装
+#!/bin/bash
+
+//设置脚本中所需命令的执行路径
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+
+// $? 是取得上面执行命令的返回值，一般正确为0，错误为1
+if [ "$?" != 0 ] ;
+then
+ //echo 为输出到屏幕
+ echo "Please check your need software"
+ //exit 0 为强制终止脚本
+ exit 0
+fi
+
+
+// 声明回滚函数（作用是删除解压出来的文件）
+rollback(){
+   rm -rf apache-tomcat.tar.gz
+   rm -rf MySQL-client-5.5.31-2.rhel5.i386.rpm
+   rm -rf MySQL-server-5.5.31-2.rhel5.i386.rpm
+   rm -rf jdk-6u29-linux-i586-rpm.bin
+   rm -rf mysql.cnf
+}
+
+echo "Please choose to install or uninstall? (Installation: 1 / Uninstall: 0)"
+
+//接收键盘输入，并把输入的值存放在userinput变量中
+read userinput
+
+//判断变量的值
+if [ "$userinput" == '1' ] ;
+then
+
+//判断文件是否存在
+if [ ! -e medical.tar.gz ] ;
+then
+  echo "I cann't find medical.tar.gz file."
+  exit 0
+else
+//存在则赋权并解压
+chmod 755 medical.tar.gz
+tar zxvf medical.tar.gz
+fi
+
+################################### Verify #################################
+
+//判断本机是否安装了jdk
+rpm -qa | grep jdk
+if [ "$?" == 0 ] ;
+then
+echo "Already installed JDK, please uninstall!"
+rollback;
+exit 0
+fi
+
+//判断8080端口是否被占用
+netstat -apn | grep 8080
+if [ "$?" == 0 ] ;
+then
+echo "8080 port is occupied!"
+rollback;
+exit 0
+fi
+
+//判断本机是否安装了mysql
+rpm -qa | grep -i mysql
+if [ "$?" == 0 ] ;
+then
+echo "The system has been installed MySQL.Please run the uninstall!"
+rollback;
+exit 0
+fi
+
+//判断目录是否已存在
+if [ -d /usr/tomcat-medical ] ;
+　　then
+
+
+
+echo "/usr/tomcat-medical Directory exists"
+rollback;
+exit 0
+fi
+
+//判断3306端口是否被占用
+netstat -apn | grep 3306
+if [ "$?" == 0 ] ;
+then
+echo "3306 port is occupied"
+rollback;
+exit 0
+fi
+
+##################################### JDK ################################
+
+//赋权并安装jdk
+　　chmod 755 jdk-6u29-linux-i586-rpm.bin
+
+
+
+./jdk-6u29-linux-i586-rpm.bin
+//安装jdk的时候需要回车确认一下jdk的许可协议
+
+#########################################################################
+
+//rpm包的jdk安装完成会自动生成 java/jdk**** 的文件夹，判断是否生成了jdk文件夹
+if [ ! -d java/jdk1.6* ] ;
+then
+echo "I cann't find JDK directory."
+rollback;
+exit 0
+fi
+
+############################## Environment Variables #########################
+
+//将一段文本追加到指定文件尾部（写入环境变量）
+cat >> /etc/profile << EFF
+
+JAVA_HOME=/usr/java/jdk1.6.0_29
+JRE_HOME=\$JAVA_HOME/jre
+CLASSPATH=:\$JAVA_HOME/lib:\$JRE_HOME/lib
+PATH=\$JAVA_HOME:/bin:\$JRE_HOME/bin:\$PATH
+export JAVA_HOME JRE_HOME CLASSPATH PATH
+
+EFF
+ //使环境变量立即生效
+ source /etc/profile
+
+#########################################################################
+
+//判断环境变量是否已经生效
+java -version
+if [ "$?" != 0 ] ;
+then
+echo "I cann't set java path."
+rollback;
+exit 0
+fi
+
+####################### Delete JDK Installation file #############################
+
+rm -rf jdk-6u29-linux-i586.rpm
+rm -rf sun-javadb*
+
+################################# MySQL ##################################
+
+//赋权并安装mysql
+chmod 755 MySQL-server-5.5.31-2.rhel5.i386.rpm
+rpm -ivh MySQL-server-5.5.31-2.rhel5.i386.rpm
+
+################### Copy MySQL configuration file ##############################
+
+ //将一份已经准备好的配置文件替换mysql现有配置文件
+ chmod 755 mysql.cnf
+ cp mysql.cnf /usr/share/mysql/my-medium.cnf
+ cp mysql.cnf /etc/my.cnf
+
+ //启动或重启mysql
+ netstat -apn | grep 3306
+ if [ "$?" != 0 ] ;
+ then
+  service mysql start
+ else
+  service mysql restart
+ fi
+
+ //判断mysql是否启动成功
+ netstat -apn | grep 3306
+ if [ "$?" != 0 ] ;
+ then
+  echo "MySQL service failed to start!"
+  rollback;
+  exit 0
+ fi
+
+ //安装mysql用户端
+ chmod 755 MySQL-client-5.5.31-2.rhel5.i386.rpm
+ rpm -ivh MySQL-client-5.5.31-2.rhel5.i386.rpm
+
+################################ Tomcat ##################################
+
+
+ //赋权并解压tomcat
+ chmod 755 apache-tomcat*.tar*
+ tar zxvf apache-tomcat*.tar*
+ mv apache-tomcat-6.0.32/ /usr/tomcat-medical/
+
+################################ Medical ##################################
+
+ //赋权并解压应用到tomcat/webapps目录下
+ chmod 755 medical.zip
+ unzip medical.zip -d /usr/tomcat-medical/webapps/
+
+ //判断当前目录下是否存在Install.zdt文件，存在则copy文件到指定目录下
+ if [ -e Install.zdt ] ;
+ then
+   cp Install.zdt /usr/tomcat-medical/webapps/medical/WEB-INF/data/installer/
+ fi
+
+########################### Change Password ################################
+
+ //等待5秒
+ sleep 5
+ //mysql默认密码为空，修改mysql密码（需要当前用户有mysql执行权限）
+ mysqladmin flush-privileges password '******'
+
+########################## Environment Variables #############################
+
+//环境变量
+　　cat >> /etc/profile << TTD
+
+　　TOMCAT_HOME=/usr/tomcat-medical/
+
+　　PATH=\$PATH:\$TOMCAT_HOME/bin/:/usr/local/apache2/bin:
+
+　　export JAVA_HOME JRE_HOME CLASSPATH PATH TOMCAT_HOME
+
+　　TTD
+
+
+
+
+source /etc/profile
+
+#########################################################################
+
+ //启动tomcat
+ sh /usr/tomcat-medical/bin/startup.sh
+
+ //这里延迟5秒等待tomcat启动完成
+ sleep 5
+
+ //判断tomcat状态
+ curl 127.0.0.1:8080 | grep "Thanks for using Tomcat"
+ if [ "$?" != 0 ] ;
+ then
+  echo "I think install tomcat is unfinished ."
+  rollback;
+  exit 0
+ fi
+
+ rollback;
+
+######################## Auto Start Up Services ###############################
+
+//把tomcat启动脚本加入rc.local文件中实现开机自动启动
+cat >> /etc/rc.local << ASU
+
+/usr/tomcat-medical/bin/startup.sh
+
+ASU
+
+ //设置mysql服务开机自动启动
+ chkconfig --add mysql
+
+########################################################################
+
+//如果用户输入0的情况下执行卸载程序
+elif [ "$userinput" == '0' ] ;
+then
+
+ echo "Uninstalling Tomcat......"
+
+ netstat -apn | grep 8080
+ if [ "$?" == 0 ] ;
+ then
+  sh /usr/tomcat-medical/bin/shutdown.sh
+ fi
+
+ rm -rf /usr/tomcat-medical/
+
+ echo "Uninstalling JDK......"
+ rpm -e jdk-1.6.0_29-fcs.i586
+
+ echo "Uninstalling MySQL......"
+
+ netstat -apn | grep 3306
+ if [ "$?" == 0 ] ;
+ then
+  service mysql stop
+ fi
+
+ rpm -e MySQL-client-5.5.31-2.rhel5.i386
+ rpm -e MySQL-server-5.5.31-2.rhel5.i386
+
+ echo "Uninstall is complete please modify environment variables."
+
+//如果用户输入的不是1或0则执行这里
+else
+ echo "You can only enter 1 or 0."
+
+fi 
+
+
+```
 
 
 ### Vagrantfile-k8sallinonekubeasz
