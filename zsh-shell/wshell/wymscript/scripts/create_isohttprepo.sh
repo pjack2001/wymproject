@@ -1,8 +1,11 @@
-
 #!/bin/sh
-#脚本--用于创建本地yum源
-#mkdir -p /opt/cdrom
-#mount -t iso9660 -o loop /oracle/CentOS-7-x86_64-DVD-1804.iso /opt/cdrom/
+# File    :   create_isohttprepo.sh
+# Time    :   2019/03/27 19:24:36
+# Author  :   wang yuming 
+# Version :   0.1
+# License :   (C)Copyright 2018-2019, MIT
+# Desc    :   None
+
 #set -xv
 #exec 1>mylog 2>&1 #shell命令输出log
 
@@ -12,7 +15,6 @@ if [[ Is_Yum_Available == "" ]]; then
 	exit 1
 fi
 
-# read -p "Please input the path which had mounted the CD:" CDPath
 read -p "请输入光盘挂载路径:/var/www/html/centos/7/os/x86_64/" CDPath
 if [ -z "$CDPath" ];then
     CDPath="/var/www/html/centos/7/os/x86_64/"
@@ -24,14 +26,13 @@ fi
 
 #CDFile=`echo $CDPath | cut -d ' ' -f 1`
 
-
-#read -p "Please input the local yum repository name:" name
-read -p "请输入光盘yum源名称:localhttpd" name
+#locahttpd 
+read -p "请输入光盘yum源名称:默认localhttpd" name
 if [ -z "$name" ];then
     name="localhttpd"
 fi
 
-# 限定网卡，需要改为变量
+# 得到eth1网卡的IP地址
 ipaddr=$(ifconfig eth1 |grep -o "[0-9.]\{7,\}" |head -n1)
 echo -e "eth1网卡的IP地址：" $ipaddr
 
@@ -63,7 +64,7 @@ yum clean all
 yum makecache
 
 echo -e $(yum repolist)
-echo -e "\e[1;31m========== 本地网络YUM源安装成功 ==========\e[0m"
+echo -e "\e[1;31m****** 本地网络YUM源安装成功 ******\e[0m"
 
 #This is red text?\e[1;31m 将颜色设置为红色
 #?\e[0m 将颜色重新置回

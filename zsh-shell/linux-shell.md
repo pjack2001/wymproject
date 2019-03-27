@@ -1,5 +1,7 @@
 # linux-shell 
 
+https://github.com/DingGuodong/LinuxBashShellScriptForOps
+
 ## wym命令
 
 ```
@@ -80,17 +82,148 @@ $echo -n "123"
 $echo "456"
 
 
+#!/bin/sh
+# 在某些情况下会拿到错误结果
+echo -e ""测试1""
+echo -e $(dirname $0)
 
+echo -e ""测试2""
+echo -e $(pwd)
+
+echo -e ""测试3""
+echo -e $(dirname $(readlink -f $0))
+
+echo -e ""测试4""
+cd ../software  # 当前位置跳到脚本位置
+echo -e $(pwd)
+
+echo -e ""测试5""
+echo -e $0
 
 
 
 ```
 
+### 17个Linux系统高频率常用命令行和shell小脚本
+
+```yml
+
+https://blog.51cto.com/dgd2010/1584952
+
+urey_pp关注0人评论871人阅读2014-12-01 11:26:16
+以下是在部署OpenStack以及使用Linux过程中摘录的一些较为常用的命令行或shell脚本，仅供参考。
+
+1.杀死所有存在的僵尸进程
+
+ps -ef | grep defunc | grep -v grep | awk '{print $3}' | xargs kill -9
+#pkill dnsmasq
+2.去掉配置文件中的#符号和空白行
+
+cat >/root/delsc.sh <<eof
+#!/bin/bash
+# delete all spaces and comments of specialized file, using with  filename
+[[ "\$1" == '' ]] && echo "delete all spaces and comments of specialized file, using with \$@ filename" && exit 1
+grep -v \# \$1 | grep -v ^$
+eof
+cat /root/delsc.sh
+chmod +x /root/delsc.sh
+ln -s /root/delsc.sh /usr/local/bin/delsc
+3.CentOS7安装vmtools
+
+# mount /dev/cdrom /mnt/
+# cp /mnt/VMwareTools-9.4.10-2092844.tar.gz /tmp/
+# cd /tmp/
+# tar zxf VMwareTools-9.4.10-2092844.tar.gz
+# /tmp/vmware-tools-distrib/vmware-install.pl
+yum install open-vm-tools -y
+systemctl enable vmtoolsd.service
+systemctl start vmtoolsd.service
+systemctl status vmtoolsd.service
+4.修改Linux系统时区
+
+mv /etc/localtime /etc/localtime~
+ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+chown -h --reference=/etc/localtime~ /etc/localtime
+chcon -h --reference=/etc/localtime~ /etc/localtime
+5.中国大陆常用时间服务器列表
+
+cat > /etc/ntp.conf <<eof
+server 2.cn.pool.ntp.org iburst
+server 3.asia.pool.ntp.org iburst
+server 0.asia.pool.ntp.org iburst
+restrict -4 default kod notrap nomodify
+restrict -6 default kod notrap nomodify
+eof
+6.配置时间同步
+
+rpm -qa | grep ntp || yum install -y ntp
+ntpdate -u pool.ntp.org || ntpdate -u time.nist.gov || ntpdate -u time-nw.nist.gov
+date
+cat >>/etc/rc.local<<EOF
+ntpdate -u pool.ntp.org || ntpdate -u time.nist.gov || ntpdate -u time-nw.nist.gov
+hwclock -w
+EOF
+# Recommoned do
+touch /etc/cron.daily/ntpdate
+cat >>/etc/cron.daily/ntpdate<<EOF
+ntpdate -u pool.ntp.org || ntpdate -u time.nist.gov || ntpdate -u time-nw.nist.gov
+hwclock -w
+EOF
+7.对配置文件更改前先备份配置文件
+
+operationfile=/etc/keystone/keystone.conf
+bakoperationfile=$operationfile$(date +-%F-%H-%M-%S)"~"
+cp $operationfile $bakoperationfile
+chown -R --reference=$operationfile $bakoperationfile
+chcon -R --reference=$operationfile $bakoperationfile
+8.创建计划任务
+
+(crontab -l -u keystone 2>&1 | grep -q token_flush) || echo '@hourly /usr/bin/keystone-manage token_flush >/var/log/keystone/keystone-tokenflush.log 2>&1' >> /var/spool/cron/keystone
+9.不切换用户但以此用户的身份执行命令
+
+su -s /bin/sh -c "glance-manage db_sync" glance
+10.获取路由IP
+
+ip=$(ifconfig `route | grep default | awk '{print $8}'` | grep inet | grep -v inet6 | awk '{print $2}')
+11.判断CPU是否支持虚拟化
+
+if [[ $(egrep -c '(vmx|svm)' /proc/cpuinfo) == 0 ]];then
+	defaultnum=`grep -n "^\[libvirt\]$" $operationfile | awk -F ':' '{print $1}'`
+	sedoperation=$defaultnum"a"
+	sed -i "$sedoperation  virt_type = qemu" $operationfile
+else
+	defaultnum=`grep -n "^\[libvirt\]$" $operationfile | awk -F ':' '{print $1}'`
+	sedoperation=$defaultnum"a"
+	sed -i "$sedoperation  virt_type = kvm" $operationfile
+fi
+12.获取指定网卡名所对应的IP地址
+
+ext_ens=ens160
+local_ip=$(ifconfig `route | grep $ext_ens | awk '{print $8}'` | grep inet | grep -v inet6 | awk '{print $2}')
+13.查找并删除文件
+
+find /tmp -name core -type f -print0 | xargs -0 /bin/rm -f
+14.查找并列出文件类型
+
+find . -type f -exec file '{}' \;
+15.查找大于1GB以上的文件，并列出
+
+find / -size +1000M -exec ls -alh '{}' \;
+16.测试磁盘性能
+
+time dd if=/dev/zero of=/tmp/testfile bs=4k  count=80000
+17.find查找文件大小大于10MB的文件，并find排除某些目录
+
+find / -not \( -path /var/lib/docker -prune -o -path /proc -prune \) -type f -size +10M
+--end--
+
+```
 
 
 ### shell脚本
 
 ```yml
+
 linux 脚本实现程序自动安装
 #!/bin/bash
 
@@ -392,7 +525,7 @@ fi
 
 ### Vagrantfile-k8sallinonekubeasz
 
-```
+```yml
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 #
@@ -434,7 +567,7 @@ end
 ```
 
 ### Vagrantfile-k8sallinone
-```
+```yml
 
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
