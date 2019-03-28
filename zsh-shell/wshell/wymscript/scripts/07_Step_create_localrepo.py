@@ -50,7 +50,6 @@ create_yum_localrepo()
 
 # 打印当前路径
 print '****** 当前目录：', os.getcwd()  #获取当前工作目录路径
-print '****** 使用本地yum源测试安装tree ******'
 
 # 安装必备的软件vim net-tools
 
@@ -62,6 +61,8 @@ def install_vim():
 
 
 install_vim()
+
+print '****** 使用本地yum源测试安装tree ******'
 
 
 ## 使用离线yum源测试安装
@@ -80,3 +81,10 @@ def remove_tree():
 
 
 remove_tree()
+
+print '****** 列出YUM源文件 ******'
+yumdirs = '/etc/yum.repos.d/'
+dirs = os.listdir(yumdirs)
+# 输出所有文件和文件夹
+for file in dirs:
+    print file

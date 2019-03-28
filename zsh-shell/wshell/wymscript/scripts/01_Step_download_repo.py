@@ -54,3 +54,9 @@ if __name__ == '__main__':
     main()
 
 print '****** 替换YUM源完毕 ******'
+print '****** 列出YUM源文件 ******'
+yumdirs = '/etc/yum.repos.d/'
+dirs = os.listdir(yumdirs)
+# 输出所有文件和文件夹
+for file in dirs:
+    print file

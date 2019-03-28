@@ -81,3 +81,10 @@ def remove_tree():
 
 
 remove_tree()
+
+print '****** 列出YUM源文件 ******'
+yumdirs = '/etc/yum.repos.d/'
+dirs = os.listdir(yumdirs)
+# 输出所有文件和文件夹
+for file in dirs:
+    print file
