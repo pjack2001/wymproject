@@ -3,7 +3,7 @@
 '''
 @File    :   07_Step_create_localrepo.py
 @Time    :   2019/03/27 14:16:34
-@Author  :   wang yuming 
+@Author  :   wangyuming 
 @Version :   0.1
 @License :   (C)Copyright 2018-2019, MIT
 @Desc    :   None

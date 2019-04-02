@@ -3,7 +3,7 @@
 '''
 @File    :   01_Step_download_repo.py
 @Time    :   2019/03/27 17:46:27
-@Author  :   wang yuming 
+@Author  :   wangyuming 
 @Version :   0.1
 @License :   (C)Copyright 2018-2019, MIT
 @Desc    :   None

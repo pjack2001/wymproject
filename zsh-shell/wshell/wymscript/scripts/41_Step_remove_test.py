@@ -3,7 +3,7 @@
 '''
 @File    :   41_Step_remove_test.py
 @Time    :   2019/03/27 22:15:03
-@Author  :   wang yuming 
+@Author  :   wangyuming 
 @Version :   0.1
 @License :   (C)Copyright 2018-2019, MIT
 @Desc    :   None

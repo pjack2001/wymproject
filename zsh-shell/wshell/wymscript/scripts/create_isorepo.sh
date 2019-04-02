@@ -1,7 +1,7 @@
 #!/bin/sh
 # File    :   create_isorepo.sh
 # Time    :   2019/03/27 17:40:26
-# Author  :   wang yuming 
+# Author  :   wangyuming 
 # Version :   0.1
 # License :   (C)Copyright 2018-2019, MIT
 # Desc    :   用于创建光盘本地yum源

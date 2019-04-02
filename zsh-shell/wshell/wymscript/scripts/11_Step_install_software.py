@@ -3,7 +3,7 @@
 '''
 @File    :   11_Step_install_software.py
 @Time    :   2019/03/27 14:17:06
-@Author  :   wang yuming 
+@Author  :   wangyuming 
 @Version :   0.1
 @License :   (C)Copyright 2018-2019, MIT
 @Desc    :   None

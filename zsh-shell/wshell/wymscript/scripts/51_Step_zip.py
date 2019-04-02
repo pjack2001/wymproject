@@ -3,7 +3,7 @@
 '''
 @File    :   51_Step_zip.py
 @Time    :   2019/03/27 23:58:13
-@Author  :   wang yuming 
+@Author  :   wangyuming 
 @Version :   0.1
 @License :   (C)Copyright 2018-2019, MIT
 @Desc    :   None
