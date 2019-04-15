@@ -201,7 +201,7 @@ yum -y install nginx
 
 wlan分配IP192.168.157.118，根据实际情况修改IP
 
-$ cat /etc/nginx/ninx.conf
+$ cat /etc/nginx/nginx.conf
 
 worker_processes  1;
 

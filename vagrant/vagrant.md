@@ -21,8 +21,8 @@ vagrant_2.2.3_x86_64.deb
 https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb
 
 
-
-
+安装插件
+vagrant plugin install vagrant-vbguest
 
 
 
