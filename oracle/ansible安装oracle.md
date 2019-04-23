@@ -116,7 +116,7 @@ $ cat lean_delivery_oracle112040.yml.yml
       oracle_version: 11
       patch_version: 11.2.0.4
       transport: "local"
-      transport_local: "/home/w/tool/oralce/oracle11.2.0.4"
+      transport_local: "/home/w/tool/oracle/oracle11.2.0.4"
       oracle_images:
         - "p13390677_112040_Linux-x86-64_1of7.zip"
         - "p13390677_112040_Linux-x86-64_2of7.zip"
@@ -131,7 +131,7 @@ $ cat lean_delivery_oracle12201.yml.yml
       oracle_version: 12
       patch_version: 12.2.0.1
       transport: "local"
-      transport_local: "/home/w/tool/oralce"
+      transport_local: "/home/w/tool/oracle"
       oracle_images:
         - "linuxx64_12201_database.zip"
 
@@ -154,7 +154,7 @@ $ ansible-playbook /media/xh/i/python/wymproject/oracle/oracleinstalltest/lean_d
 可以不修改，写到lean_delivery_oracle112040.yml文件里优先级最高
 
 #trasnport_local: "/tmp"
-trasnport_local: "/home/w/tool/oralce"
+trasnport_local: "/home/w/tool/oracle"
 
 oracle_version: 11
 patch_version: 11.2.0.4
@@ -343,9 +343,9 @@ included: /etc/ansible/roles/lean_delivery.oracle_db/tasks/fetch/local.yml for 1
 
 TASK [lean_delivery.oracle_db : Artifacts stored localy] *******************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/fetch/local.yml:3
-ok: [172.17.8.242] => (item=p13390677_112040_Linux-x86-64_1of7.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip"]}, "changed": false, "item": "p13390677_112040_Linux-x86-64_1of7.zip"}
-ok: [172.17.8.242] => (item=p13390677_112040_Linux-x86-64_2of7.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip", "/home/w/tool/oralce/p13390677_112040_Linux-x86-64_2of7.zip"]}, "changed": false, "item": "p13390677_112040_Linux-x86-64_2of7.zip"}
-ok: [172.17.8.242] => (item=p13390677_112040_Linux-x86-64_3of7.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip", "/home/w/tool/oralce/p13390677_112040_Linux-x86-64_2of7.zip", "/home/w/tool/oralce/p13390677_112040_Linux-x86-64_3of7.zip"]}, "changed": false, "item": "p13390677_112040_Linux-x86-64_3of7.zip"}
+ok: [172.17.8.242] => (item=p13390677_112040_Linux-x86-64_1of7.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oracle/p13390677_112040_Linux-x86-64_1of7.zip"]}, "changed": false, "item": "p13390677_112040_Linux-x86-64_1of7.zip"}
+ok: [172.17.8.242] => (item=p13390677_112040_Linux-x86-64_2of7.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oracle/p13390677_112040_Linux-x86-64_1of7.zip", "/home/w/tool/oracle/p13390677_112040_Linux-x86-64_2of7.zip"]}, "changed": false, "item": "p13390677_112040_Linux-x86-64_2of7.zip"}
+ok: [172.17.8.242] => (item=p13390677_112040_Linux-x86-64_3of7.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oracle/p13390677_112040_Linux-x86-64_1of7.zip", "/home/w/tool/oracle/p13390677_112040_Linux-x86-64_2of7.zip", "/home/w/tool/oracle/p13390677_112040_Linux-x86-64_3of7.zip"]}, "changed": false, "item": "p13390677_112040_Linux-x86-64_3of7.zip"}
 
 TASK [lean_delivery.oracle_db : Check unziped folder] **********************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:65
@@ -353,7 +353,7 @@ ok: [172.17.8.242] => {"changed": false, "stat": {"exists": false}}
 
 TASK [lean_delivery.oracle_db : Unzip oracle installer] ********************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:71
-changed: [172.17.8.242] => (item=/home/w/tool/oralce/p13390677_112040_Linux-x86-64_1of7.zip) => {"changed": true, "dest": "/opt/install/oracledb", "extract_results": {"cmd": ["/usr/bin/unzip", "-o", "/root/.ansible/tmp/ansible-tmp-1552302685.1475568-165752864793794/source", "-d", "/opt/install/oracledb"], "err": "", "out": "Archive:  /root/.ansible/tmp/ansible-tmp-1552302685.1475568-165752864793794/source\n   creating: /opt/install/oracledb/database/\n  
+changed: [172.17.8.242] => (item=/home/w/tool/oracle/p13390677_112040_Linux-x86-64_1of7.zip) => {"changed": true, "dest": "/opt/install/oracledb", "extract_results": {"cmd": ["/usr/bin/unzip", "-o", "/root/.ansible/tmp/ansible-tmp-1552302685.1475568-165752864793794/source", "-d", "/opt/install/oracledb"], "err": "", "out": "Archive:  /root/.ansible/tmp/ansible-tmp-1552302685.1475568-165752864793794/source\n   creating: /opt/install/oracledb/database/\n  
 
 解压缩输出信息较多，时间较长，省略......
 
@@ -750,7 +750,7 @@ included: /etc/ansible/roles/lean_delivery.oracle_db/tasks/fetch/local.yml for 1
 
 TASK [lean_delivery.oracle_db : Artifacts stored localy] ******************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/fetch/local.yml:3
-ok: [172.17.8.242] => (item=linuxx64_12201_database.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oralce/linuxx64_12201_database.zip"]}, "changed": false, "item": "linuxx64_12201_database.zip"}
+ok: [172.17.8.242] => (item=linuxx64_12201_database.zip) => {"ansible_facts": {"oracle_db_artifacts": ["/home/w/tool/oracle/linuxx64_12201_database.zip"]}, "changed": false, "item": "linuxx64_12201_database.zip"}
 
 TASK [lean_delivery.oracle_db : Check unziped folder] *********************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:65
@@ -758,7 +758,7 @@ ok: [172.17.8.242] => {"changed": false, "stat": {"atime": 1551822078.6733859, "
 
 TASK [lean_delivery.oracle_db : Unzip oracle installer] *******************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:71
-skipping: [172.17.8.242] => (item=/home/w/tool/oralce/linuxx64_12201_database.zip)  => {"changed": false, "item": "/home/w/tool/oralce/linuxx64_12201_database.zip", "skip_reason": "Conditional result was False"}
+skipping: [172.17.8.242] => (item=/home/w/tool/oracle/linuxx64_12201_database.zip)  => {"changed": false, "item": "/home/w/tool/oracle/linuxx64_12201_database.zip", "skip_reason": "Conditional result was False"}
 
 TASK [lean_delivery.oracle_db : Remove installs] **************************************************************************
 task path: /etc/ansible/roles/lean_delivery.oracle_db/tasks/system/prepare.yml:80

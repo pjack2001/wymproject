@@ -1,0 +1,48 @@
+version: '3.1'
+
+services:
+  centos7.4:
+    image: centos:7.4.1708
+    container_name: centos7.4
+    hostname: centos7.4
+    tty: true
+    command: /bin/bash
+    volumes:
+    - /home/w/tool/oracle:/opt
+    ports:
+    - "8045:80"
+
+  centos7.6:
+    image: centos:7.6.1810
+    container_name: centos7.6
+    hostname: centos7.6
+    tty: true
+    command: /bin/bash
+    volumes:
+    - /home/w/tool/oracle:/opt
+    ports:
+    - "8046:80"
+
+  nginx1:
+    image: nginx:1.15.9-alpine
+    container_name: nginx1
+    hostname: nginx1
+    volumes:
+    - /home/w/tool/nginx/html:/usr/share/nginx/html
+    - /home/w/tool/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+    - /home/w/tool/nginx/www:/www
+    - /home/w/tool/nginx/logs:/wwwlogs
+    ports:
+    - "8041:80"
+
+  nginx2:
+    image: nginx:1.15.9-alpine
+    container_name: nginx2
+    hostname: nginx2
+    volumes:
+    - /home/w/tool/nginx/html2:/usr/share/nginx/html
+    - /home/w/tool/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+    - /home/w/tool/nginx/www:/www
+    - /home/w/tool/nginx/logs:/wwwlogs
+    ports:
+    - "8042:80"

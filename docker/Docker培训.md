@@ -216,6 +216,46 @@ sudo yum install -y docker-ce 或安装特定版本docker-ce-18.03.1.ce
 sudo systemctl start docker
 sudo systemctl enable docker
 
+
+$ yum list docker-ce --showduplicates
+Failed to set locale, defaulting to C
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+ * base: mirrors.aliyun.com
+ * extras: mirrors.aliyun.com
+ * updates: mirrors.aliyun.com
+Installed Packages
+docker-ce.x86_64                  18.03.1.ce-1.el7.centos                   @docker-ce-stable
+Available Packages
+docker-ce.x86_64                  17.03.0.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.03.1.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.03.2.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.03.3.ce-1.el7                          docker-ce-stable 
+docker-ce.x86_64                  17.06.0.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.06.1.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.06.2.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.09.0.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.09.1.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.12.0.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  17.12.1.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  18.03.0.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  18.03.1.ce-1.el7.centos                   docker-ce-stable 
+docker-ce.x86_64                  18.06.0.ce-3.el7                          docker-ce-stable 
+docker-ce.x86_64                  18.06.1.ce-3.el7                          docker-ce-stable 
+docker-ce.x86_64                  18.06.2.ce-3.el7                          docker-ce-stable 
+docker-ce.x86_64                  18.06.3.ce-3.el7                          docker-ce-stable 
+docker-ce.x86_64                  3:18.09.0-3.el7                           docker-ce-stable 
+docker-ce.x86_64                  3:18.09.1-3.el7                           docker-ce-stable 
+docker-ce.x86_64                  3:18.09.2-3.el7                           docker-ce-stable 
+docker-ce.x86_64                  3:18.09.3-3.el7                           docker-ce-stable 
+docker-ce.x86_64                  3:18.09.4-3.el7                           docker-ce-stable 
+docker-ce.x86_64                  3:18.09.5-3.el7                           docker-ce-stable 
+
+
+
+
+
+
 删除 Docker CE
 $ sudo yum remove docker-ce
 $ sudo rm -rf /var/lib/docker
@@ -330,6 +370,27 @@ $ sudo docker restart 重启容器名或ID
 
 进入容器
 $ sudo docker exec -it 容器ID /bin/sh
+
+
+进入docker 容器的小脚本
+
+下面是一个通过nsenter进入docker容器的例子脚本： 
+文件名字：ns 
+使用方法：将文件放入系统PATH路径下，进入容器方式ns <container-name/container-id>
+
+如果docker容器没有提供ssh,那么进入docker容器的方法，一般是 attach ,exec,nsenter
+attach 进入后再退出，会引起docker 容器停止。exec 每次输入比较麻烦。
+比较方便的是用 nsenter . nsenter 进入需要查docker 容器的pid 。所以，写了下面的脚本，方便进入。
+
+#!/bin/bash  
+docker ps  
+echo "======================================\r"  
+read -p "input docker name:" did  
+PID=$(docker inspect --format "{{.State.Pid}}" $did)  
+nsenter --target $PID --mount --uts --ipc --net --pid 
+ 
+该脚本会提示当前运行的docker容器，然后输入docker 的id 后，就进入了docker容器
+
 
 删除，容器要先停止
 $ sudo docker rm 容器ID

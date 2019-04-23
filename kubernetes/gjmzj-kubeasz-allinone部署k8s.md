@@ -5,6 +5,9 @@
 w：
 ~/tool/vagrant/k8sallinone
 
+git克隆的kubeasz安装文件放在/home/w/tool/vagrant/kubeasz
+
+
 102：
 https://192.168.102.10:6443
 /home/y/vagrant/allinonekubeasz

@@ -6,6 +6,6 @@
       oracle_version: 12
       patch_version: 12.2.0.1
       transport: "local"
-      transport_local: "/home/w/tool/oralce"
+      transport_local: "/home/w/tool/oracle"
       oracle_images:
         - "linuxx64_12201_database.zip"

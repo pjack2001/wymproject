@@ -7,10 +7,10 @@
     shell: df -lh
 
   - name: "Unzip temp"
-    unarchive: src=/home/w/tool/oralce/temp.zip dest=/opt/install/
+    unarchive: src=/home/w/tool/oracle/temp.zip dest=/opt/install/
 
   - name: "Unzip oracle installer 1of2"
-    unarchive: src=/home/w/tool/oralce/linux_11gR2_database_1of2.zip dest=/opt/install/ 
+    unarchive: src=/home/w/tool/oracle/linux_11gR2_database_1of2.zip dest=/opt/install/ 
 
   - name: "Unzip oracle installer 2of2"
-    unarchive: src=/home/w/tool/oralce/linux_11gR2_database_2of2.zip dest=/opt/install/ 
+    unarchive: src=/home/w/tool/oracle/linux_11gR2_database_2of2.zip dest=/opt/install/ 

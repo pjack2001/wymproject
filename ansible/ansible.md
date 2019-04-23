@@ -83,9 +83,9 @@ vagrant up
 vagrant ssh-config
 vagrant snapshop save
 
-快照的名字写错了，写成了oralce1
-vagrant snapshot save oralce1
-vagrant snapshot restore oralce1
+快照的名字写错了，写成了oracle1
+vagrant snapshot save oracle1
+vagrant snapshot restore oracle1
 
 
 $ ansible all --list
@@ -136,22 +136,22 @@ $ ansible test -b -m yum -a 'name=tree,vim,dstat state=present'
 
 各节点分别拷贝
 
-ansible oracle1 -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/wm.keepalived.conf  dest=/etc/keepalived/keepalived.conf backup=yes'
+ansible oracle1 -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/wm.keepalived.conf  dest=/etc/keepalived/keepalived.conf backup=yes'
 
-ansible oracle2 -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/wb.keepalived.conf  dest=/etc/keepalived/keepalived.conf backup=yes'
+ansible oracle2 -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/wb.keepalived.conf  dest=/etc/keepalived/keepalived.conf backup=yes'
 
 全部节点执行
 
-ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx_check.sh  dest=/etc/keepalived backup=yes'
+ansible all -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/nginx_check.sh  dest=/etc/keepalived backup=yes'
 
-ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/nginx.conf  dest=/etc/nginx backup=yes'
+ansible all -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/nginx/nginx.conf  dest=/etc/nginx backup=yes'
 
 恢复原始备份nginx.conf
-$ ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/nginx.conf.bak  dest=/etc/nginx/nginx.conf backup=yes'
+$ ansible all -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/nginx/nginx.conf.bak  dest=/etc/nginx/nginx.conf backup=yes'
 
-$ ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/nginx.conf-w dest=/etc/nginx/nginx.conf backup=yes'
+$ ansible all -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/nginx/nginx.conf-w dest=/etc/nginx/nginx.conf backup=yes'
 
-ansible all -b -m copy -a 'src=/home/w/tool/oralce/keepalived-nginx/nginx/8080.conf  dest=/etc/nginx/conf.d backup=yes'
+ansible all -b -m copy -a 'src=/home/w/tool/oracle/keepalived-nginx/nginx/8080.conf  dest=/etc/nginx/conf.d backup=yes'
 
 注意：/etc/nginx/conf.d/default.conf已经侦听80端口，所以新建的监听端口不能重复，或者default.conf改后缀名
 
@@ -261,7 +261,7 @@ Vagrant.configure("2") do |config|
    vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
   end  
 #config.vm.synced_folder ".", "/oracle", type: "nfs", nfs_udp: false
-  config.vm.synced_folder "/home/w/tool/oralce/", "/oracle", type: "nfs", nfs_udp: false
+  config.vm.synced_folder "/home/w/tool/oracle/", "/oracle", type: "nfs", nfs_udp: false
   $num_instances = 2
   # curl https://discovery.etcd.io/new?size=3
   #i$etcd_cluster = "node1=http://172.17.8.101:2380"
@@ -330,6 +330,7 @@ sudo systemctl restart sshd
 修改PushKey.yml文件里的hosts，上传公钥
 $ ansible-playbook /media/xh/i/python/wymproject/ansible/testw/Verified/PushKey.yml -u root -k
 
+$ ansible-playbook /media/xh/i/wymproject/ansible/testw/Verified/PushKey.yml -u root -k
 
 
 ```
@@ -1492,9 +1493,9 @@ ansible -i /root/hosts all  -m unarchive -a 'src=/usr/loca/src/mysql.tar.gz dest
 与之相对的压缩命令的模块是archive。
 
 
-$ ansible all -m unarchive -a 'src=/home/w/tool/oralce/linux_11gR2_database_1of2.zip dest=/opt/install/'
+$ ansible all -m unarchive -a 'src=/home/w/tool/oracle/linux_11gR2_database_1of2.zip dest=/opt/install/'
 
-$ ansible all -m unarchive -a 'src=/home/w/tool/oralce/linux_11gR2_database_2of2.zip dest=/opt/install/'
+$ ansible all -m unarchive -a 'src=/home/w/tool/oracle/linux_11gR2_database_2of2.zip dest=/opt/install/'
 
 
 
@@ -1508,13 +1509,13 @@ $ ansible all -m unarchive -a 'src=/home/w/tool/oralce/linux_11gR2_database_2of2
     shell: df -lh
 
   - name: "Unzip temp"
-    unarchive: src=/home/w/tool/oralce/temp.zip dest=/opt/install/
+    unarchive: src=/home/w/tool/oracle/temp.zip dest=/opt/install/
 
   - name: "Unzip oracle installer 1of2"
-    unarchive: src=/home/w/tool/oralce/linux_11gR2_database_1of2.zip dest=/opt/install/ 
+    unarchive: src=/home/w/tool/oracle/linux_11gR2_database_1of2.zip dest=/opt/install/ 
 
   - name: "Unzip oracle installer 2of2"
-    unarchive: src=/home/w/tool/oralce/linux_11gR2_database_2of2.zip dest=/opt/install/
+    unarchive: src=/home/w/tool/oracle/linux_11gR2_database_2of2.zip dest=/opt/install/
 
 
 
