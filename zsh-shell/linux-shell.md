@@ -1193,7 +1193,7 @@ w1.vm.network :public_network, ip: "192.168.31.161", bridge:"wlp3s0", bootproto:
     sudo yum clean all && yum makecache
     sudo yum install -y wget vim tree
 #sudo yum list docker-ce --showduplicates
-    sudo yum install -y docker-ce-18.03.1.ce
+    sudo yum install -y docker-ce-18.06.1.ce
     sudo systemctl start docker
     sudo systemctl enable docker
     sudo mkdir -p /etc/docker

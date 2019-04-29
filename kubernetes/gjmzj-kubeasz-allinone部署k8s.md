@@ -2,11 +2,74 @@
 ##
 
 ```
-w：
+w：建立虚拟机
 ~/tool/vagrant/k8sallinone
 
-git克隆的kubeasz安装文件放在/home/w/tool/vagrant/kubeasz
+1、虚拟机目录
+git克隆的kubeasz安装文件放在/home/w/tool/vagrant/kubeasz，后来拷贝到~/tool/vagrant/k8sallinone目录下
 
+启动虚拟机，做快照
+$ vagrant snapshot save kubeasz1
+
+2、配置ssh免密登录
+
+$ ansible-playbook /media/xh/i/wymproject/ansible/testw/Verified/PushKey.yml -u root -k
+$ ssh root@172.17.8.161
+
+$ ansible all -m ping 如果报错，可能是用户不对
+
+$ ansible all -m ping -u root
+
+如果以前配置过，删除
+$ ssh-keygen -f "/home/w/.ssh/known_hosts" -R "172.17.8.161"
+
+3、按照文档后面，下载，解压到/etc/ansible的bin目录和down目录，并把kubeasz的所有文件拷贝到/etc/ansible目录
+
+4、执行安装
+# 一步安装
+#ansible-playbook 90.setup.yml
+
+#如果安装时报错
+$ ansible-playbook 90.setup.yml 
+PLAY [all] **********************************************************************************
+TASK [Gathering Facts] **********************************************************************
+fatal: [172.17.8.161]: UNREACHABLE! => {"changed": false, "msg": "SSH Error: data could not be sent to remote host \"172.17.8.161\". Make sure this host can be reached over ssh", "unreachable": true}
+
+
+加-u root，加sudo
+$ sudo ansible-playbook 90.setup.yml -u root
+
+5、安装完成，ssh登录，测试
+$ ssh root@172.17.8.161
+
+[root@kubeasz1 ~]# kubectl cluster-info
+Kubernetes master is running at https://172.17.8.161:6443
+CoreDNS is running at https://172.17.8.161:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+kubernetes-dashboard is running at https://172.17.8.161:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+
+[root@kubeasz1 ~]# kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+Name:         admin-user-token-gshv7
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name=admin-user
+              kubernetes.io/service-account.uid=9a5a10e0-6573-11e9-8aa1-52540075dc3d
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1350 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWdzaHY3Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI5YTVhMTBlMC02NTczLTExZTktOGFhMS01MjU0MDA3NWRjM2QiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.cQzJ1cREtLFDTwSKNw0RR7_92B1bUd6hUQPgZR7ss_uQHm_ACuGNopRdBrGl-v2Inzi78oSQOPO1KWLnrAsfqHKwYe8lduqxbMmC6M-iM41G6lGlPCE_n0S_jqu8foAqaXk_XeCLRPhuPWrcGgwWROUcKz0QOTfHy20uAosXUvwHtUMqXbpR1Wn2TBYuFsuMG8Z1eG7QPNetEGQD5GZ3MmpCxfDNDixV8fpmqPh01jWMAD8vv-9VYl7Ct1QTR6C2z_LRDyAOGoBG5TGC0oIYbHkd870u0LwBR2VpON6PB9pai0iHex_O1MKZcaWxAh2aL6E8_ZOszed5kCLTKtXcow
+
+浏览器登录：https://192.168.102.10:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+
+6、做快照
+
+$ vagrant snapshot save kubeasz1b
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 102：
 https://192.168.102.10:6443
@@ -46,6 +109,9 @@ ssh-keygen -t rsa -b 2048 回车 回车 回车
 ssh-copy-id 192.168.102.10 #$IP为本虚机地址，按照提示输入yes 和root密码
 
 
+
+
+
 下载项目源码
 # 方式一：使用git clone
 git clone https://github.com/gjmzj/kubeasz.git
@@ -60,7 +126,7 @@ mv bin/* /etc/ansible/bin
  [可选]下载离线docker镜像
 服务器使用内部yum源/apt源，但是无法访问公网情况下，请下载离线docker镜像完成集群安装；
 从百度云盘把basic_images_kubeasz_x.y.tar.gz 下载解压到/etc/ansible/down 目录,有0.2,0.3,0.4，可以都加压
-tar zxvf basic_images_kubeasz_0.2.tar.gz -C /etc/ansible/down
+tar zxvf extra_images_kubeasz_0.2.tar.gz -C /etc/ansible/down
 tar zxvf basic_images_kubeasz_0.3.tar.gz -C /etc/ansible/down
 tar zxvf basic_images_kubeasz_0.4.tar.gz -C /etc/ansible/down
 

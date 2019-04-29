@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box_check_update = false
+  config.vm.provider 'virtualbox' do |vb|
+   vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
+  end  
+#config.vm.synced_folder ".", "/vagrant", type: "nfs", nfs_udp: false
+  $num_instances = 3
+  # curl https://discovery.etcd.io/new?size=3
+# $etcd_cluster = "node1=http://172.17.8.101:2380"
+  (1..$num_instances).each do |i|
+    config.vm.define "ranchernode#{i}" do |node|
+      node.vm.box = "centos/7"
+      node.vm.hostname = "ranchernode#{i}"
+      ip = "172.17.8.#{i+210}"
+      node.vm.network "private_network", ip: ip
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = "6144"
+        vb.cpus = 1
+        vb.name = "ranchernode#{i}"
+      end
+#node.vm.provision "shell", path: "install.sh", args: [i, ip, $etcd_cluster]
+    end
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+    sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+    sudo yum install -y wget vim tree net-tools
+    sudo yum install -y docker-ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    sudo systemctl restart sshd
+    sudo mkdir -p /etc/docker
+    sudo echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001"]}' > /etc/docker/daemon.json
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+  SHELL
+
+end

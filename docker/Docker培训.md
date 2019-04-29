@@ -212,7 +212,7 @@ sudo yum clean all && yum makecache
 ```
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 sudo yum list docker-ce --showduplicates
-sudo yum install -y docker-ce 或安装特定版本docker-ce-18.03.1.ce
+sudo yum install -y docker-ce 或安装特定版本docker-ce-18.06.1.ce
 sudo systemctl start docker
 sudo systemctl enable docker
 
