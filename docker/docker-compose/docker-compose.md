@@ -35,6 +35,30 @@ Compose文件格式有多个版本 - 1,2,2.x和3.x.
 
 
 
+## nextcloud环境
+
+102.3服务器
+
+$ cd /home/m/wymdata/nextcloud
+
+$ docker-compose ps
+$ docker-compose up -d
+$ docker-compose down -v
+
+数据库管理
+http://192.168.102.3:8005
+
+nextcloud
+http://192.168.102.3:8006/
+
+admin/newcapecwym
+
+数据库ncdb，192.168.102.3:8306
+ncuser/newcapecwym
+
+
+https://download.nextcloud.com/android/
+
 
 
 

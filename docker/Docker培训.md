@@ -458,6 +458,10 @@ http://127.0.0.1:8018/test/helloworld.html
 $ docker pull centos
 $ docker run -dit -p 8080:8080 --name centos7w -v /opt/tomcat/test1:/home/wym/tomcat/test centos
 
+
+$ docker run -dit --name ubuntu1604 ubuntu:16.04
+
+
 进入容器，以下都在容器中操作
 $ docker exec -it d08 /bin/bash
 
@@ -1030,6 +1034,8 @@ Username: wym
 Password: W1!harbor
 Login Succeeded
 ```
+$ sudo docker login -u admin -p admin 192.168.102.3:8001
+
 
 给要上传的镜像打标签，注意必须包括私有仓库IP、端口和项目名称
 
@@ -1489,9 +1495,118 @@ $ docker run hello-world
 ```
 
 
-### 
+### Docker 容器中运行 Docker 命令
+
+```yml
+
+$ docker run -dit --name ubuntu1604 ubuntu:16.04
+
+通常您可以通过安装Docker套接字从容器内管理主机容器。
+
+docker run -it -v /var/run/docker.sock:/var/run/docker.sock --name ubuntu1604 ubuntu:16.04 sh -c "apt-get update ; apt-get install docker.io -y ; bash"
+
+$ docker run -dit --name c761810 --privileged=true centos:7.6.1810 /usr/sbin/init
+
+Docker里运行Docker docker in docker(dind)
+http://www.wantchalk.com/c/devops/docker/2017/05/24/docker-in-docer.html
+
+Docker 容器中运行 Docker 命令
+在使用 GitLab/Jenkins 等 CI 软件的时候需要使用 Docker 命令来构建镜像，需要在容器中使用 Docker 命令；通过将宿主机的 Docker 共享给容器即可
+
+在启动容器时添加以下命令：
+     --privileged \
+     -v /var/run/docker.sock:/var/run/docker.sock \
+     -v $(which docker)r:/bin/docker \
+--privileged 表示该容器真正启用 root 权限
+-v /var/run/docker.sock:/var/run/docker.sock和-v $(which docker)r:/bin/docker命令将相关的 Docker 文件挂载到容器
+
+$ docker run -dit --name c761810 --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker)r:/bin/docker centos:7.6.1810 /usr/sbin/init
+
+$ docker rm -f 容器ID
+
 
 ```
+
+
+### Docker 容器中运行命令
+
+```yml
+
+
+进入虚拟机执行命令
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd && systemctl stop firewalld && setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+
+mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux && yum install -y docker-ce
+
+#systemctl start docker && systemctl enable docker 
+mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+
+
+
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+  Vagrant.configure("2") do |config|
+    config.vm.box_check_update = false
+    config.vm.provider 'virtualbox' do |vb|
+     vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
+    end  
+    #config.vbguest.auto_update = false
+  #config.vm.synced_folder ".", "/oracle", type: "nfs", nfs_udp: false
+  #config.vm.synced_folder "./share_dir", "/vagrant", create: true, owner: "root", group: "root", mount_options: ["dmode=755","fmode=644"], type: "rsync"
+    config.vm.synced_folder "/media/xh/f/linux/iSO/dockerimages", "/home/vagrant/images", type: "nfs", nfs_udp: false
+    $num_instances = 1
+    # curl https://discovery.etcd.io/new?size=3
+    #i$etcd_cluster = "node1=http://172.17.8.101:2380"
+    (1..$num_instances).each do |i|
+      config.vm.define "kubeasz#{i}" do |node|
+        node.vm.box = "centos7.6"
+        node.vm.hostname = "kubeasz#{i}"
+        ip = "172.17.8.#{i+160}"
+        node.vm.network "private_network", ip: ip
+        node.vm.provider "virtualbox" do |vb|
+          vb.memory = "6144"
+          vb.cpus = 1
+          vb.name = "kubeasz#{i}"
+        end
+    # node.vm.provision "shell", path: "install.sh", args: [i, ip, $etcd_cluster]
+      end
+    end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+    sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+    sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+    sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+    sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+    sudo yum install -y wget vim tree
+#sudo yum list docker-ce --showduplicates
+    sudo yum install -y docker-ce-18.09.2 #docker-ce-18.06.1.ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo mkdir -p /etc/docker
+# https://registry.docker-cn.com https://hub-mirror.c.163.com https://al9ikvwc.mirror.aliyuncs.com
+    sudo echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"]}' > /etc/docker/daemon.json
+    #sudo echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001"]}' > /etc/docker/daemon.json
+    #sudo curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+    sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    sudo systemctl restart sshd
+  SHELL
+
+end
 
 
 ```

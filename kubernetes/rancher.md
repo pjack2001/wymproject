@@ -10,6 +10,26 @@ https://www.cnrancher.com/docs/rancher/v2.x/cn/overview/
 
 ```
 
+## 问题
+
+
+```yml
+
+1、harbor配置完，已经配置daemon.json，但就是连不上
+
+mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001","0.0.0.0/0"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+
+2、rancher建立集群，报错
+
+
+
+
+
+
+
+
+```
+
 ## 本机安装
 
 

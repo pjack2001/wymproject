@@ -1,6 +1,88 @@
 #常用docker应用版本配置
 
 
+
+
+```yml
+
+$ docker run -dit --name ubuntu1604 ubuntu:16.04
+
+$ docker run -dit --name c761810 --privileged=true centos:7.6.1810 /usr/sbin/init
+
+Docker 容器中运行 Docker 命令
+$ docker run -dit --name c761810 --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker)r:/bin/docker centos:7.6.1810 /usr/sbin/init
+
+$ docker rm -f 容器ID
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+#
+  Vagrant.configure("2") do |config|
+    config.vm.box_check_update = false
+    config.vm.provider 'virtualbox' do |vb|
+     vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000 ]
+    end  
+    #config.vbguest.auto_update = false
+  #config.vm.synced_folder ".", "/oracle", type: "nfs", nfs_udp: false
+  #config.vm.synced_folder "./share_dir", "/vagrant", create: true, owner: "root", group: "root", mount_options: ["dmode=755","fmode=644"], type: "rsync"
+    config.vm.synced_folder "/media/xh/f/linux/iSO/dockerimages", "/home/vagrant/images", type: "nfs", nfs_udp: false
+    $num_instances = 1
+    # curl https://discovery.etcd.io/new?size=3
+    #i$etcd_cluster = "node1=http://172.17.8.101:2380"
+    (1..$num_instances).each do |i|
+      config.vm.define "kubeasz#{i}" do |node|
+        node.vm.box = "centos7.6"
+        node.vm.hostname = "kubeasz#{i}"
+        ip = "172.17.8.#{i+160}"
+        node.vm.network "private_network", ip: ip
+        node.vm.provider "virtualbox" do |vb|
+          vb.memory = "6144"
+          vb.cpus = 1
+          vb.name = "kubeasz#{i}"
+        end
+    # node.vm.provision "shell", path: "install.sh", args: [i, ip, $etcd_cluster]
+      end
+    end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo systemctl stop firewalld
+    sudo systemctl disable firewalld
+    sudo setenforce 0
+    sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+    sudo sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+    sudo mkdir -p /etc/yum.repos.d/repobak
+    sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+    sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+    sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+    sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+    sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+    sudo yum clean all && yum makecache
+    sudo yum install -y wget vim tree
+#sudo yum list docker-ce --showduplicates
+    sudo yum install -y docker-ce-18.09.2 #docker-ce-18.06.1.ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+    sudo mkdir -p /etc/docker
+# https://registry.docker-cn.com https://hub-mirror.c.163.com https://al9ikvwc.mirror.aliyuncs.com
+    sudo echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"]}' > /etc/docker/daemon.json
+    #sudo echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001"]}' > /etc/docker/daemon.json
+    #sudo curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+    sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    sudo systemctl restart sshd
+  SHELL
+
+end
+
+
+```
+
+
+
 ## 应用
 
 ```yml
@@ -9,6 +91,7 @@ $ docker pull mysql:5.7
 $ docker pull wordpress:5.1.1
 
 $ docker pull nextcloud:15.0.5-apache
+
 
 
 20190319
