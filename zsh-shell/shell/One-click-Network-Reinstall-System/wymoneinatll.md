@@ -22,6 +22,11 @@ $ scp CXT_Bare-metal_System_Deployment_Platform.vhd.gz root@192.168.102.3:/home/
 http://192.168.102.3/iso/One-click-Network-Reinstall-System/
 可以打开即可
 
+下载相应的镜像
+
+
+修改Network-Reinstall-System-Modify.sh文件的镜像位置
+
 
 ```
 
@@ -31,6 +36,8 @@ http://192.168.102.3/iso/One-click-Network-Reinstall-System/
 
 
 ```yml
+
+
 
 
 ```
