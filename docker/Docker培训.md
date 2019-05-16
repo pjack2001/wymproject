@@ -1,46 +1,122 @@
-# docker培训
+# Docker培训
 
 ©王予明2019
 
 ## 学习参考资料
-```
+```yml
+注意：学习技术，最好的是官方文档
+Docker官网： http://www.docker.com
+https://docs.docker.com/install/linux/docker-ce/centos/
+
 《Docker从入门到实践》
-菜鸟教程http://www.runoob.com/docker/docker-tutorial.html
+菜鸟教程 http://www.runoob.com/docker/docker-tutorial.html
 
-思维导图
+参考网上别人的思维导图
 https://www.processon.com/view/5bda9e15e4b0844e0bc2cdea
-https://www.processon.com/view/5bfd2d4ee4b0f012f2346b33
+
 ```
 
-## 准备
+## 一、Docker简介
 
-### 注意：root用户不用加sudo
+### 1、简介
+```yml
+Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从Apache2.0协议开源。
+
+Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。
+
+容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。
+
+Docker 从 17.03 版本之后分为 CE（Community Edition: 社区版） 和 EE（Enterprise Edition: 企业版），我们用社区版就可以了。
+
 ```
 
-设置用户的sudo权限
+### 2、Docker的应用场景
+```yml
+
+Web 应用的自动化打包和发布。
+
+自动化测试和持续集成、发布。
+
+在服务型环境中部署和调整数据库或其他的后台应用。
+
+从头编译或者扩展现有的OpenShift或Cloud Foundry平台来搭建自己的PaaS环境。
+
+```
+
+### 3、Docker 的优点
+```yml
+
+1、简化程序：
+Docker 让开发者可以打包他们的应用以及依赖包到一个可移植的容器中，然后发布到任何流行的 Linux 机器上，便可以实现虚拟化。Docker改变了虚拟化的方式，使开发者可以直接将自己的成果放入Docker中进行管理。方便快捷已经是 Docker的最大优势，过去需要用数天乃至数周的	任务，在Docker容器的处理下，只需要数秒就能完成。
+
+2、避免选择恐惧症：
+如果你有选择恐惧症，还是资深患者。Docker 帮你	打包你的纠结！比如 Docker 镜像；Docker 镜像中包含了运行环境和配置，所以 Docker 可以简化部署多种应用实例工作。比如 Web 应用、后台应用、数据库应用、大数据应用比如 Hadoop 集群、消息队列等等都可以打包成一个镜像部署。
+
+3、节省开支：
+一方面，云计算时代到来，使开发者不必为了追求效果而配置高额的硬件，Docker 改变了高性能必然高价格的思维定势。Docker 与云的结合，让云空间得到更充分的利用。不仅解决了硬件管理的问题，也改变了虚拟化的方式。
+
+```
+
+### 
+```yml
+
+
+```
+
+## 二、准备
+
+### 1、centos7系统
+```yml
+注意：root用户执行命令不用加sudo
+
+1)设置普通用户的sudo权限
 # yum install -y sudo
 # chmod u+w /etc/sudoers
 # echo 'wym    ALL=(ALL)       ALL' >> /etc/sudoers
 
-检查selinux和防火墙是否关闭
+2)检查selinux和防火墙是否关闭
 
+改配置文件禁用SELINUX
 # vim /etc/selinux/config
 SELINUX=disabled
 
 # setenforce 0  #临时关闭
 # getenforce  #查看状态
 
-# systemctl disable firewalld.service #禁止自启动
-# systemctl stop firewalld.service
-# systemctl status firewalld.service
+# systemctl disable firewalld.service   #禁止自启动
+# systemctl stop firewalld.service      #停止防火墙
+# systemctl status firewalld.service    #查看防火墙状态
 
 
 ```
 
-## 安装
 
-### 官方安装
+### 2、更换阿里yum源，需要连外网
+
 ```
+sudo mkdir -p /etc/yum.repos.d/repobak
+sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
+sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum clean all && yum makecache
+
+```
+
+### 3、公司内网yum源
+```
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
+# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
+
+```
+
+
+## 三、安装
+
+### 1、官方安装
+```yml
 https://docs.docker.com/install/linux/docker-ce/centos/
 
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
@@ -77,7 +153,7 @@ sudo yum -y install docker-ce-17.03.2.ce docker-ce-cli-17.03.2.ce containerd.io
 
 ```
 
-### 离线安装包
+### 2、离线安装包
 
 ```yml
 
@@ -108,9 +184,9 @@ yum localinstall -y --nogpgcheck supervisor-3.1.4-1.el7.noarch.rpm \
        python-meld3-0.6.10-1.el7.x86_64.rpm \
        python-setuptools-0.9.8-7.el7.noarch.rpm
  
-
-几个注意点：
-
+```
+#### 2.1 几个注意点：
+```yml
 1.使用yum localinstall命令需要的程序包时需要同时安装程序包所有的依赖项目，否则还是会尝试联网去下载缺少的依赖项目；
 2.“--nogpgcheck”参数主要是为了不让yum对程序包进行GPG验证；
 3.除了yum localinstall命令以外，还可以使用rpm -ivh命令安装rpm包，这里不再单独讨论。
@@ -182,34 +258,10 @@ gpgcheck=0
 yum localinstall fglrx-glc22-4.1.0-3.2.5.i586.rpm --nogpgcheck
 
 
-
-
-
-
-
 ```
 
-### 更换阿里yum源，需要连外网
-
-```
-sudo mkdir -p /etc/yum.repos.d/repobak
-sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak
-sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
-
-sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-sudo yum clean all && yum makecache
-```
-### 公司内网yum源
-```
-# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo
-# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo
-# sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo
-
-```
-
-### 安装docker版本
-```
+### 3、选择需要安装docker版本
+```yml
 sudo yum install -y yum-utils device-mapper-persistent-data lvm2
 sudo yum list docker-ce --showduplicates
 sudo yum install -y docker-ce 或安装特定版本docker-ce-18.06.1.ce
@@ -250,11 +302,11 @@ docker-ce.x86_64                  3:18.09.2-3.el7                           dock
 docker-ce.x86_64                  3:18.09.3-3.el7                           docker-ce-stable 
 docker-ce.x86_64                  3:18.09.4-3.el7                           docker-ce-stable 
 docker-ce.x86_64                  3:18.09.5-3.el7                           docker-ce-stable 
+```
 
 
-
-
-
+### 4、删除
+```yml
 
 删除 Docker CE
 $ sudo yum remove docker-ce
@@ -264,14 +316,16 @@ yum -y remove docker docker-common docker-selinux docker-engine docker-engine-se
 
 yum -y remove docker-ce-cli
 
+
 #查看是否已经安装的Docker软件包
 sudo yum list installed | grep docker
 
-```
-
-### 镜像加速
 
 ```
+
+### 5、镜像加速
+
+```yml
 sudo mkdir -p /etc/docker
 
 可以选择多个加速器，建议阿里，但是需要注册
@@ -304,9 +358,9 @@ sudo systemctl restart docker
 ```
 
 
-## docker常用命令
+## 四、docker常用命令
 
-```
+```yml
 
 $ sudo docker #显示docker命令
 $ sudo docker -v #显示 Docker 版本信息
@@ -421,9 +475,11 @@ HOME=/root
 
 ```
 
-## docker使用tomcat环境
+## 六、Docker实战
 
-```
+### 1、docker使用tomcat环境
+
+```yml
 $ docker pull tomcat
 $ docker inspect tomcat  #查看镜像信息，比如查看tomcat的路径CATALINA_HOME=/usr/local/tomcat
 
@@ -450,9 +506,9 @@ http://127.0.0.1:8018/test/helloworld.html
 
 ```
 
-## 安装jdk和tomcat环境
+### 2、安装jdk和tomcat环境
 
-```
+```yml
 注意：自己准备jdk和tomcat安装文件
 
 $ docker pull centos
@@ -518,11 +574,11 @@ http://127.0.0.1:8080/test/
 
 ```
 
-## docker使用oracle(以前的记录，仅供参考)
+### 3、docker使用oracle(以前的记录，仅供参考)
 
 
-### 数据库
-```
+#### 3.1数据库访问
+```yml
 http://IP:8080/apex
 使用以下设置连接到Oracle Application Express Web管理控制台：
 
@@ -544,9 +600,9 @@ password: oracle
 connect as sysdba: true
 ```
 
-### 使用Docker创建oracle数据库 
+#### 3.2使用Docker创建oracle数据库 
 
-```
+```yml
 使用sath89/oracle-12c镜像，５.7G
 
 # chmod -R 777 /u01/app/oracle
@@ -580,19 +636,21 @@ Starting import from '/docker-entrypoint-initdb.d':
 
 ```
 
-## 物联网平台安装(以前的记录，仅供参考)
+### 4、物联网平台安装(以前的记录，仅供参考)
 
-### 物联网
+#### 4.1物联网访问
 
+```yml
 http://IP:8080/
 使用用户名：
 sysadmin，密码：sysadmin
+
 tenant@newcapec.net，密码：123456登录.
 
-
-
-### mysql
 ```
+
+#### 4.2 mysql
+```yml
 # docker -v
 # docker ps
 
@@ -623,9 +681,9 @@ mysql> alter user 'root'@'%' identified with mysql_native_password by 'root123';
 
 ```
 
-### 连接数，需要重启
+#### 4.3连接数，需要重启
 
-```
+```yml
 # vi /etc/security/limits.conf
 * soft nofile 1024000
 * hard nofile 1024000
@@ -634,20 +692,22 @@ hive   - nproc  1024000
 
 ```
 
-### 4.4	如何重启服务
+#### 4.4 如何重启服务
+
+
 执行sh restart.sh
 
 
-### 4.5	如何判断服务是否正常启动
+#### 4.5	如何判断服务是否正常启动
 通过浏览器访问：
 http://ip:8085/api/health
 http://ip:8088/api/health
 如果都能返回：
 
-### 登录
+#### 4.6登录
+```yml
 http://IP:8080/
 
-```
 2.	在浏览器里，输入：http://服务器IP:8080，打开物联网管理平台。使用用户名：
 sysadmin，密码：sysadmin登录，如果打不开或者登录失败，请查看下一章节。从系统设置-集群配置，设置集群部署信息，需要和deploys.sh配置的对应。如下图：
  
@@ -675,10 +735,10 @@ tenant@newcapec.net，密码：123456登录.
 ```
 
 
-##  docker-compose
+##  七、docker-compose
 
-### 常用docker-compose命令
-```
+### 1、常用docker-compose命令
+```yml
 首先要进入docker-compose.yml所在目录，再执行命令
 
 其它命令（修改配置文件后最好把容器删除再创建）：
@@ -692,9 +752,9 @@ docke-compose ps             ###查看容器
 如果用的不是标准yml名称docker-compose.yml，就要用-f参数指定自定义的yml文件
 
 ```
-### 例子
+### 2、例子
 
-```
+```yml
 $ cd tomcat/
 $ cat docker-compose.yml 
 version: '3.1'
@@ -723,10 +783,10 @@ services:
 ```
 
 
-##  docker-machine
+##  八、docker-machine
 
 
-```
+```yml
 
 注意：使用/bin/bash
 
@@ -839,9 +899,9 @@ PS1='[\u@\h \W$(__docker_machine_ps1)]\$ '
 ```
 
 
-## 安装virtualbox
+## 九、安装virtualbox
 
-```
+```yml
 https://www.virtualbox.org/wiki/Linux_Downloads
 https://www.virtualbox.org/wiki/Download_Old_Builds_5_2
 
@@ -984,7 +1044,8 @@ kill -9 194999
 ```
 
 
-## Docker私有仓库使用说明
+## 十、Docker私有仓库使用说明
+```yml
 
     注：
     现有仓库空间不大，仅作为测试使用，不要上传过多无用的镜像
@@ -1007,11 +1068,11 @@ docker1.3.2版本开始默认docker registry使用的是https，我们设置Harb
 
 > $ sudo vim /etc/docker/daemon.json
 
-```
+
 {
   "insecure-registries": ["http://192.168.102.3:8001"]
 }
-```
+
 
 #### 重启
 
@@ -1029,11 +1090,11 @@ docker1.3.2版本开始默认docker registry使用的是https，我们设置Harb
 ### 6、私有仓库，首先要用自己的账号登录
 
 > $ sudo docker login 192.168.102.3:8001
-```
+
 Username: wym
 Password: W1!harbor
 Login Succeeded
-```
+
 $ sudo docker login -u admin -p admin 192.168.102.3:8001
 
 
@@ -1049,12 +1110,12 @@ $ sudo docker login -u admin -p admin 192.168.102.3:8001
 
 ### 7、项目管理员可以添加项目成员，删除镜像等操作
 
-
+```
 
 
 ## 使用docker-compose 大杀器来部署服务 
 
-```
+```yml
 https://www.cnblogs.com/neptunemoon/p/6512121.html#toc_47
 
 docker   # docker 命令帮助
@@ -1213,13 +1274,13 @@ docker search mariadb
 
 
 
-## docker常见问题
+## 十一、docker常见问题
 
 
 
-### CentOS7中Docker-ce的卸载和安装
+### 1、CentOS7中Docker-ce的卸载和安装
 
-```
+```yml
 
 一、查看是否已安装了Docker软件包：
 #查看是否已经安装的Docker软件包
@@ -1289,9 +1350,9 @@ https://docs.docker.com/v1.12/engine/installation/linux/centos/ 
 
 ```
 
-### centos 安装docker时出现依赖关系问题的解决办法
+### 2、centos 安装docker时出现依赖关系问题的解决办法
 
-```
+```yml
 
 2018年12月19日 10:38:34 Summerplaying 阅读数：140
 版权声明：本文为博主原创文章，未经博主允许不得转载。	https://blog.csdn.net/u010652906/article/details/85090379
@@ -1324,8 +1385,8 @@ sudo yum install docker-ce-17.03.2.ce-1.el7.centos
 
 
 ```
-### docker-ce-17.03.2 离线安装RPM包
-```
+### 3、docker-ce-17.03.2 离线安装RPM包
+```yml
 https://www.cnblogs.com/liweiming/p/8656729.html
 [root@docker05 docker]# ll
 total 20796
@@ -1368,9 +1429,9 @@ total 20796
 
 
 
-### 让docker 容器开机自动启动
+### 4、让docker 容器开机自动启动
 
-```
+```yml
 
 http://neo-it.iteye.com/blog/2291750
 网上有些文章说，要让docker 的容器自动在开机启动，是写脚本，比如在 rc.local 中写。
@@ -1385,11 +1446,11 @@ docker update –restart=no <CONTAINER ID>
 
 ```
 
-###  迁移 /var/lib/docker 目录
+###  5、迁移 /var/lib/docker 目录
 
 /var/lib/docker/overlay2 占用很大，清理Docker占用的磁盘空间，迁移 /var/lib/docker 目录
 
-```
+```yml
 迁移 /var/lib/docker 目录。
 
 4.1 停止docker服务。
@@ -1449,9 +1510,9 @@ BBB/BBB               v1                  da4a80dd8424        28 hours ago      
 
 ```
 
-### 配置centos8解决 docker Failed to get D-Bus connection 报错
+### 6、配置centos8解决 docker Failed to get D-Bus connection 报错
 
-```
+```yml
 
 原因及解决方式：
 在创建docker容器时添加--privileged
@@ -1463,9 +1524,9 @@ docker run -it --name cobbler --privileged=true jasonlix/docker-cobbler /usr/sbi
 
 ```
 
-### 不使用sudo命令执行docker
+### 7、不使用sudo命令执行docker
 
-```
+```yml
 
 http://www.docker.org.cn/book/install/run-docker-without-sudo-30.html
 2015-09-11 11:03:05  王春生  22890 最后编辑：王春生 于 2015-09-11 12:18:30
@@ -1495,7 +1556,7 @@ $ docker run hello-world
 ```
 
 
-### Docker 容器中运行 Docker 命令
+### 8、Docker 容器中运行 Docker 命令
 
 ```yml
 

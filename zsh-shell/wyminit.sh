@@ -17,3 +17,18 @@ mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.
 #mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["0.0.0.0/0"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
 
 #mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001","http://192.168.31.50"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+
+
+配置计划任务
+# echo "* 8 * * * /root/dstat/dstat.py" >> /var/spool/cron/root
+每天8点启动，（什么时候停止需要研究）
+# echo "* 6 * * * /opt/dstat/dstat.py -tydncs --output /opt/dstat/dstat.log --pidfile /opt/dstat/dstat.lck --nocolor 10" >> /var/spool/cron/root
+
+查看计划任务
+# crontab -l
+
+# cat /var/spool/cron/root 
+* 8 * * * /root/dstat/dstat.py
+
+
+

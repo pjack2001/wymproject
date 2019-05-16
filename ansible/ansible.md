@@ -62,6 +62,66 @@ http://192.168.102.3:8004
 $ docker exec -it chusiangansible_control_machine_1 sh
 vi /home/inventory
 
+```yml 
+配置免密登录或修改密码，对应想要修改hosts文件的主机列表
+
+# cat ansible.cfg 
+[defaults]
+inventory = hosts
+remote_user = wym
+host_key_checking = False
+
+# cat hosts
+[rancher]
+192.168.113.41 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+
+# ansible all --list
+# ansible all -m ping -u wym -k
+
+批量推送公钥
+# cat PushKey.yml 
+---
+- hosts: rancher
+  remote_user: wym
+  become: yes
+  become_user: wym
+  become_method: sudo
+  tasks:
+  - name: deliver authorized_keys
+    authorized_key:
+      user: wym
+      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      state: present
+      exclusive: yes
+
+首先要登录一次
+# ssh root@192.168.113.37
+# ansible-playbook PushKey.yml -u wym -k
+# ansible all -m ping
+
+修改密码
+# cat userpass.yml 
+---
+- hosts: rancher1
+  gather_facts: false
+  tasks:
+  - name: change user passwd
+    user: name={{ item.name }} password={{ item.chpass | password_hash('sha512') }}  update_password=always
+    with_items:
+         - { name: 'wym', chpass: 'newcapec' }
+
+如果配置了免密登录，就不用加-u和-k参数
+# ansible-playbook userpass.yml
+# ansible-playbook userpass.yml -u wym -k
+
+修改完密码，如果没有配置免密登录，就需要修改hosts里面的密码
+# cat hosts
+[rancher]
+192.168.113.41 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapec'
+
+# ansible all -m ping
+
+```
 
 #### 本机
 
@@ -1181,7 +1241,7 @@ ansible_user_uid	执行用户的UID	0
 
 ### user账户模块
 
-```
+```yml
 user
 功能：管理用户账号
 
@@ -1236,7 +1296,6 @@ group: 指定用户的主组
     - name: add user
       user: name={{ username }} group=ftp groups={{ groupname }}
 
-```
 
 创建一个ftp账号，没有登录权限，属于系统组，指定家目录，加上描述
 $ ansible test -m user -a 'name=ftpuser shell=/sbin/nologin system=yes home=/opt/ftp comment="FTP user"'
@@ -1249,6 +1308,52 @@ $ ansible test -a 'ls -l /opt'
 
 删除用户，remove表示删除家目录
 $ ansible test -m user -a 'name=ftpuser state=absent remove=yes'
+
+
+
+使用Ansible的user模块批量修改用户密码
+Galactics关注0人评论42720人阅读2018-07-11 14:51:52
+介绍使用ansible批量修改用户密码的方法，因为在使用ansible修改用户密码的时候不能使用明文的方式，需要先加密，所以就需要使用一个方法对输入的明文的密码进行加密，下面就直接上干货。
+
+方法一：
+1、这个方法适用于更改多个固定的用户；playbook写法如下：
+
+# cat userpass.yml
+---
+- hosts: test
+  gather_facts: false
+  tasks:
+  - name: change user passwd
+    user: name={{ item.name }} password={{ item.chpass | password_hash('sha512') }}  update_password=always
+    with_items:
+         - { name: 'root', chpass: 'admin#123' }
+         - { name: 'wym', chpass: 'newcapec ' }
+1.1、执行playbook如下：
+# ansible-playbook userpass.yml
+
+以非root用户连接目标主机通过 sudo执行 剧本：
+
+　　　　ansible-playbook play.yml --user=app --private-key=/home/app/.ssh/id_rsa -b 
+　　　　解析：-b 是 become  -s 是旧版本的sudo
+
+
+方法二：
+2、这个方法更改单用户比较方便，从外面使用-e参数传递变量到playbook中，playbook写法如下：
+
+  # cat  userpass2.yml               
+    ---
+    - hosts: test
+      gather_facts: false
+      tasks:
+      - name: Change password
+        user: name={{ name1 }}  password={{ chpass | password_hash('sha512') }}  update_password=always
+2 .1、执行playbook脚本，使用-e参数传递用户名和密码给剧本，其中test为用户名，admin#123就是要设置密码，执行如下：
+# ansible-playbook userpass2.yml -e "name1=test chpass=admin#123"
+
+
+
+```
+
 
 
 ### group组模块
@@ -2430,10 +2535,7 @@ playbook: site.yml
 
 ##
 
-```
-
-
-
+```yml
 
 ```
 
