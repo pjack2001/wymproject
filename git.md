@@ -2,6 +2,88 @@
 
 ## 常用命令
 
+```yml
+查看远程仓库地址命令：
+# git remote -v
+
+查看提交历史
+在提交了若干更新，又或者克隆了某个项目之后，你也许想回顾下提交历史。完成这个任务最简单而又有效的工具是
+# git log
+# git log --stat
+
+已经push的回滚方法，执行一次，回滚一个版本
+# git reset --hard HEAD^
+
+
+
+
+```
+
+
+```
+Git中撤销提交
+Git的几种状态
+未修改
+       原始内容
+已修改    ↓   
+       工 作 区
+已暂存    ↓    git add
+       暂 存 区
+已提交    ↓    git commit
+       本地仓库
+已推送    ↓    git push
+       远程仓库
+注意：下面所有命令每一个代码段是相互独立的，为了解决一个问题，请不要使用多个代码段。所有命令均经过本人测试，由于测试环境是简单的Git仓库没有过多的数据，可能在复杂环境回出现错误。如发现问题请直接评论区指出。请仔细分析使用情况，丢失数据与本人无关。
+
+已修改 未暂存
+已经修改了文件，还未进行git add。
+即工作区的内容不想要了。
+
+恢复方法
+使用以下任意命令
+
+git checkout .
+git checkout -- <FILENAME>
+git reset --hard
+已暂存 未提交
+已经进行了git add，还未进行git commit
+即暂存区的内容不想要了
+
+恢复方法
+使用以下任意命令
+
+git reset
+git checkout .
+git reset --hard
+git reset HEAD
+git reset HEAD -- <FILENAME>
+已提交 未推送
+已经进行了git commit，还未进行git push
+
+恢复方法
+使用远程仓库覆盖本地仓库
+
+git reset --hard origin/master
+已推送
+已经进行了git push
+
+恢复方法
+回滚本地仓库，强制推送覆盖远程仓库
+
+git reset --hard HEAD^
+git push -f
+其他情况
+丢弃某个节点后的全部提交
+即HEAD指针指向该节点
+
+git reset --hard <COMMITID>
+
+```
+
+
+
+
+
 
 ### ssh方式
 git@github.com:pjack2001/wymproject.git

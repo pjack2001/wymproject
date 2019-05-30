@@ -1,0 +1,6 @@
+FROM openjdk:8-alpine
+WORKDIR /app/etc/
+LABEL USER=HULAN
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime 
+COPY datalook-core-0.0.1-SNAPSHOT.jar /app/lib/datalook-core-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java","-jar","-XX:+UnlockExperimentalVMOptions","-XX:+UseCGroupMemoryLimitForHeap","-Duser.timezone=GMT+08","-Dspring.config.location=/app/etc/application.properties","/app/lib/datalook-core-0.0.1-SNAPSHOT.jar"]

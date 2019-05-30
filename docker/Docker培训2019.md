@@ -153,8 +153,8 @@ SELINUX=disabled
 拉取阿里源文件
 # sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 # sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+# sudo curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 
-# sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 清除并生成缓存
 # sudo yum clean all && yum makecache
 查看
@@ -413,7 +413,7 @@ EOF
 
 或
 # sudo echo -e "{\n \"registry-mirrors\": [\"http://hub-mirror.c.163.com\"]\n}" > /etc/docker/daemon.json
-#sudo echo -e '{"registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com/"],"insecure-registries": ["http://192.168.102.37"]}' > /etc/docker/daemon.json
+#sudo echo -e '{"registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com/"],"insecure-registries": ["http://192.168.113.38"]}' > /etc/docker/daemon.json
 或
 # sudo curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
 
@@ -730,10 +730,10 @@ connect as sysdba: true
 
 ```yml
 使用sath89/oracle-12c镜像，５.7G
-
+# mkdir -p /u01/app/oracle
 # chmod -R 777 /u01/app/oracle
 
-# docker run -d -p 8080:8080 -p 5500:5500 -p 1521:1521 -v /u01/app/oracle:/u01/app/oracle -e DBCA_TOTAL_MEMORY=1024 --name oracle12c sath89/oracle-12c
+# docker run -d --restart=always -p 8080:8080 -p 5500:5500 -p 1521:1521 -v /u01/app/oracle:/u01/app/oracle -e DBCA_TOTAL_MEMORY=1024 --name oracle12c 192.168.113.38/library/sath89/oracle-12c
 
 查看日志 # docker logs -f bf2，发现正在创建数据库实例，安装成功
 
@@ -757,7 +757,131 @@ Starting import from '/docker-entrypoint-initdb.d':
 
     Database ready to use. Enjoy! ;)
 
-# docker exec -it bf2 /bin/bash
+# docker exec -it 23e /bin/bash
+
+# netstat -nlpt
+# su oracle
+$ cd $ORACLE_HOME
+oracle@3da2d9cc1972:/u01/app/oracle/product/12.1.0/xe$ bin/sqlplus / as sysdba
+SQL*Plus: Release 12.1.0.2.0 Production on Tue May 17 12:11:19 2016
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to:
+Oracle Database 12c Standard Edition Release 12.1.0.2.0 - 64bit Production
+
+SQL> select database_status from v$instance;
+DATABASE_STATUS
+----------------
+ACTIVE
+
+oracle@23e5750b5330:/u01/app/oracle/product/12.1.0/xe$ bin/lsnrctl status
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 24-MAY-2019 16:07:50
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (ADDRESS=(PROTOCOL=tcp)(HOST=)(PORT=1521))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                24-MAY-2019 15:57:33
+Uptime                    0 days 0 hr. 10 min. 17 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Log File         /u01/app/oracle/diag/tnslsnr/23e5750b5330/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=23e5750b5330)(PORT=1521)))
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=23e5750b5330)(PORT=8080))(Presentation=HTTP)(Session=RAW))
+Services Summary...
+Service "xe" has 1 instance(s).
+  Instance "xe", status READY, has 1 handler(s) for this service...
+Service "xeXDB" has 1 instance(s).
+  Instance "xe", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+$ curl -v localhost:8080/apex
+
+$ curl -v localhost:8080/apex/apex
+
+默认Oracle的实例叫xe，没有配置环境变量，需要先运行.oraenv设置环境变量。
+
+oracle@81d5d58574c0:~$ . oraenv
+ORACLE_SID = [oracle] ? xe
+The Oracle base has been set to /u01/app/oracle
+oracle@81d5d58574c0:~$ sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Thu May 3 13:52:31 2018
+
+Copyright (c) 1982, 2014, Oracle. All rights reserved.
+
+Connected to:
+Oracle Database 12c Standard Edition Release 12.1.0.2.0 - 64bit Production
+
+SQL> select name,open_mode from v$database;
+
+NAME OPEN_MODE
+--------- --------------------
+XE READ WRITE
+当然你还可以在外面查看em。
+http://localhost:8080/em/
+
+
+
+
+相关链接
+
+    ·  docker-oracle-12c 其GitHub主页: https://github.com/MaksymBilenko/docker-oracle-12c
+    ·  Apex 详情 ：http://https：//github.com/MaksymBilenko/docker-oracle-apex
+
+    ·  docker 的 Github主页：https://github.com/docker
+
+   · Oracle Database 12c 使用文档：http://www.oracle.com/technetwork/cn/database/enterprise-edition/documentation/index.html
+
+oracle
+维护者
+https://hub.docker.com/r/sath89/oracle-12c/
+
+Run with data on host and reuse it:
+-e ORACLE_ALLOW_REMOTE=true 远程连接 -e DEFAULT_SYS_PASS=
+
+docker run -dit –name test_oracle -p 8080:8080 -p 1521:1521 -v /opt/oracle/data:/u01/app/oracle sath89/oracle-12c
+
+自动导入 sh sql and dmp files： -v /my/oracle/init/sh_sql_dmp_files:/docker-entrypoint-initdb.d
+
+Run with Custom DBCA_TOTAL_MEMORY (in Mb):
+docker run -d -p 8080:8080 -p 1521:1521 -v /my/oracle/data:/u01/app/oracle -e DBCA_TOTAL_MEMORY=1024 sath89/oracle-12c
+
+连接数据库的设置
+Connect database with following setting:
+
+hostname: localhost
+port: 1521
+sid: xe
+service name: xe
+username: system
+password: oracle
+
+修改Oracle密码
+
+-- 查看用户的proifle是哪个，一般是default：
+SELECT username,PROFILE FROM dba_users;
+
+-- 查看指定概要文件（如default）的密码有效期设置：
+SELECT * FROM dba_profiles s WHERE s.profile='DEFAULT' AND resource_name='PASSWORD_LIFE_TIME';
+
+-- 将密码有效期由默认的180天修改成“无限制”：修改之后不需要重启动数据库，会立即生效。
+ALTER PROFILE DEFAULT LIMIT PASSWORD_LIFE_TIME UNLIMITED;
+
+-- 修改用户SYSTEM 密码
+alter user SYSTEM identified by "****password****";
+
+-- 解锁方法
+alter user SYSTEM account unlock;
+
+
+
 ```
 
 ##  七、使用docker-compose
@@ -1041,7 +1165,7 @@ docker run 指令中加入 --restart=always 就行。
 # docker update --restart=always 容器ID
 
 如果你想取消掉
-# docker update –restart=no <CONTAINER ID>
+# docker update --restart=no <CONTAINER ID>
 
 ```
 
@@ -1165,10 +1289,10 @@ Docker 容器中运行 Docker 命令
 # sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd && systemctl stop firewalld && setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 
 配置阿里yum源并安装
-# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo && yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux && yum install -y docker-ce
+# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo && curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux bash-completion && yum install -y docker-ce
 
 配置内网yum源并安装
-# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux && yum install -y docker-ce
+# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux bash-completion dstat && yum install -y docker-ce
 
 启动docker
 # systemctl start docker && systemctl enable docker 

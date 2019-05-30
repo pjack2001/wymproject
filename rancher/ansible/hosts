@@ -1,0 +1,13 @@
+[rancher]
+192.168.113.41 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.42 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.43 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.44 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.45 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.46 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.47 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.48 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.49 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.50 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.51 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.52 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'

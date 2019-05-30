@@ -1,0 +1,13 @@
+---
+- hosts: rancher
+  remote_user: wym
+  become: yes
+  become_user: wym
+  become_method: sudo
+  tasks:
+  - name: deliver authorized_keys
+    authorized_key:
+      user: wym
+      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      state: present
+      exclusive: yes

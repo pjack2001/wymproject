@@ -1,0 +1,26 @@
+[test]
+192.168.102.4 ansible_ssh_user=wym ansible_ssh_passwd=newcapec
+
+[rancher0]
+192.168.113.40
+
+[rancher1]
+192.168.113.41 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.42 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.43 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.44 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+
+[rancher2]
+192.168.113.45
+192.168.113.46
+192.168.113.47
+192.168.113.48
+
+[rancher3]
+192.168.113.49
+192.168.113.50
+192.168.113.51
+192.168.113.52
+
+[harbor]
+192.168.113.38

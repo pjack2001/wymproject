@@ -5,130 +5,369 @@
 https://www.cnrancher.com/docs/rancher/v2.x/cn/overview/
 
 
+### 主要安装步骤
+
+```yml
+
+
+
+1、把文件拷贝到服务器
+2、用docker-compose安装harbor
+3、登录harbor，根据rancher-images.txt里的镜像仓库名字，在harbor建项目coredns，minio，rancher，registry，jimmidyson
+4、先用docker login登录，用rancher-load-images.sh把镜像导入harbor，用-h查参数，使用rancher-images.txt
+5、在主节点用docker run命令拉取harbor里的rancher镜像，
+6、登录rancher，建立集群，注意配置默认镜像仓库为harbor的地址
+7、在各节点拷贝rancher的命令，各节点rancher成功（master三台）
+8、把迪科镜像pull到harbor，rancher建立集群，拉取迪科镜像，迪科的镜像需要配置文件，（所以需要在rancher建立configmap）
+
+1、资源->添加配置映射->从文件读取->名称：core，选择命名空间->键名和值用相关模块的resources目录下的配置文件->->->->
+
+cat /media/w/m/v8/old/core/resources/application.properties
+
+2、建立工作负载
+
+docker pull 192.168.113.38/v8/auth:2019.01.25
+docker pull 192.168.113.38/v8/core:2019.01.28
+docker pull 192.168.113.38/v8/core:2019.03.19
+docker pull 192.168.113.38/v8/eureka:2019.01.29
+docker pull 192.168.113.38/v8/pre-core:2019.01.23
+docker pull 192.168.113.38/v8/webportal:2019.01.28
+docker pull 192.168.113.38/v8/ykt-ui:2019.01.23
+docker pull 192.168.113.38/v8/ykt-ui:2019.03.19
+
+
+```
+
+## 搭建v8测试环境
+
+### 一、环境说明
+
+```yml
+镜像上传102.3的/home/y/v8目录
+# docker load -i ykt-ui/ykt-ui.tar.gz
+# docker tag ykt-ui:latest 192.168.113.38/v8/ykt-ui:2019.03.19
+# docker push 192.168.113.38/v8/ykt-ui:2019.03.19
+# docker rmi -f 镜像ID
+
+使用sath89/oracle-12c镜像，５.7G
+# mkdir -p /u01/app/oracle
+# chmod -R 777 /u01/app/oracle
+
+# sudo docker run -d --restart=always -p 8080:8080 -p 5500:5500 -p 1521:1521 -v /u01/app/oracle:/u01/app/oracle -e DBCA_TOTAL_MEMORY=2048 --name oracle12c 192.168.113.38/library/sath89/oracle-12c
+
+查看日志 
+# docker logs -f bf2，发现正在创建数据库实例，安装成功
+
+
+深信服虚拟机
+http://10.10.252.9
+用户名：wangyuming   密码：
+
+ip：192.168.113.37-56，60~89，共50个
+子网掩码：255.255.254.0
+网关：192.168.112.1
+DNS：211.138.24.66
+
+harbor私有仓库：192.168.113.38，所有项目设置为公有
+38密码newcapec!1
+$ docker login 192.168.113.38
+admin/Newcapec301
+
+
+搭建v8测试环境,wym/newcapectest
+192.168.113.47~52，六台
+
+192.168.113.52 oracle数据库
+192.168.113.51 rancher管理节点
+192.168.113.47~50 rancher节点
+
+
+其他测试
+192.168.113.53 centos7.6-oracle
+
+
+
+
+
+
+
+centos系统
+建立centos7.6-虚拟机，安装docker，配置加速器和私有仓库，安装常用软件
+克隆centos7.6-oracle，改主机名和IP
+
+# hostnamectl set-hostname yjk01
+# cat vi /etc/hostname 
+# cat vi /etc/hosts
+
+# ip a
+#假设现有的IP地址79,替换为xxx，适用于修改为分配的IP地址
+# sed -i '/IPADDR/s@113\.37@113.89@' /etc/sysconfig/network-scripts/ifcfg-eth0
+
+# sed -i '/IPADDR/s@113\.37@113.89@' /etc/sysconfig/network-scripts/ifcfg-ens18
+# systemctl restart network
+
+
+转模板，批量建立12台虚拟机，修改IP和主机名
+us16-rancher0001（ip 192.168.113.41）～us16-rancher0012（ip 192.168.113.52）
+$ sudo vi /etc/network/interfaces
+$ sudo hostnamectl set-hostname rancher01
+$ sudo vi /etc/hostname 
+$ sudo vi /etc/hosts
+
+
+$ sudo vi /etc/network/interfaces
+$ sudo /etc/init.d/networking restart
+
+
+
+```
+### 环境准备
+
+```yml
+使用Ubuntu16.04.6
+
+
+
+加速器配置
+$ cat /etc/docker/daemon.json 
+{
+    "log-driver": "json-file",
+    "log-opts": {
+    "max-size": "100m",
+    "max-file": "3"
+    },
+    "max-concurrent-downloads": 10,
+    "max-concurrent-uploads": 10,
+    "registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com"],
+    "insecure-registries": ["192.168.113.38"],
+    "storage-driver": "overlay2",
+    "storage-opts": [
+    "overlay2.override_kernel_check=true"
+    ]
+}
+
+
+
+
+```
+
+### harbor私有仓库
+
+```yml
+
+harbor私有仓库：192.168.113.38，所有项目设置为公有
+
+
+harbor：
+https://www.cnrancher.com/docs/rancher/v2.x/cn/install-prepare/registry/single-node-installation/
+
+$ cd /home/wym/
+$ tar zxvf harbor-offline-installer-v1.7.5.tgz
+
+$ cd /home/wym/harbor
+
+$ vim /home/wym/harbor/harbor.cfg
+hostname = 192.168.113.38
+harbor_admin_password = newcapec   #Newcapec301
+
+$ sudo ./install.sh
+
+$ sudo docker-compose ps
+
+sudo docker-compose start/stop/restart
+
+更新配置
+要更改Harbour的配置，请先停止现有的Harbor实例并进行更新harbor.cfg。然后运行prepare脚本以填充配置。最后重新创建并启动Harbor的实例:
+
+  sudo docker-compose down -v
+  sudo vim harbor.cfg
+  sudo ./prepare
+  sudo docker-compose up -d
+
+删除Harbor的容器，同时将镜像数据和Harbor的数据库文件保存在文件系统上
+sudo docker-compose down -v
+
+删除Harbor的数据库和镜像数据(用于干净的重新安装)
+  rm -r /data/database
+  rm -r /data/registry
+
+
+登录：http://192.168.113.38
+
+根据rancher-images.txt里的镜像仓库名字，在harbor建项目coredns minio rancher registry jimmidyson 都选择“公开”
+
+有新的镜像可以增加到rancher-images.txt，在harbor建立相应的项目，用rancher-load-images.sh导入
+coredns minio rancher registry jimmidyson 
+gitlab kibana elasticsearch
+
+
+使用http://192.168.113.38
+
+$ cat /etc/docker/daemon.json 
+{
+  "registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],
+  "insecure-registries": ["http://192.168.102.3:8001"]
+}
+
+# sudo echo -e '{"registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com/"],"insecure-registries": ["http://192.168.113.38"]}' > /etc/docker/daemon.json
+
+
+
+```
+
+### Oracle数据库环境搭建
+
+
+```yml
+
+登录52
+配置oracle数据库
+
+
+使用sath89/oracle-12c镜像，５.7G
+$ docker pull 192.168.113.38/library/sath89/oracle-12c
+# mkdir -p /u01/app/oracle
+# chmod -R 777 /u01/app/oracle
+
+# docker run -d --restart=always -p 8080:8080 -p 5500:5500 -p 1521:1521 -v /u01/app/oracle:/u01/app/oracle -e DBCA_TOTAL_MEMORY=1024 --name oracle12c 192.168.113.38/library/sath89/oracle-12c
+
+wym@rancher12:/u01/app/oracle$ docker exec -it 23e /bin/bash
+root@23e5750b5330:/# su oracle
+oracle@23e5750b5330:/$ cd $ORACLE_HOME
+
+oracle@23e5750b5330:/u01/app/oracle/product/12.1.0/xe$ bin/sqlplus / as sysdba
+
+SQL*Plus: Release 12.1.0.2.0 Production on Tue May 28 00:50:06 2019
+Copyright (c) 1982, 2014, Oracle.  All rights reserved.
+
+Connected to:
+Oracle Database 12c Standard Edition Release 12.1.0.2.0 - 64bit Production
+设置密码不限时间
+SQL> alter profile default limit password_life_time unlimited;
+解锁system用户
+SQL> alter user system account unlock;
+修改system用户的密码为oracle
+SQL> alter user system identified by oracle;
+
+
+
+```
+
+```yml
+└── 数据库脚本
+    ├── 开放平台
+    │   ├── CreateTable.sql
+    │   └── Initdata.sql
+    └── 一卡通
+        ├── 01-creatTable.sql
+        └── 03-initdata.sql
+
+1.建立表空间（可以1个也可以多个）
+
+2.在表空间下建立3个用户datalook、college、cardrpt（如果要执行开放平台脚本需创建openplartform用户）
+我们测试暂时未执行开放平台脚本，脚本在datalook用户下执行即可
+
+```
+
+
 ```yml
 
 
 ```
 
-## 问题
+```yml
 
+
+```
 
 ```yml
 
-1、harbor配置完，已经配置daemon.json，但就是连不上
 
-mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001","0.0.0.0/0"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
-
-2、rancher建立集群，报错
-docker logs -f 查看，网络问题，主机环境要按rancher官方文档配置
-
-3、导入rancher镜像，执行到registry报错
-执行到registry:2，会报错，手工执行
-
-$ docker tag registry:2 192.168.102.3:8001/library/registry:2
-$ docker push 192.168.102.3:8001/library/registry:2
-
-$ docker tag registry:2 192.168.113.38/library/registry:2
-$ docker push 192.168.113.38/library/registry:2
-$ docker tag kibana:6.5.4 192.168.113.38/library/kibana:6.5.4
-$ docker push 192.168.113.38/library/kibana:6.5.4
-$ docker tag elasticsearch:6.5.4 192.168.113.38/library/elasticsearch:6.5.4
-$ docker push 192.168.113.38/library/elasticsearch:6.5.4
-
-
-为了以后执行方便，需要修改rancher-images.txt，把registry:2放到最后一行
-
-4、问题：如果执行没有反应，应该是压缩包的问题，碰到过两次了，用现场带回来的就可以
-
-已解决：必须加"./rancher-images.tar.gz"，即可导入成功
---images ./rancher-images.tar.gz
-
-$ ./rancher-load-images.sh --image-list ./rancher-images.txt --images ./rancher-images.tar.gz --registry 192.168.113.38
-
-
-5、
-当前集群Updating中...，在API准备就绪之前，直接与API交互的功能将不可用。
-
-[Failed to start [rke-port-checker] container on host [192.168.113.41]: error during connect: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/2d9fc5cf29aadaa5bc3ca4f3a453590f6eb979ac8778f3264a88f1f1b8aa183e/start: tunnel disconnect]; [controlPlane] Failed to bring up Control Plane: [Failed to verify healthcheck: Failed to check https://localhost:6443/healthz for service [kube-apiserver] on host [192.168.113.41]: Get https://localhost:6443/healthz: read tcp [::1]:36248->[::1]:6443: read: connection reset by peer, log: I0510 01:10:00.920683 1 plugins.go:161] Loaded 6 validating admission controller(s) successfully in the following order: LimitRanger,ServiceAccount,Priority,PersistentVolumeClaimResize,ValidatingAdmissionWebhook,ResourceQuota.]
-
- Rancher-鞠宏超
-这个你需要检查一下你的主机端口是否开放了
-
-https://rancher.com/docs/rke/latest/en/os/#ports
- 
-看下这个文档的说明，检查一下这些端口是不是都可以访问
-
-sudo ufw disable
-
-当前集群Updating中...，在API准备就绪之前，直接与API交互的功能将不可用。
-
-[Failed to start [rke-port-checker] container on host [192.168.113.41]: error during connect: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/2d9fc5cf29aadaa5bc3ca4f3a453590f6eb979ac8778f3264a88f1f1b8aa183e/start: tunnel disconnect]; [[network] Host [192.168.113.42] is not able to connect to the following ports: [192.168.113.41:6443]. Please check network policies and firewall rules]
-
-
-检查端口
-
-$ sudo netstat -atunlp|grep 6443
-$ sudo lsof -i:6443
-
-$ sudo netstat -nlpt
-$ sudo netstat -aon|grep 6443
-
-$ sudo telnet 192.168.113.41 6443
-Trying 192.168.113.41...
-Connected to 192.168.113.41.
-Escape character is '^]'.
-Connection closed by foreign host.
-
-$ sudo lsof -i:6443
-
-$ sudo netstat -tln|grep 6443
-tcp6       0      0 :::6443                 :::*                    LISTEN
-
-$ sudo netstat -ntlp
-
-
-好像是被tcp6占了6443端口
-
-
-在Ubuntu上完全禁用IPv6
-如果要在Ubuntu Linux系统上完全禁用IPv6，则需要对Linux内核参数进行一些更改。
-
-$ sudo vi /etc/sysctl.d/99-sysctl.conf
-
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-net.ipv6.conf.lo.disable_ipv6 = 1
-
-保存并关闭文件。 然后执行以下命令加载上述更改。
-
-sudo sysctl -p
-现在运行以下命令。 您应该看到1，这意味着IPv6已成功禁用。
-
-$ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
-1
+```
 
 
 
+### Rancher环境搭建
+
+```yml
 
 
+登录51，配置rancher管理节点
+sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 \
+-v /home/wym/rancher:/var/lib/rancher/ \
+-v /root/var/log/auditlog:/var/log/auditlog \
+-e AUDIT_LEVEL=3 \
+-e CATTLE_SYSTEM_DEFAULT_REGISTRY=192.168.113.38 \
+192.168.113.38/rancher/rancher:v2.2.2
 
+$ sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v /home/wym/rancher:/var/lib/rancher/ -v /root/var/log/auditlog:/var/log/auditlog -e AUDIT_LEVEL=3 -e CATTLE_SYSTEM_DEFAULT_REGISTRY=192.168.113.38 192.168.113.38/rancher/rancher:v2.2.2
 
+https://192.168.113.51
+admin/newcapectest
 
+添加主机
 
+分别登录47~49
+首先登录
+$ docker login 192.168.113.38
 
-
-
-
+执行rancher添加主机命令
 
 
 
 
 ```
 
+
+```yml
+
+
+```
+
+```yml
+
+
+```
+
+```yml
+
+
+```
+
+```yml
+
+
+```
+
+```yml
+
+
+```
+
+## 积累资料
 
 ### 环境检查
 
 ```yml
+
+虚拟机做的有快照，还原快照后：
+1、统一修改密码
+# ansible all --list
+# ansible all -m ping -u wym -k
+# ansible testing -m ping -u wym -k
+# ansible all -i hosts-testing -m ping -u wym -k
+
+
+2、看情况配置免密登录
+首先要登录一次
+# ssh root@192.168.113.37
+需要修改PushKey.yml
+# ansible-playbook PushKey.yml -u wym -k
+
+如果重建虚拟机，清除公钥
+ssh-keygen -f "/home/w/.ssh/known_hosts" -R "172.17.8.241"
+
+
 
 如果需要root权限，要加-b参数
 
@@ -1435,7 +1674,7 @@ systemctl daemon-reload && systemctl restart docker
 http://10.10.252.9
 用户名：wangyuming   密码：
 马晓东
-ip：192.168.113.37-56
+ip：192.168.113.37-56，60~89，共50个
 子网掩码：255.255.254.0
 网关：192.168.112.1
 DNS：211.138.24.66
@@ -1444,14 +1683,31 @@ DNS：211.138.24.66
 
 克隆主机，在/etc/docker/daemon.json文件添加harbor仓库，需要修改IP，主机名
 
+centos系统
+建立centos7.6-虚拟机，安装docker，配置加速器和私有仓库，安装常用软件
+克隆centos7.6-oracle，改主机名和IP
+
+# hostnamectl set-hostname yjk01
+# cat vi /etc/hostname 
+# cat vi /etc/hosts
+
+# ip a
+#假设现有的IP地址79,替换为xxx，适用于修改为分配的IP地址
+# sed -i '/IPADDR/s@113\.37@113.89@' /etc/sysconfig/network-scripts/ifcfg-eth0
+
+# sed -i '/IPADDR/s@113\.37@113.89@' /etc/sysconfig/network-scripts/ifcfg-ens18
+# systemctl restart network
+
+
+
+ubuntu系统：
+
 转模板，批量建立12台虚拟机，修改IP和主机名
 us16-rancher0001（ip 192.168.113.41）～us16-rancher0012（ip 192.168.113.52）
 $ sudo vi /etc/network/interfaces
 $ sudo hostnamectl set-hostname rancher01
 $ sudo vi /etc/hostname 
 $ sudo vi /etc/hosts
-
-
 
 
 $ sudo vi /etc/network/interfaces
@@ -1869,6 +2125,12 @@ docker login <your-registry-domain>
 主机配置免密登录
 ssh-keygen -t rsa
 # 将生产的idrsa.pub内容拷贝到要部署集群的主机~/.ssh/authorized_keys
+ssh-copy-id root@m7-autocv-gpu01
+ssh-copy-id root@m7-autocv-gpu02
+ssh-copy-id root@m7-autocv-gpu03
+
+
+
 将用户加入docker用户组
 usermod -aG docker <your-user-name>
 编辑cluster.yml
@@ -1944,4 +2206,106 @@ docker run --detach --env GITLAB_OMNIBUS_CONFIG="external_url 'http://<your-gitl
 
 ```
 
+
+## 问题
+
+
+```yml
+
+1、harbor配置完，已经配置daemon.json，但就是连不上
+
+mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.3:8001","0.0.0.0/0"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+
+2、rancher建立集群，报错
+docker logs -f 查看，网络问题，主机环境要按rancher官方文档配置
+
+3、导入rancher镜像，执行到registry报错
+执行到registry:2，会报错，手工执行
+
+$ docker tag registry:2 192.168.102.3:8001/library/registry:2
+$ docker push 192.168.102.3:8001/library/registry:2
+
+$ docker tag registry:2 192.168.113.38/library/registry:2
+$ docker push 192.168.113.38/library/registry:2
+$ docker tag kibana:6.5.4 192.168.113.38/library/kibana:6.5.4
+$ docker push 192.168.113.38/library/kibana:6.5.4
+$ docker tag elasticsearch:6.5.4 192.168.113.38/library/elasticsearch:6.5.4
+$ docker push 192.168.113.38/library/elasticsearch:6.5.4
+
+
+为了以后执行方便，需要修改rancher-images.txt，把registry:2放到最后一行
+
+4、问题：如果执行没有反应，应该是压缩包的问题，碰到过两次了，用现场带回来的就可以
+
+已解决：必须加"./rancher-images.tar.gz"，即可导入成功
+--images ./rancher-images.tar.gz
+
+$ ./rancher-load-images.sh --image-list ./rancher-images.txt --images ./rancher-images.tar.gz --registry 192.168.113.38
+
+
+5、
+当前集群Updating中...，在API准备就绪之前，直接与API交互的功能将不可用。
+
+[Failed to start [rke-port-checker] container on host [192.168.113.41]: error during connect: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/2d9fc5cf29aadaa5bc3ca4f3a453590f6eb979ac8778f3264a88f1f1b8aa183e/start: tunnel disconnect]; [controlPlane] Failed to bring up Control Plane: [Failed to verify healthcheck: Failed to check https://localhost:6443/healthz for service [kube-apiserver] on host [192.168.113.41]: Get https://localhost:6443/healthz: read tcp [::1]:36248->[::1]:6443: read: connection reset by peer, log: I0510 01:10:00.920683 1 plugins.go:161] Loaded 6 validating admission controller(s) successfully in the following order: LimitRanger,ServiceAccount,Priority,PersistentVolumeClaimResize,ValidatingAdmissionWebhook,ResourceQuota.]
+
+ Rancher-鞠宏超
+这个你需要检查一下你的主机端口是否开放了
+
+https://rancher.com/docs/rke/latest/en/os/#ports
+ 
+看下这个文档的说明，检查一下这些端口是不是都可以访问
+
+sudo ufw disable
+
+当前集群Updating中...，在API准备就绪之前，直接与API交互的功能将不可用。
+
+[Failed to start [rke-port-checker] container on host [192.168.113.41]: error during connect: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/2d9fc5cf29aadaa5bc3ca4f3a453590f6eb979ac8778f3264a88f1f1b8aa183e/start: tunnel disconnect]; [[network] Host [192.168.113.42] is not able to connect to the following ports: [192.168.113.41:6443]. Please check network policies and firewall rules]
+
+
+检查端口
+
+$ sudo netstat -atunlp|grep 6443
+$ sudo lsof -i:6443
+
+$ sudo netstat -nlpt
+$ sudo netstat -aon|grep 6443
+
+$ sudo telnet 192.168.113.41 6443
+Trying 192.168.113.41...
+Connected to 192.168.113.41.
+Escape character is '^]'.
+Connection closed by foreign host.
+
+$ sudo lsof -i:6443
+
+$ sudo netstat -tln|grep 6443
+tcp6       0      0 :::6443                 :::*                    LISTEN
+
+$ sudo netstat -ntlp
+
+
+好像是被tcp6占了6443端口
+
+
+在Ubuntu上完全禁用IPv6
+如果要在Ubuntu Linux系统上完全禁用IPv6，则需要对Linux内核参数进行一些更改。
+
+$ sudo vi /etc/sysctl.d/99-sysctl.conf
+
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+保存并关闭文件。 然后执行以下命令加载上述更改。
+
+sudo sysctl -p
+现在运行以下命令。 您应该看到1，这意味着IPv6已成功禁用。
+
+$ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+1
+
+
+
+
+```
 
