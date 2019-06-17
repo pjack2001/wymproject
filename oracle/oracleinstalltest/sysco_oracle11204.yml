@@ -1,5 +1,5 @@
 - name: oracle database 11g (11.2.0.4)
-  hosts: 172.17.8.241
+  hosts: 192.168.113.54
 
   roles:
     #- role: nfs
@@ -20,10 +20,10 @@
     - role: sysco-middleware.oracle-database-instance
       oracle_database_version: 11g # supported versions: [11g]
       # instance variables
-      oracle_database_sid: TESTDB
-      oracle_database_global_name: TESTDB
+      oracle_database_sid: ORCL
+      oracle_database_global_name: ORCL
       oracle_database_template_name: General_Purpose.dbc
-      oracle_database_admin_password: welcome1
+      oracle_database_admin_password: newcapec
       oracle_database_auto_memory_mgnt: TRUE
       oracle_database_memory_percentage: 80
       oracle_database_memory_total: 1024

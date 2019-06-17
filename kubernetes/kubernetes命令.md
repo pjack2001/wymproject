@@ -1,13 +1,71 @@
 
-# kubernetes命令
+# 目录
 
 ## 常用命令 
 
 
 ```yml
+allinone
+192.168.113.53
 
-kubectl
-source <(kubectl completion bash) #命令补全
+多主多节点
+多master节点需要额外规划一个master VIP(虚地址)113.60
+192.168.113.61~64
+
+验证安装
+如果提示kubectl: command not found，退出重新ssh登陆一下，环境变量生效即可
+
+kubectl version
+kubectl get componentstatus # 可以看到scheduler/controller-manager/etcd等组件 Healthy
+kubectl get node # 可以看到单 node Ready状态
+kubectl get pod --all-namespaces # 可以查看所有集群pod状态，默认已安装网络插件、coredns、metrics-server等
+kubectl get svc --all-namespaces # 可以查看所有集群服务状态
+
+# 可以看到
+# kubernetes master(apiserver)组件 running
+# kubernetes-dashboard is running at..
+
+kubectl cluster-info 
+
+Kubernetes master is running at https://192.168.113.60:8443
+CoreDNS is running at https://192.168.113.60:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+kubernetes-dashboard is running at https://192.168.113.60:8443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+
+
+# 获取访问dashboard token 
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+
+Name:         admin-user-token-r4pd9
+Namespace:    kube-system
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: 08fe1bca-8940-11e9-b536-fefcfe3db569
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1350 bytes
+namespace:  11 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLXI0cGQ5Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIwOGZlMWJjYS04OTQwLTExZTktYjUzNi1mZWZjZmUzZGI1NjkiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.n3dXU3E3TX4WlnNUJHgQFHRxtz5aM4Oz9nTEKIklcGomZWZBcP9tCeFENDI8vSREy1k6F--6JQn38Fx6d90frRhjmbZjJYVErFxtynI4epjPr4n4v-k37upHVKHrc5_oCCcMlayRysEcGnUuJonOb-7__G_5aMGALhhTOIZIhN-wawrzlOW634KgtoAM2oueig7GhPGY_jec1A_YE2-diDX5wvQLx3YC1B-kqC7QQTpbii-TIs6VZc-874j_QE8LnUdXAZU8u7pI_jNiX6DIgHL0BGzWYhZbgWJRFnKxSiA8Rn-4hxlCrJ0hvGvWwaY8fsHJg443BslrgeY3koSdIg
+
+
+
+
+# 使用浏览器访问前面``kubectl cluster-info ``获取的dashboard地址，最后一条命令获取的token登陆。
+
+admin/test1234
+
+
+
+6.安装主要组件
+# 安装kubedns，默认已集成安装
+#kubectl create -f /etc/ansible/manifests/kubedns
+# 安装dashboard，默认已集成安装
+#kubectl create -f /etc/ansible/manifests/dashboard
+
+登陆 dashboard可以查看和管理集群，更多内容请查阅dashboard文档
+
 
 
 ```

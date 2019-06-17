@@ -484,7 +484,109 @@ volumes:
 ### 
 
 ```yml
+OpenVAS image for Docker
+mikesplain/openvas       9     889967897c49     7 weeks ago    6.39GB
 
+Ubuntu上OpenVAS的Docker容器。默认情况下，最新映像包括OpenVAS Base以及运行OpenVAS所需的NVT和Certs。我们决定将9作为默认分支，因为8似乎在docker中有很多问题。我们建议您使用9，因为它更稳定。我们的Openvas9版本设计为较小的图像，内置较少的附加功能。请注意，OpenVAS 8不再构建，因为OpenVAS 9现在已成为标准配置。仍然可以从Docker集线器中提取映像，但是已经在此github中删除了源代码，这是已弃用的Docker映像的标准配置。
+
+Openvas Version	Tag	Web UI Port
+9	latest/9	443
+
+用法
+简单地运行：
+
+# latest (9)
+docker run -d -p 443:443 --name openvas mikesplain/openvas
+# 9
+docker run -d -p 443:443 --name openvas mikesplain/openvas:9
+
+这将从docker注册表中获取容器并启动它。Openvas启动可能需要一些时间（扫描NVT和重建数据库时需要4-5分钟），所以请耐心等待。一旦你It seems like your OpenVAS-9 installation is OK.在日志中看到一个进程，web ui就可以了。去https://<machinename>
+
+Username: admin
+Password: admin
+
+要检查进程的状态，请运行：
+
+docker top openvas
+
+在输出中，查找进程扫描证书数据。它包含一个百分比。
+
+要在容器运行中运行bash：
+
+docker exec -it openvas bash
+
+指定DNS主机名
+默认情况下，系统仅允许主机名“openvas”的连接。要允许使用自定义DNS名称进行访问，必须使用以下命令：
+
+docker run -d -p 443:443 -e PUBLIC_HOSTNAME=myopenvas.example.org --name openvas mikesplain/openvas
+
+OpenVAS Manager
+要使用OpenVAS Manager，请将端口添加9390到docker run命令：
+
+docker run -d -p 443:443 -p 9390:9390 --name openvas mikesplain/openvas
+
+Volume Support
+我们现在支持卷。只需将数据目录挂载到/var/lib/openvas/mgr/：
+
+mkdir data
+docker run -d -p 443:443 -v $(pwd)/data:/var/lib/openvas/mgr/ --name openvas mikesplain/openvas
+
+请注意，您的本地目录必须在运行之前存在。
+
+设置管理员密码
+可以通过使用env变量在运行时指定密码来更改管理员密码OV_PASSWORD：
+
+docker run -d -p 443:443 -e OV_PASSWORD=securepassword41 --name openvas mikesplain/openvas
+
+更新NVT
+有时您需要更新NVT。我们每周更新一次容器，但您可以通过插入容器并运行一些命令来更新容器：
+
+docker exec -it openvas bash
+## inside container
+greenbone-nvt-sync
+openvasmd --rebuild --progress
+greenbone-certdata-sync
+greenbone-scapdata-sync
+openvasmd --update --verbose --progress
+
+/etc/init.d/openvas-manager restart
+/etc/init.d/openvas-scanner restart
+
+
+Docker compose (experimental)
+
+为简单起见，提供了docker-compose.yml文件，以及Nginx作为反向代理的配置，具有以下功能：
+
+Nginx作为反向代理
+从端口80（http）重定向到端口433（https）
+来自Let's Encrypt的自动SSL证书
+每天更新NVT的cron
+
+To run:
+
+Change "example.com" in the following files:
+docker-compose.yml
+conf/nginx.conf
+conf/nginx_ssl.conf
+Change the "OV_PASSWORD" enviromental variable in docker-compose.yml
+Install the latest docker-compose
+run docker-compose up -d
+
+LDAP支持（实验性）
+Openvas不支持完整的ldap集成，但仅支持每用户身份验证。LDAP_ADMIN_FILTER每当应用启动时，通过将ldap管理员用户（定义方）与openvas管理员用户同步，可以实现解决方法。要使用它，只需要指定所需的ldap env变量：
+
+docker run -d -p 443:443 -p 9390:9390 --name openvas -e LDAP_HOST=your.ldap.host -e LDAP_BIND_DN=uid=binduid,dc=company,dc=com -e LDAP_BASE_DN=cn=accounts,dc=company,dc=com -e LDAP_AUTH_DN=uid=%s,cn=users,cn=accounts,dc=company,dc=com -e LDAP_ADMIN_FILTER=memberOf=cn=admins,cn=groups,cn=accounts,dc=company,dc=com -e LDAP_PASSWORD=password -e OV_PASSWORD=admin mikesplain/openvas
+
+Email Support
+要配置后缀的服务器，提供了以下ENV变量在运行时：OV_SMTP_HOSTNAME，OV_SMTP_PORT，OV_SMTP_USERNAME，OV_SMTP_KEY
+
+docker run -d -p 443:443 -e OV_SMTP_HOSTNAME=smtp.example.com -e OV_SMTP_PORT=587 -e OV_SMTP_USERNAME=username@example.com -e OV_SMTP_KEY=g0bBl3de3Go0k --name openvas mikesplain/openvas
+
+特约
+我总是乐于接受拉动请求或问题。
+
+谢谢
+感谢hackertarget提供了很棒的教程：http：//hackertarget.com/install-openvas-7-ubuntu/ 感谢Serge Katzmann为OpenVAS 8做了一些很棒的工作：https：//github.com/sergekatzmann/openvas8-完成
 
 ```
 

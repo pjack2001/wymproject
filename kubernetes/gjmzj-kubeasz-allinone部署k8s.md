@@ -1,7 +1,48 @@
 # kubeasz安装
+
 ##
 
+```yml
+老版本的kubeasz安装k8s1.11,1.12，镜像启动正常，
+但是安装1.13版本，coredns和metrics-server提示ImagePullBackOff，怀疑是镜像版本不对
+
 ```
+
+##
+
+```yml
+$ docker pull jmgao1983/kubeasz
+
+```
+
+
+##
+
+```yml
+centos7.6系统
+
+配置免密登录
+
+CentOS 7 请执行以下脚本：
+
+# 文档中脚本默认均以root用户执行
+# 安装 epel 源并更新
+yum install epel-release -y
+yum update
+# 删除不要的默认安装
+yum erase firewalld firewalld-filesystem python-firewall -y
+# 安装依赖工具
+yum install git python python-pip -y
+
+
+
+
+```
+
+
+##
+
+```yml
 w：建立虚拟机
 ~/tool/vagrant/k8sallinone
 
@@ -25,7 +66,10 @@ $ ssh-keygen -f "/home/w/.ssh/known_hosts" -R "172.17.8.161"
 
 3、按照文档后面，下载，解压到/etc/ansible的bin目录和down目录，并把kubeasz的所有文件拷贝到/etc/ansible目录
 
-4、执行安装
+4、配置hosts
+$ cp example/hosts.allinone.example hosts
+
+5、执行安装
 # 一步安装
 #ansible-playbook 90.setup.yml
 
@@ -39,32 +83,36 @@ fatal: [172.17.8.161]: UNREACHABLE! => {"changed": false, "msg": "SSH Error: dat
 加-u root，加sudo
 $ sudo ansible-playbook 90.setup.yml -u root
 
-5、安装完成，ssh登录，测试
-$ ssh root@172.17.8.161
+6、安装完成，ssh登录，测试
+$ ssh root@192.168.113.53
 
-[root@kubeasz1 ~]# kubectl cluster-info
-Kubernetes master is running at https://172.17.8.161:6443
-CoreDNS is running at https://172.17.8.161:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-kubernetes-dashboard is running at https://172.17.8.161:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+# kubectl cluster-info
+Kubernetes master is running at https://192.168.113.53:6443
+CoreDNS is running at https://192.168.113.53:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+kubernetes-dashboard is running at https://192.168.113.53:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
 
-[root@kubeasz1 ~]# kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
-Name:         admin-user-token-gshv7
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+[root@kubeasz53 ansible]# kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+Name:         admin-user-token-lt999
 Namespace:    kube-system
 Labels:       <none>
 Annotations:  kubernetes.io/service-account.name=admin-user
-              kubernetes.io/service-account.uid=9a5a10e0-6573-11e9-8aa1-52540075dc3d
+              kubernetes.io/service-account.uid=edcf0f32-8873-11e9-bc35-fefcfeb23fe9
 
 Type:  kubernetes.io/service-account-token
 
 Data
 ====
-ca.crt:     1350 bytes
+ca.crt:     1346 bytes
 namespace:  11 bytes
-token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWdzaHY3Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI5YTVhMTBlMC02NTczLTExZTktOGFhMS01MjU0MDA3NWRjM2QiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.cQzJ1cREtLFDTwSKNw0RR7_92B1bUd6hUQPgZR7ss_uQHm_ACuGNopRdBrGl-v2Inzi78oSQOPO1KWLnrAsfqHKwYe8lduqxbMmC6M-iM41G6lGlPCE_n0S_jqu8foAqaXk_XeCLRPhuPWrcGgwWROUcKz0QOTfHy20uAosXUvwHtUMqXbpR1Wn2TBYuFsuMG8Z1eG7QPNetEGQD5GZ3MmpCxfDNDixV8fpmqPh01jWMAD8vv-9VYl7Ct1QTR6C2z_LRDyAOGoBG5TGC0oIYbHkd870u0LwBR2VpON6PB9pai0iHex_O1MKZcaWxAh2aL6E8_ZOszed5kCLTKtXcow
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLWx0OTk5Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJlZGNmMGYzMi04ODczLTExZTktYmMzNS1mZWZjZmViMjNmZTkiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.aHPVlMa51udsf1geLmnIjbUizHTpHVXzhHUsKZJLTF4DCBWBc1ZNJLjlxCcDKBK5d8nRpzVnJPBwdWpNpnAGCh6yWw_-yBIlDogkcqJxhR8yhuMaYLi3MfDM5Dyoi_0IygOqxoEdX27nE72btoRYNCPe1Qmv1zqhLvTbpVgGs-3wWhH1nsR4SYLPJMfFvmG7hdDSUzxCSvbCeifPfmrfSbZUR4YPHKFB4iGPikzekb1FOoS9QFpS0XwIOb_ll7sFJi8G-Tyy8mLUQiL3Ij3GEO2b6ZMHntxuUptR2pgIWFyO-UKHrHU5vld9D7_pZxi6UXxnbPO401bY0iO4g7SqZw
+[root@kubeasz53 ansible]#
 
-浏览器登录：https://192.168.102.10:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
+浏览器登录：https://192.168.113.53:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy
 
-6、做快照
+并用默认用户 `admin:test1234` 登陆，输入token
+
+7、做快照
 
 $ vagrant snapshot save kubeasz1b
 
@@ -108,7 +156,9 @@ pip install --no-cache-dir ansible -i http://mirrors.aliyun.com/pypi/simple/ --t
 ssh-keygen -t rsa -b 2048 回车 回车 回车
 ssh-copy-id 192.168.102.10 #$IP为本虚机地址，按照提示输入yes 和root密码
 
-
+配置ubuntu免密登录
+ssh-keygen -t rsa -b 2048 回车 回车 回车
+$ ssh-copy-id wym@192.168.113.44
 
 
 
@@ -136,9 +186,15 @@ cd /etc/ansible
 cp example/hosts.allinone.example hosts
 vim hosts           # 根据实际情况修改此hosts文件，所有节点改成虚拟机IP:192.168.102.10
 
+ubuntu节点需要在hosts文件添加如下root权限
+# cat hosts
+[rancher]
+192.168.113.41 ansible_ssh_user=wym ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
 
 # 验证ansible安装，正常能看到每个节点返回 SUCCESS
 ansible all -m ping
+ansible all -m ping -u wym
+
 
 开始安装
 如果你对集群安装流程不熟悉，请阅读项目首页 安装步骤 讲解后分步安装，并对 每步都进行验证
@@ -153,6 +209,8 @@ ansible-playbook 07.cluster-addon.yml
 
 # 一步安装
 #ansible-playbook 90.setup.yml
+
+$ ansible-playbook 90.setup.yml -u wym
 
 [可选]对集群节点进行操作系统层面的安全加固 ansible-playbook roles/os-harden/os-harden.yml，详情请参考os-harden项目
 

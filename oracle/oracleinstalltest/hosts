@@ -1,0 +1,2 @@
+[oracle]
+192.168.113.54 ansible_ssh_user=wym ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'

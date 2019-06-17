@@ -3,7 +3,7 @@
 
 ## 常用或重要
 
-```
+```yml
 查询模块：
 http://docs.ansible.com/ansible/unarchive_module.html
 https://docs.ansible.com/ansible/latest/modules/debug_module.html
@@ -25,7 +25,7 @@ $ ansible-galaxy list
 
 ## 运维自动化-Ansibleb 和 马哥2019全新ansible入门到精通
 
-```
+```yml
 运维自动化-Ansible ( 一 )
 https://blog.51cto.com/191226139/2066936
 运维自动化-Ansible ( 二 )
@@ -64,7 +64,10 @@ vi /home/inventory
 
 ```yml 
 配置免密登录或修改密码，对应想要修改hosts文件的主机列表
+$ ssh-copy-id root@192.168.113.242
 
+
+注意：ansible.cfg和hosts文件权限只能设置755，不能有可读权限，否则不生效
 # cat ansible.cfg 
 [defaults]
 inventory = hosts
@@ -73,7 +76,7 @@ host_key_checking = False
 
 # cat hosts
 [rancher]
-192.168.113.41 ansible_ssh_user=wym  ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
+192.168.113.41 ansible_ssh_user=wym ansible_become_user=root ansible_become=true ansible_become_pass='newcapecwym'
 
 # ansible all --list
 # ansible all -m ping -u wym -k
@@ -480,6 +483,7 @@ ansible.cfg文件查找顺序
 通常可以把ansible.cfg文件和playbook一起放在某个目录，就可以用git来管理
 
 
+注意：ansible.cfg和hosts文件权限只能设置755，不能有可读权限，否则不生效
 
 Ansible 配置文件/etc/ansible/ansible.cfg （一般保持默认）
  [defaults]
@@ -2521,15 +2525,6 @@ playbook: site.yml
 
 
 
-
-
-
-
-
-
-
-
-
 ```
 
 
@@ -2540,11 +2535,33 @@ playbook: site.yml
 ```
 
 
-##
+## V8常用
 
-```
+```yml
 
 
+配置免密登录或修改密码，对应想要修改hosts文件的主机列表
+$ ssh-copy-id root@192.168.113.242
+$ ssh-copy-id root@192.168.113.244
+$ ssh-copy-id root@192.168.113.248
+
+
+注意：ansible.cfg和hosts文件权限只能设置755，不能有可读权限，否则不生效
+# cat ansible.cfg 
+[defaults]
+inventory = hosts
+remote_user = root
+#private_key_file = .vagrant/machines/default/virtualbox/private_key
+host_key_checking = False
+
+# cat hosts
+[test]
+192.168.113.242
+192.168.113.244
+192.168.113.248
+
+# ansible all --list
+# ansible all -m ping
 
 
 ```
