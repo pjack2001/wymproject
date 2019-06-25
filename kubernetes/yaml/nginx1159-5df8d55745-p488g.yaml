@@ -1,0 +1,107 @@
+﻿apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cattle.io/timestamp: "2019-05-23T03:01:53Z"
+    cni.projectcalico.org/podIP: 10.42.2.6/32
+    field.cattle.io/ports: '[[{"containerPort":80,"dnsName":"nginx1159-nodeport","kind":"NodePort","name":"80tcp01","protocol":"TCP","sourcePort":0}]]'
+  creationTimestamp: "2019-05-23T03:22:19Z"
+  generateName: nginx1159-5df8d55745-
+  labels:
+    pod-template-hash: 5df8d55745
+    workload.user.cattle.io/workloadselector: deployment-v8testnamespaces-nginx1159
+  name: nginx1159-5df8d55745-p488g
+  namespace: v8testnamespaces
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: nginx1159-5df8d55745
+    uid: f8c17073-7d09-11e9-a160-fefcfe145ba1
+  resourceVersion: "463521"
+  selfLink: /api/v1/namespaces/v8testnamespaces/pods/nginx1159-5df8d55745-p488g
+  uid: f8d20070-7d09-11e9-a160-fefcfe145ba1
+spec:
+  containers:
+  - image: 192.168.113.38/wymproject/nginx:1.15.9
+    imagePullPolicy: Always
+    name: nginx1159
+    ports:
+    - containerPort: 80
+      name: 80tcp01
+      protocol: TCP
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      privileged: false
+      procMount: Default
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+    stdin: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-cqpkn
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: rancher07
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: default-token-cqpkn
+    secret:
+      defaultMode: 420
+      secretName: default-token-cqpkn
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:22:19Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:22:25Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:22:25Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:22:19Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://0970b6f066d9778639a5e101d66f604fe2e4acc5111cf50752a5e2a8537100f9
+    image: 192.168.113.38/wymproject/nginx:1.15.9
+    imageID: docker-pullable://192.168.113.38/wymproject/nginx@sha256:7734a210432278817f8097acf2f72d20e2ccc7402a0509810c44b3a8bfe0094a
+    lastState: {}
+    name: nginx1159
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-05-23T03:22:24Z"
+  hostIP: 192.168.113.47
+  phase: Running
+  podIP: 10.42.2.6
+  qosClass: BestEffort
+  startTime: "2019-05-23T03:22:19Z"

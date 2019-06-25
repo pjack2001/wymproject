@@ -1,0 +1,107 @@
+﻿apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cattle.io/timestamp: "2019-05-23T03:23:10Z"
+    cni.projectcalico.org/podIP: 10.42.0.8/32
+    field.cattle.io/ports: '[[{"containerPort":8080,"dnsName":"tomcat85-nodeport","kind":"NodePort","name":"8080tcp01","protocol":"TCP","sourcePort":0}]]'
+  creationTimestamp: "2019-05-23T03:23:11Z"
+  generateName: tomcat85-759f9bcb57-
+  labels:
+    pod-template-hash: 759f9bcb57
+    workload.user.cattle.io/workloadselector: deployment-v8testnamespaces-tomcat85
+  name: tomcat85-759f9bcb57-9bhjt
+  namespace: v8testnamespaces
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: tomcat85-759f9bcb57
+    uid: 17bbf530-7d0a-11e9-a160-fefcfe145ba1
+  resourceVersion: "463667"
+  selfLink: /api/v1/namespaces/v8testnamespaces/pods/tomcat85-759f9bcb57-9bhjt
+  uid: 17bffd8c-7d0a-11e9-a160-fefcfe145ba1
+spec:
+  containers:
+  - image: 192.168.113.38/wymproject/tomcat:8.5.38-jre8-alpine
+    imagePullPolicy: Always
+    name: tomcat85
+    ports:
+    - containerPort: 8080
+      name: 8080tcp01
+      protocol: TCP
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      privileged: false
+      procMount: Default
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+    stdin: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-cqpkn
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: rancher09
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: default-token-cqpkn
+    secret:
+      defaultMode: 420
+      secretName: default-token-cqpkn
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:23:11Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:23:16Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:23:16Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2019-05-23T03:23:11Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://48bc5c8b1ca0dd1ced5f7c449c237a31a1c39fb9bbf1a6d1889753f1ba54e39a
+    image: 192.168.113.38/wymproject/tomcat:8.5.38-jre8-alpine
+    imageID: docker-pullable://192.168.113.38/wymproject/tomcat@sha256:8f3b62dafc1ebec318cc3cb909fee9cf022e1a96cb7638998f2364986c757a9a
+    lastState: {}
+    name: tomcat85
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-05-23T03:23:16Z"
+  hostIP: 192.168.113.49
+  phase: Running
+  podIP: 10.42.0.8
+  qosClass: BestEffort
+  startTime: "2019-05-23T03:23:11Z"
