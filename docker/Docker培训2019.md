@@ -6,55 +6,55 @@
 
 <!-- TOC -->
 
-- [Docker培训](#docker%E5%9F%B9%E8%AE%AD)
-  - [目录](#%E7%9B%AE%E5%BD%95)
-  - [学习参考资料](#%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99)
-  - [一、Docker简介](#%E4%B8%80docker%E7%AE%80%E4%BB%8B)
-    - [1、简介](#1%E7%AE%80%E4%BB%8B)
-    - [2、Docker的应用场景](#2docker%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF)
-    - [3、Docker 的优点](#3docker-%E7%9A%84%E4%BC%98%E7%82%B9)
-    - [3、docker的缺点](#3docker%E7%9A%84%E7%BC%BA%E7%82%B9)
-    - [4、docker的相关知识点](#4docker%E7%9A%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9)
-  - [二、准备](#%E4%BA%8C%E5%87%86%E5%A4%87)
-    - [1、使用Centos7系统](#1%E4%BD%BF%E7%94%A8centos7%E7%B3%BB%E7%BB%9F)
-    - [2、更换阿里yum源，需要连外网](#2%E6%9B%B4%E6%8D%A2%E9%98%BF%E9%87%8Cyum%E6%BA%90%E9%9C%80%E8%A6%81%E8%BF%9E%E5%A4%96%E7%BD%91)
-    - [3、公司内网yum源](#3%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91yum%E6%BA%90)
-  - [三、安装Docker](#%E4%B8%89%E5%AE%89%E8%A3%85docker)
-    - [1、官方安装](#1%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85)
-    - [1.1安装低版本，解决依赖问题](#11%E5%AE%89%E8%A3%85%E4%BD%8E%E7%89%88%E6%9C%AC%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98)
-    - [2、离线安装包](#2%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85)
-    - [3、选择需要安装docker版本](#3%E9%80%89%E6%8B%A9%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC)
-    - [4、删除Docker](#4%E5%88%A0%E9%99%A4docker)
-    - [5、镜像加速](#5%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F)
-    - [6、Windows Docker 安装](#6windows-docker-%E5%AE%89%E8%A3%85)
-  - [四、docker常用命令](#%E5%9B%9Bdocker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4)
-    - [1、docker命令](#1docker%E5%91%BD%E4%BB%A4)
-    - [2、docker常用命令](#2docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4)
-    - [3、批量操作docker命令](#3%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9Cdocker%E5%91%BD%E4%BB%A4)
-  - [六、Docker实战](#%E5%85%ADdocker%E5%AE%9E%E6%88%98)
-    - [1、docker使用tomcat环境](#1docker%E4%BD%BF%E7%94%A8tomcat%E7%8E%AF%E5%A2%83)
-    - [2、docker使用mysql](#2docker%E4%BD%BF%E7%94%A8mysql)
-    - [3、docker使用oracle](#3docker%E4%BD%BF%E7%94%A8oracle)
-      - [3.1数据库访问](#31%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE)
-      - [3.2使用Docker创建oracle数据库](#32%E4%BD%BF%E7%94%A8docker%E5%88%9B%E5%BB%BAoracle%E6%95%B0%E6%8D%AE%E5%BA%93)
-  - [七、使用docker-compose](#%E4%B8%83%E4%BD%BF%E7%94%A8docker-compose)
-    - [1、安装](#1%E5%AE%89%E8%A3%85)
-    - [2、常用docker-compose命令](#2%E5%B8%B8%E7%94%A8docker-compose%E5%91%BD%E4%BB%A4)
-    - [3、docker-compose 命令](#3docker-compose-%E5%91%BD%E4%BB%A4)
-    - [3、例子](#3%E4%BE%8B%E5%AD%90)
-  - [八、Docker私有仓库使用说明](#%E5%85%ABdocker%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
-    - [1.安装harbor](#1%E5%AE%89%E8%A3%85harbor)
-    - [2.使用harbor](#2%E4%BD%BF%E7%94%A8harbor)
-  - [九、管理工具](#%E4%B9%9D%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7)
-  - [十、docker常见问题](#%E5%8D%81docker%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
-    - [1、CentOS7中Docker-ce的卸载和安装](#1centos7%E4%B8%ADdocker-ce%E7%9A%84%E5%8D%B8%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85)
-    - [2、centos 安装docker时出现依赖关系问题的解决办法](#2centos-%E5%AE%89%E8%A3%85docker%E6%97%B6%E5%87%BA%E7%8E%B0%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95)
-    - [3、让docker 容器开机自动启动](#3%E8%AE%A9docker-%E5%AE%B9%E5%99%A8%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8)
-    - [4、迁移 /var/lib/docker 目录](#4%E8%BF%81%E7%A7%BB-varlibdocker-%E7%9B%AE%E5%BD%95)
-    - [5、配置centos8解决 docker Failed to get D-Bus connection 报错](#5%E9%85%8D%E7%BD%AEcentos8%E8%A7%A3%E5%86%B3-docker-failed-to-get-d-bus-connection-%E6%8A%A5%E9%94%99)
-    - [6、不使用sudo命令执行docker](#6%E4%B8%8D%E4%BD%BF%E7%94%A8sudo%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8Cdocker)
-    - [7、Docker 容器中运行 Docker 命令](#7docker-%E5%AE%B9%E5%99%A8%E4%B8%AD%E8%BF%90%E8%A1%8C-docker-%E5%91%BD%E4%BB%A4)
-    - [初始化常用运行命令](#%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B8%B8%E7%94%A8%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4)
+- [Docker培训](#docker培训)
+    - [目录](#目录)
+    - [学习参考资料](#学习参考资料)
+    - [一、Docker简介](#一docker简介)
+        - [1、简介](#1简介)
+        - [2、Docker的应用场景](#2docker的应用场景)
+        - [3、Docker 的优点](#3docker-的优点)
+        - [3、docker的缺点](#3docker的缺点)
+        - [4、docker的相关知识点](#4docker的相关知识点)
+    - [二、准备](#二准备)
+        - [1、使用Centos7系统](#1使用centos7系统)
+        - [2、更换阿里yum源，需要连外网](#2更换阿里yum源需要连外网)
+        - [3、公司内网yum源](#3公司内网yum源)
+    - [三、安装Docker](#三安装docker)
+        - [1、官方安装](#1官方安装)
+        - [1.1安装低版本，解决依赖问题](#11安装低版本解决依赖问题)
+        - [2、离线安装包](#2离线安装包)
+        - [3、选择需要安装docker版本](#3选择需要安装docker版本)
+        - [4、删除Docker](#4删除docker)
+        - [5、镜像加速](#5镜像加速)
+        - [6、Windows Docker 安装](#6windows-docker-安装)
+    - [四、docker常用命令](#四docker常用命令)
+        - [1、docker命令](#1docker命令)
+        - [2、docker常用命令](#2docker常用命令)
+        - [3、批量操作docker命令](#3批量操作docker命令)
+    - [六、Docker实战](#六docker实战)
+        - [1、docker使用tomcat环境](#1docker使用tomcat环境)
+        - [2、docker使用mysql](#2docker使用mysql)
+        - [3、docker使用oracle](#3docker使用oracle)
+            - [3.1数据库访问](#31数据库访问)
+            - [3.2使用Docker创建oracle数据库](#32使用docker创建oracle数据库)
+    - [七、使用docker-compose](#七使用docker-compose)
+        - [1、安装](#1安装)
+        - [2、常用docker-compose命令](#2常用docker-compose命令)
+        - [3、docker-compose 命令](#3docker-compose-命令)
+        - [3、例子](#3例子)
+    - [八、Docker私有仓库使用说明](#八docker私有仓库使用说明)
+        - [1.安装harbor](#1安装harbor)
+        - [2.使用harbor](#2使用harbor)
+    - [九、管理工具](#九管理工具)
+    - [十、docker常见问题](#十docker常见问题)
+        - [1、CentOS7中Docker-ce的卸载和安装](#1centos7中docker-ce的卸载和安装)
+        - [2、centos 安装docker时出现依赖关系问题的解决办法](#2centos-安装docker时出现依赖关系问题的解决办法)
+        - [3、让docker 容器开机自动启动](#3让docker-容器开机自动启动)
+        - [4、迁移 /var/lib/docker 目录](#4迁移-varlibdocker-目录)
+        - [5、配置centos8解决 docker Failed to get D-Bus connection 报错](#5配置centos8解决-docker-failed-to-get-d-bus-connection-报错)
+        - [6、不使用sudo命令执行docker](#6不使用sudo命令执行docker)
+        - [7、Docker 容器中运行 Docker 命令](#7docker-容器中运行-docker-命令)
+        - [初始化常用运行命令](#初始化常用运行命令)
 
 <!-- /TOC -->
 
@@ -459,6 +459,8 @@ sudo mkdir -p /etc/docker
 {
   "registry-mirrors": ["https://xxxx.mirror.aliyuncs.com"]
 }
+
+"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn","https://al9ikvwc.mirror.aliyuncs.com"]
 
 或
 # sudo tee /etc/docker/daemon.json <<-'EOF'
@@ -1342,7 +1344,7 @@ Docker 容器中运行 Docker 命令
 
 ```yml
 配置SSH登录，关闭SElinux和防火墙
-# sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd && systemctl stop firewalld && setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+# sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd && systemctl stop firewalld && systemctl disable firewalld.service && setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 
 配置阿里yum源并安装
 # mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo && curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux bash-completion && yum install -y docker-ce

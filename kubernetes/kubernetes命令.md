@@ -50,7 +50,7 @@ namespace:  11 bytes
 token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJhZG1pbi11c2VyLXRva2VuLXI0cGQ5Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImFkbWluLXVzZXIiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIwOGZlMWJjYS04OTQwLTExZTktYjUzNi1mZWZjZmUzZGI1NjkiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06YWRtaW4tdXNlciJ9.n3dXU3E3TX4WlnNUJHgQFHRxtz5aM4Oz9nTEKIklcGomZWZBcP9tCeFENDI8vSREy1k6F--6JQn38Fx6d90frRhjmbZjJYVErFxtynI4epjPr4n4v-k37upHVKHrc5_oCCcMlayRysEcGnUuJonOb-7__G_5aMGALhhTOIZIhN-wawrzlOW634KgtoAM2oueig7GhPGY_jec1A_YE2-diDX5wvQLx3YC1B-kqC7QQTpbii-TIs6VZc-874j_QE8LnUdXAZU8u7pI_jNiX6DIgHL0BGzWYhZbgWJRFnKxSiA8Rn-4hxlCrJ0hvGvWwaY8fsHJg443BslrgeY3koSdIg
 
 
-
+kubectl completion zsh > "${fpath[1]}/_kubectl"
 
 # 使用浏览器访问前面``kubectl cluster-info ``获取的dashboard地址，最后一条命令获取的token登陆。
 
@@ -65,6 +65,114 @@ admin/test1234
 #kubectl create -f /etc/ansible/manifests/dashboard
 
 登陆 dashboard可以查看和管理集群，更多内容请查阅dashboard文档
+
+
+```
+
+### kubernetes帮助
+
+```yml
+学会使用帮助
+
+$ kubectl --help
+
+比如命令补全
+$ kubectl completion --help
+
+# source <(kubectl completion bash)
+# kubectl completion bash > ~/.kube/completion.bash.inc
+printf "
+source '$HOME/.kube/completion.bash.inc'
+" >> $HOME/.bash_profile
+
+生效
+# source $HOME/.bash_profile
+
+如果使用zsh，按下列
+  # Load the kubectl completion code for zsh[1] into the current shell
+  source <(kubectl completion zsh)
+  # Set the kubectl completion code for zsh[1] to autoload on startup
+  kubectl completion zsh > "${fpath[1]}/_kubectl"
+
+# 注意：Ubuntu使用.bashrc
+$ source <(kubectl completion bash)
+$ kubectl completion bash > ~/.kube/completion.bash.inc
+
+$ printf "
+# Kubectl shell completion
+source '$HOME/.kube/completion.bash.inc'
+" >> $HOME/.bashrc
+
+$ source $HOME/.bashrc
+
+```
+
+### rancher环境命令
+
+```yml
+#使用帮助
+$ kubectl --help
+
+#配置本机访问rancher或远程登录
+$ ssh-copy-id wym@192.168.113.51
+$ ssh wym@192.168.113.51
+
+#相关pods信息
+$ kubectl get pods --all-namespaces
+$ kubectl get pods -o wide --all-namespaces
+
+$ kubectl get pods -n v8testnamespaces
+$ kubectl get pods eureka-5ddbd9d548-mxdvn -n v8testnamespaces
+$ kubectl get pods redis-55864f4c67-f82f9 -n v8testnamespaces
+
+#describe 显示一个指定 resource 或者 group 的 resources 详情
+$ kubectl describe pods/redis-55864f4c67-f82f9 -n v8testnamespaces
+$ kubectl describe pods/eureka-5ddbd9d548-mxdvn -n v8testnamespaces 
+$ kubectl describe pod eureka-5ddbd9d548-mxdvn -n v8testnamespaces 同上面的命令一样
+
+
+$ kubectl get service -n v8testnamespaces
+$ kubectl describe service/eureka -n v8testnamespaces
+$ kubectl describe service/eureka-nodeport -n v8testnamespaces
+
+$ kubectl get endpoints -n v8testnamespaces
+
+#查看pods
+$ kubectl get pods -n v8testnamespaces
+NAME                           READY   STATUS              RESTARTS   AGE
+auth-5d89877574-d2n4p          1/1     Running             0          45h
+centos76test-7cc9d59dc-bkqfq   1/1     Running             0          33d
+core-897fc8858-b5zkn           1/1     Running             0          5d7h
+eureka-5ddbd9d548-mxdvn        1/1     Running             0          45h
+nginx-nfs01-6d695bdc78-qkptb   1/1     Running             0          19d
+nginx1159-5df8d55745-p488g     1/1     Running             0          33d
+pre-core-6f44bc564-trb6t       1/1     Running             0          45h
+redis-55864f4c67-f82f9         1/1     Running             0          63m
+redisv8-75fbc88c74-mh5ht       1/1     Running             0          19d
+redisv8-cf5755b5f-rlknm        0/1     ContainerCreating   0          19d
+tomcat85-759f9bcb57-9bhjt      1/1     Running             0          33d
+ykt-ui-656fc77df-m5wpj         1/1     Running             0          45h
+
+
+#查看日志
+$ kubectl logs pods/redis-55864f4c67-f82f9 -n v8testnamespaces
+$ kubectl logs pods/core-897fc8858-b5zkn -n v8testnamespaces
+$ kubectl logs pods/eureka-5ddbd9d548-mxdvn -n v8testnamespaces
+$ kubectl logs pods/ykt-ui-656fc77df-m5wpj -n v8testnamespaces
+$ kubectl logs pods/auth-5d89877574-d2n4p -n v8testnamespaces
+$ kubectl logs pods/pre-core-6f44bc564-trb6t -n v8testnamespaces
+$ kubectl logs pods/ -n v8testnamespaces
+$ kubectl logs pods/ -n v8testnamespaces
+
+
+#进入容器
+$ kubectl exec -it redis-55864f4c67-f82f9 -n v8testnamespaces /bin/bash
+# redis-cli -h 192.168.113.244 -p 6379 -a dkyw
+192.168.113.244:6379> config set requirepass #设置密码
+192.168.113.244:6379> config get requirepass #查看密码
+192.168.113.244:6379> auth dkyw #验证密码
+
+
 
 
 
@@ -1100,6 +1208,705 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 
 
 
+### kubectl帮助
+
+```yml
+
+$ kubectl --help
+kubectl controls the Kubernetes cluster manager. 
+
+Find more information at: https://kubernetes.io/docs/reference/kubectl/overview/
+
+Basic Commands (Beginner):
+  create         Create a resource from a file or from stdin.
+  expose         使用 replication controller, service, deployment 或者 pod 并暴露它作为一个 新的
+Kubernetes Service
+  run            在集群中运行一个指定的镜像
+  set            为 objects 设置一个指定的特征
+
+Basic Commands (Intermediate):
+  explain        查看资源的文档
+  get            显示一个或更多 resources
+  edit           在服务器上编辑一个资源
+  delete         Delete resources by filenames, stdin, resources and names, or by resources and label selector
+
+Deploy Commands:
+  rollout        Manage the rollout of a resource
+  scale          为 Deployment, ReplicaSet, Replication Controller 或者 Job 设置一个新的副本数量
+  autoscale      自动调整一个 Deployment, ReplicaSet, 或者 ReplicationController 的副本数量
+
+Cluster Management Commands:
+  certificate    修改 certificate 资源.
+  cluster-info   显示集群信息
+  top            Display Resource (CPU/Memory/Storage) usage.
+  cordon         标记 node 为 unschedulable
+  uncordon       标记 node 为 schedulable
+  drain          Drain node in preparation for maintenance
+  taint          更新一个或者多个 node 上的 taints
+
+Troubleshooting and Debugging Commands:
+  describe       显示一个指定 resource 或者 group 的 resources 详情
+  logs           输出容器在 pod 中的日志
+  attach         Attach 到一个运行中的 container
+  exec           在一个 container 中执行一个命令
+  port-forward   Forward one or more local ports to a pod
+  proxy          运行一个 proxy 到 Kubernetes API server
+  cp             复制 files 和 directories 到 containers 和从容器中复制 files 和 directories.
+  auth           Inspect authorization
+
+Advanced Commands:
+  diff           Diff live version against would-be applied version
+  apply          通过文件名或标准输入流(stdin)对资源进行配置
+  patch          使用 strategic merge patch 更新一个资源的 field(s)
+  replace        通过 filename 或者 stdin替换一个资源
+  wait           Experimental: Wait for a specific condition on one or many resources.
+  convert        在不同的 API versions 转换配置文件
+
+Settings Commands:
+  label          更新在这个资源上的 labels
+  annotate       更新一个资源的注解
+  completion     Output shell completion code for the specified shell (bash or zsh)
+
+Other Commands:
+  api-resources  Print the supported API resources on the server
+  api-versions   Print the supported API versions on the server, in the form of "group/version"
+  config         修改 kubeconfig 文件
+  plugin         Provides utilities for interacting with plugins.
+  version        输出 client 和 server 的版本信息
+
+Usage:
+  kubectl [flags] [options]
+
+Use "kubectl <command> --help" for more information about a given command.
+Use "kubectl options" for a list of global command-line options (applies to all commands).
+
+
+
+
+```
+
+
+
+
+### 阿良运维
+
+```yml
+1、创建
+# kubectl run nginx --replicas=3 --labels="app=example" --image=192.168.113.38/wymproject/nginx:1.14.2-alpine --port=80
+
+2、查看
+# kubectl get deployments
+NAME    DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+nginx   3         3         3            3           44s
+
+# kubectl get pods
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-57df7db684-m9qxr   1/1     Running   0          13s
+nginx-57df7db684-snw7k   1/1     Running   0          13s
+nginx-57df7db684-szvlf   1/1     Running   0          13s
+
+# kubectl get pods --show-labels
+# kubectl get pods -l app=example
+# kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP            NODE             NOMINATED NODE
+nginx-57df7db684-m9qxr   1/1     Running   0          5m31s   172.20.0.15   192.168.113.53   <none>
+nginx-57df7db684-snw7k   1/1     Running   0          5m31s   172.20.0.14   192.168.113.53   <none>
+nginx-57df7db684-szvlf   1/1     Running   0          5m31s   172.20.0.16   192.168.113.53   <none>
+
+# kubectl get all
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/nginx-57df7db684-m9qxr   1/1     Running   0          5m42s
+pod/nginx-57df7db684-snw7k   1/1     Running   0          5m42s
+pod/nginx-57df7db684-szvlf   1/1     Running   0          5m42s
+
+NAME                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/kubernetes      ClusterIP   10.68.0.1      <none>        443/TCP        9d
+service/nginx-service   NodePort    10.68.113.90   <none>        88:36318/TCP   30s
+
+NAME                    DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx   3         3         3            3           5m42s
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-57df7db684   3         3         3       5m42s
+
+# curl 172.20.0.16:80
+
+3、发布
+# kubectl expose deployment nginx --port=88 --type=NodePort --target-port=80 --name=nginx-service
+
+# kubectl describe service nginx-service 
+Name:                     nginx-service
+Namespace:                default
+Labels:                   app=example
+Annotations:              <none>
+Selector:                 app=example
+Type:                     NodePort
+IP:                       10.68.113.90
+Port:                     <unset>  88/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  36318/TCP
+Endpoints:                172.20.0.14:80,172.20.0.15:80,172.20.0.16:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+# curl 172.20.0.16:80  # pods间访问
+# curl 10.68.113.90:88   # 服务访问
+# curl 192.168.113.53:36318  #外部访问
+
+4、故障排查
+# kubectl describe TYPE NAME_PREFIX
+# kubectl logs nginx-xxx
+
+# kubectl get all
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/nginx-57df7db684-m9qxr   1/1     Running   0          13m
+pod/nginx-57df7db684-snw7k   1/1     Running   0          13m
+pod/nginx-57df7db684-szvlf   1/1     Running   0          13m
+
+NAME                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/kubernetes      ClusterIP   10.68.0.1      <none>        443/TCP        9d
+service/nginx-service   NodePort    10.68.113.90   <none>        88:36318/TCP   8m28s
+
+NAME                    DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx   3         3         3            3           13m
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-57df7db684   3         3         3       13m
+
+# kubectl describe pod/nginx-57df7db684-m9qxr
+Name:           nginx-57df7db684-m9qxr
+Namespace:      default
+Node:           192.168.113.53/192.168.113.53
+Start Time:     Wed, 26 Jun 2019 14:24:55 +0800
+Labels:         app=example
+                pod-template-hash=57df7db684
+Annotations:    <none>
+Status:         Running
+IP:             172.20.0.15
+Controlled By:  ReplicaSet/nginx-57df7db684
+Containers:
+  nginx:
+    Container ID:   docker://9a93caea450968d978669c7ab8391cd9bc00e6bc5f3a2090738cf6d701650120
+    Image:          192.168.113.38/wymproject/nginx:1.14.2-alpine
+    Image ID:       docker-pullable://192.168.113.38/wymproject/nginx@sha256:adfd8ccf00554bd6a79abcdf9fee7866f7ac1a9c0473d144615b79eee429864c
+    Port:           80/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Wed, 26 Jun 2019 14:24:58 +0800
+    Ready:          True
+    Restart Count:  0
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-rrqfc (ro)
+Conditions:
+  Type              Status
+  Initialized       True 
+  Ready             True 
+  ContainersReady   True 
+  PodScheduled      True 
+Volumes:
+  default-token-rrqfc:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  default-token-rrqfc
+    Optional:    false
+QoS Class:       BestEffort
+Node-Selectors:  <none>
+Tolerations:     <none>
+Events:
+  Type    Reason     Age   From                     Message
+  ----    ------     ----  ----                     -------
+  Normal  Scheduled  14m   default-scheduler        Successfully assigned default/nginx-57df7db684-m9qxr to 192.168.113.53
+  Normal  Pulling    14m   kubelet, 192.168.113.53  pulling image "192.168.113.38/wymproject/nginx:1.14.2-alpine"
+  Normal  Pulled     13m   kubelet, 192.168.113.53  Successfully pulled image "192.168.113.38/wymproject/nginx:1.14.2-alpine"
+  Normal  Created    13m   kubelet, 192.168.113.53  Created container
+  Normal  Started    13m   kubelet, 192.168.113.53  Started container
+
+# kubectl describe service/nginx-service
+Name:                     nginx-service
+Namespace:                default
+Labels:                   app=example
+Annotations:              <none>
+Selector:                 app=example
+Type:                     NodePort
+IP:                       10.68.113.90
+Port:                     <unset>  88/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  36318/TCP
+Endpoints:                172.20.0.14:80,172.20.0.15:80,172.20.0.16:80
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:                   <none>
+
+# kubectl describe deployment.apps/nginx
+Name:                   nginx
+Namespace:              default
+CreationTimestamp:      Wed, 26 Jun 2019 14:24:55 +0800
+Labels:                 app=example
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=example
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=example
+  Containers:
+   nginx:
+    Image:        192.168.113.38/wymproject/nginx:1.14.2-alpine
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   nginx-57df7db684 (3/3 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  16m   deployment-controller  Scaled up replica set nginx-57df7db684 to 3
+
+# kubectl describe replicaset.apps/nginx-57df7db684
+Name:           nginx-57df7db684
+Namespace:      default
+Selector:       app=example,pod-template-hash=57df7db684
+Labels:         app=example
+                pod-template-hash=57df7db684
+Annotations:    deployment.kubernetes.io/desired-replicas: 3
+                deployment.kubernetes.io/max-replicas: 4
+                deployment.kubernetes.io/revision: 1
+Controlled By:  Deployment/nginx
+Replicas:       3 current / 3 desired
+Pods Status:    3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=example
+           pod-template-hash=57df7db684
+  Containers:
+   nginx:
+    Image:        192.168.113.38/wymproject/nginx:1.14.2-alpine
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  17m   replicaset-controller  Created pod: nginx-57df7db684-szvlf
+  Normal  SuccessfulCreate  17m   replicaset-controller  Created pod: nginx-57df7db684-snw7k
+  Normal  SuccessfulCreate  17m   replicaset-controller  Created pod: nginx-57df7db684-m9qxr
+
+
+# kubectl logs pod/nginx-57df7db684-m9qxr
+172.20.0.1 - - [26/Jun/2019:06:27:35 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.29.0" "-"
+# kubectl logs service/nginx-service
+Found 3 pods, using pod/nginx-57df7db684-m9qxr
+172.20.0.1 - - [26/Jun/2019:06:27:35 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.29.0" "-"
+# kubectl logs deployment.apps/nginx
+Found 3 pods, using pod/nginx-57df7db684-m9qxr
+172.20.0.1 - - [26/Jun/2019:06:27:35 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.29.0" "-"
+# kubectl logs replicaset.apps/nginx-57df7db684
+Found 3 pods, using pod/nginx-57df7db684-m9qxr
+172.20.0.1 - - [26/Jun/2019:06:27:35 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.29.0" "-"
+
+
+5、更新
+# kubectl set image deployment/nginx nginx=192.168.113.38/wymproject/nginx:1.14.2
+# kubectl set image deployment/nginx nginx=192.168.113.38/wymproject/nginx:1.15.9
+# kubectl set image deployment/nginx nginx=192.168.113.38/wymproject/nginx:1.15.9-alpine
+or
+# kubectl edit deployment/nginx  #打开配置文件，vi编辑保存即可
+
+# kubectl get pods
+NAME                         READY   STATUS        RESTARTS   AGE
+pod/nginx-57df7db684-m9qxr   0/1     Terminating   0          21m
+pod/nginx-57df7db684-snw7k   0/1     Terminating   0          21m
+pod/nginx-57df7db684-szvlf   0/1     Terminating   0          21m
+pod/nginx-68d5c569c6-4nv5c   1/1     Running       0          6s
+pod/nginx-68d5c569c6-bhtmv   1/1     Running       0          10s
+pod/nginx-68d5c569c6-n4d7c   1/1     Running       0          5s
+
+
+
+资源发布管理
+# kubectl rollout status deployment.apps/nginx
+# kubectl rollout history deployment.apps/nginx
+# kubectl rollout history deployment.apps/nginx --revision=3  #查看版本3的信息
+
+# kubectl scale deployment nginx --replicas=5
+
+
+
+6、回滚
+# kubectl rollout undo deployment.apps/nginx
+# kubectl rollout undo deployment.apps/nginx --to-revision=3
+
+# kubectl get pods
+# kubectl describe nginx-7f454bcb6-2pxss
+
+7、删除
+# kubectl delete/nginx 
+# kubectl delete/nginx-service
+
+
+```
+
+
+
+
+### Kubernetes 的奇技淫巧
+
+```yml
+https://mp.weixin.qq.com/s?__biz=MzU1MzY4NzQ1OA==&mid=2247484203&idx=1&sn=97078722f7f9929afe5258d455c78a76&chksm=fbee43e6cc99caf00e48c3c048ba1542721648dea8141c647d32d0b4777eadcbd28d5b23f27e&mpshare=1&scene=1&srcid=&pass_ticket=z6LouKF7qfLqYVrhtkindKj6cCo%2ByhpVOgiEgEzKMVQ7%2FHSHlqOKeMoE03rMxV4j#rd
+Kubernetes 的奇技淫巧
+原创： 米开朗基杨  云原生实验室  昨天
+引导关注
+前言
+
+Kubernetes 作为云原生时代的“操作系统”，熟悉和使用它是每名用户（User）的必备技能。如果你正在 Kubernetes 上工作，你需要正确的工具和技巧来确保 Kubernetes 集群的高可用以及工作负载的稳定运行。
+
+随着 Kubernetes 的发展和演变，人们可以从内部来驯服它的无节制行为。但有些人并不情愿干等 Kubernetes 变得易于使用，并且为已投入生产的 Kubernetes 中遇到的很多常见问题制定了自己的解决方案。
+
+这里我们将介绍一些提高操作效率的技巧，同时列举几个比较有用的开源 Kubernetes 工具，这些工具以各种方式简化 Kubernetes，包括简化命令行交互，简化应用程序部署语法等。
+
+kubectl 自动补全
+
+kubectl 这个命令行工具非常重要，与之相关的命令也很多，我们也记不住那么多的命令，而且也会经常写错，所以命令自动补全是很有必要的，kubectl 工具本身就支持自动补全，只需简单设置一下即可。
+
+1 bash 用户
+
+大多数用户的 shell 使用的是 bash，Linux 系统可以通过下面的命令来设置：
+
+$ echo "source <(kubectl completion bash)" >> ~/.bashrc
+$ source ~/.bashrc
+如果发现不能自动补全，可以尝试安装 bash-completion 然后刷新即可！
+
+2 zsh 用户
+
+如果你使用的 shell 是 zsh，可以通过下面的命令来设置：
+
+$ echo "source <(kubectl completion zsh)" >> ~/.zshrc
+$ source ~/.zshrc
+
+自定义 kubectl get 输出
+
+kubectl get 相关资源，默认输出为 kubectl 内置，一般我们也可以使用 -o json 或者 -o yaml 查看其完整的资源信息。但是很多时候，我们需要关心的信息并不全面，因此我们需要自定义输出的列，那么可以使用 go-template 来进行实现。
+
+go-template 是 golang 的一种模板，可以参考 template 的相关说明。
+
+比如仅仅想要查看获取的 pods 中的各个 pod 的 uid，则可以使用以下命令：
+
+$ kubectl get pods --all-namespaces -o go-template='{{range .items}}{{.metadata.uid}}
+{{end}}'
+
+2ea418d4-533e-11e8-b722-005056a1bc83
+7178b8bf-4e93-11e8-8175-005056a1bc83
+a0341475-5338-11e8-b722-005056a1bc83
+...
+
+因为 get pods 的返回结果是 List 类型，获取的 pods 都在 items 这个的 value 中，因此需要遍历 items，也就有了 {{range .items}}。而后通过模板选定需要展示的内容，就是 items 中的每个 {{.metadata.uid}}。
+
+这里特别注意，要做一个特别的处理，就是要把 {{end}} 前进行换行，以便在模板中插入换行符。
+
+当然，如果觉得这样处理不优雅的话，也可以使用 printf 函数，在其中使用 \n 即可实现换行符的插入。
+
+$ kubectl get pods --all-namespaces -o go-template --template='{{range .items}}{{printf "%s\n" .metadata.uid}}{{end}}'
+或者可以这样：
+
+$ kubectl get pods --all-namespaces -o go-template --template='{{range .items}}{{.metadata.uid}}{{"\n"}}{{end}}'
+其实有了 printf，就可以很容易的实现对应字段的输出，且样式可以进行自己控制。比如可以这样
+
+$ kubectl get pods --all-namespaces -o go-template --template='{{range .items}}{{printf "|%-20s|%-50s|%-30s|\n" .metadata.namespace .metadata.name .metadata.uid}}{{end}}'
+
+|default             |details-v1-64b86cd49-85vks                        |2e7a2a66-533e-11e8-b722-005056a1bc83|
+|default             |productpage-v1-84f77f8747-7tkwb                   |2eb4e840-533e-11e8-b722-005056a1bc83|
+|default             |ratings-v1-5f46655b57-qlrxp                       |2e89f981-533e-11e8-b722-005056a1bc83|
+...
+下面举两个 go-template 高级用法的例子：
+
+range 嵌套
+
+# 列出所有容器使用的镜像名
+$ kubectl get pods --all-namespaces -o go-template --template='{{range .items}}{{range .spec.containers}}{{printf "%s\n" .image}}{{end}}{{end}}'
+
+istio/examples-bookinfo-details-v1:1.5.0
+istio/examples-bookinfo-productpage-v1:1.5.0
+istio/examples-bookinfo-ratings-v1:1.5.0
+...
+条件判断
+
+# 列出所有不可调度节点的节点名与 IP
+$ kubectl get no -o go-template='{{range .items}}{{if .spec.unschedulable}}{{.metadata.name}} {{.spec.externalID}}{{"\n"}}{{end}}{{end}}'
+
+除了使用 go-template 之外，还可以使用逗号分隔的自定义列列表打印表格：
+
+$ kubectl -n kube-system get pods coredns-64b597b598-7547d -o custom-columns=NAME:.metadata.name,hostip:.status.hostIP
+
+NAME                       hostip
+coredns-64b597b598-7547d   192.168.123.250
+
+也可以使用 go-template-file 自定义模板列表，模板不用通过参数传进去，而是写成一个文件，然后需要指定 template 指向该文件即可。
+
+$ cat > test.tmpl << EOF 
+NAME                      HOSTIP
+metadata.name       status.hostIP
+EOF
+
+$ kubectl -n kube-system get pods coredns-64b597b598-7547d -o custom-columns-file=test.tmpl
+
+NAME                       HOSTIP
+coredns-64b597b598-7547d   192.168.123.250
+
+交互式 Kubernetes 客户端
+
+Kube-prompt 可以让你在 Kubernetes 客户端输入相当于交互式命令会话的东西，并为每个命令提供自动填充的背景信息，你不必键入 kubectl 来为每个命令添加前缀。
+
+生成 kubectl 别名
+
+如果你需要频繁地使用 kubectl 和 kubernetes api 进行交互，使用别名将会为你节省大量的时间，开源项目 kubectl-aliases 可以通过编程的方式生成 kubectl 别名，别名生成规则如下：
+
+
+简单别名示例
+
+kd → kubectl describe
+
+高级别名示例
+
+kgdepallw → kubectl get deployment --all-namespaces --watch
+
+校验配置文件
+
+
+如果你手动写 Kubernetes manifest 文件，检查 manifest 文件的语法是很困难的，特别是当你有多个不同版本的 Kubernetes 集群时，确认配置文件语法是否正确更是难上加难。
+
+Kubeval 是一个用于校验Kubernetes YAML或JSON配置文件的工具，支持多个Kubernetes版本，可以帮助我们解决不少的麻烦。
+
+使用示例
+
+$ kubeval nginx.yaml
+
+The document nginx.yaml contains an invalid Deployment
+---> spec.replicas: Invalid type. Expected: integer, given: string
+简化 Kubernetes 部署定义
+
+
+很多人都抱怨 Kubernetes manifest 文件的定义太复杂和冗长。它们很难写，而且很难维护，如果能够简化部署定义就会极大地降低维护难度。
+
+Kedge 提供更简单、更简洁的语法，然后 kedge 将其转换为 Kubernetes manifest 文件。
+
+使用示例
+
+参考
+
+为高效 Ops 和 SRE 团队准备的 10 个开源 k8s 工具
+
+打造高效的 Kubernetes 命令行终端
+
+推荐阅读
+kubectl 创建 Pod 背后到底发生了什么？
+
+Kubernetes Pod 驱逐详解
+
+Kubernetes 内存资源限制实战
+
+
+```
+
+
+## k8s工具
+
+### kube-prompt
+
+```yml
+
+https://github.com/c-bata/kube-prompt
+
+wget https://github.com/c-bata/kube-prompt/releases/download/v1.0.6/kube-prompt_v1.0.6_linux_amd64.zip
+unzip kube-prompt_v1.0.6_linux_amd64.zip
+chmod +x kube-prompt
+sudo mv ./kube-prompt /usr/local/bin/kube-prompt
+
+Goal
+Hopefully support following commands enough to operate kubernetes.
+
+ get Display one or many resources
+ describe Show details of a specific resource or group of resources
+ create Create a resource by filename or stdin
+ replace Replace a resource by filename or stdin.
+ patch Update field(s) of a resource using strategic merge patch.
+ delete Delete resources by filenames, stdin, resources and names, or by resources and label selector.
+ edit Edit a resource on the server
+ apply Apply a configuration to a resource by filename or stdin
+ namespace SUPERSEDED: Set and view the current Kubernetes namespace
+ logs Print the logs for a container in a pod.
+ rolling-update Perform a rolling update of the given ReplicationController.
+ scale Set a new size for a Deployment, ReplicaSet, Replication Controller, or Job.
+ cordon Mark node as unschedulable
+ drain Drain node in preparation for maintenance
+ uncordon Mark node as schedulable
+ attach Attach to a running container.
+ exec Execute a command in a container.
+ port-forward Forward one or more local ports to a pod.
+ proxy Run a proxy to the Kubernetes API server
+ run Run a particular image on the cluster.
+ expose Take a replication controller, service, or pod and expose it as a new Kubernetes Service
+ autoscale Auto-scale a Deployment, ReplicaSet, or ReplicationController
+ rollout rollout manages a deployment
+ label Update the labels on a resource
+ annotate Update the annotations on a resource
+ config config modifies kubeconfig files
+ cluster-info Display cluster info
+ api-versions Print the supported API versions on the server, in the form of "group/version".
+ version Print the client and server version information.
+ explain Documentation of resources.
+ convert Convert config files between different API versions
+ top Display Resource (CPU/Memory/Storage) usage
+
+```
+
+
+
+### k9s
+
+```yml
+https://github.com/derailed/k9s
+
+K9s - Kubernetes CLI管理你的风格集群！
+
+K9s提供了一个基于curses的终端UI，可与您的Kubernetes集群进行交互。该项目的目的是使您可以更轻松地在野外导航，观察和管理您的应用程序。K9s不断观察Kubernetes的变化，并提供后续命令与观察到的Kubernetes资源进行交互。
+
+wget https://github.com/derailed/k9s/releases/download/0.7.11/k9s_0.7.11_Linux_x86_64.tar.gz
+
+$ tar -zxvf k9s_0.7.11_Linux_x86_64.tar.gz 
+sudo mv ./kube-prompt /usr/local/bin/kube-prompt
+
+
+关键绑定
+K9s使用别名来导航大多数K8资源。
+
+命令	结果	例
+:别号<ENTER>	查看Kubernetes资源别名	:po<ENTER>
+?	显示键盘快捷键和帮助	
+Ctrl-a	显示所有可用的资源别名	选择+ <ENTER>查看
+/过滤ENTER	在给定过滤器的情况下过滤出资源视图	/bumblebeetuna
+/-l label-selectorENTER	按标签过滤资源视图	/-l app=fred
+<Esc>	退出命令模式	
+d，v，e，l，...	用于描述，查看，编辑，查看日志的键映射，......	d （描述资源）
+:CTX<ENTER>	查看并切换到另一个Kubernetes上下文	:+ ctx+<ENTER>
+:q， Ctrl-c	摆脱K9s
+
+
+k9s -h
+
+$ k9s -n v8testnamespaces  #k8s命名空间
+$ k9s -n kube-system
+$ k9s -n default
+
+
+Context: v8test                     <0> all              <ctrl-d>  Dele ____  __.________        
+Cluster: v8test                     <1> kube-system      <d>       Desc|    |/ _/   __   \______ 
+User:    user-ntz8b                 <2> v8testnamesp…    <e>       Edit|      < \____    /  ___/ 
+K9s Rev: 0.7.11                     <3> default          <l>       Logs|    |  \   /    /\___ \  
+K8s Rev: v1.13.5                                         <shift-l> Logs|____|__ \ /____//____  > 
+CPU:     27%                                             <ctrl-s>  Save        \/            \/  
+MEM:     57%                                             <s>       Shel  
+
+
+
+
+
+The Command Line
+# List all available CLI options
+k9s -h
+# To get info about K9s runtime (logs, configs, etc..)
+k9s info
+# To run K9s in a given namespace
+k9s -n mycoolns
+# Start K9s in an existing KubeConfig context
+k9s --context coolCtx
+PreFlight Checks
+K9s uses 256 colors terminal mode. On `Nix system make sure TERM is set accordingly.
+
+export TERM=xterm-256color
+K9s config file ($HOME/.k9s/config.yml)
+K9s keeps its configurations in a dot file in your home directory.
+
+NOTE: This is still in flux and will change while in pre-release stage!
+
+k9s:
+  # Indicates api-server poll intervals.
+  refreshRate: 2
+  # Indicates log view maximum buffer size. Default 1k lines.
+  logBufferSize: 200
+  # Indicates how many lines of logs to retrieve from the api-server. Default 200 lines.
+  logRequestSize: 200
+  # Indicates the current kube context. Defaults to current context
+  currentContext: minikube
+  # Indicates the current kube cluster. Defaults to current context cluster
+  currentCluster: minikube
+  # Persists per cluster preferences for favorite namespaces and view.
+  clusters:
+    cooln:
+      namespace:
+        active: coolio
+        favorites:
+        - cassandra
+        - default
+      view:
+        active: po
+    minikube:
+      namespace:
+        active: all
+        favorites:
+        - all
+        - kube-system
+        - default
+      view:
+        active: dp
+
+
+
+```
+
+
+### lazydocker
+
+```yml
+curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+或
+wget https://github.com/jesseduffield/lazydocker/releases/download/v0.3/lazydocker_0.3_Linux_x86_64.tar.gz
+
+之后直接解压执行就好
+
+tar -zxvf lazydocker_0.2.4_Linux_x86_64.tar.gz
+
+./lazydocker
+
+
+
+lazydocker，一个简单的 docker 和 docker-compose 终端用户界面，用更懒惰的方式来管理所有的 docker
+
+https://gitee.com/mirrors/lazydocker
+https://github.com/jesseduffield/lazydocker/releases
+
+curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
+Usage
+Call lazydocker in your terminal. I personally use this a lot so I've made an alias for it like so:
+
+echo "alias lzd='lazydocker'" >> ~/.zshrc
+(you can substitute .zshrc for whatever rc file you're using)
+
+
+
+```
+
+
 ### 
 
 ```yml
@@ -1110,6 +1917,14 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 ```
 
 
+### 
+
+```yml
+
+
+
+
+```
 
 
 ### 
@@ -1122,6 +1937,14 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 ```
 
 
+### 
+
+```yml
+
+
+
+
+```
 
 
 ### 
@@ -1134,6 +1957,14 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 ```
 
 
+### 
+
+```yml
+
+
+
+
+```
 
 
 ### 
@@ -1145,6 +1976,35 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 
 ```
 
+
+### 
+
+```yml
+
+
+
+
+```
+
+
+### 
+
+```yml
+
+
+
+
+```
+
+
+### 
+
+```yml
+
+
+
+
+```
 
 
 

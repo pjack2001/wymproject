@@ -15,6 +15,16 @@
 # git reset --hard HEAD^
 
 
+Git 远程推送被拒绝的一种解决方案
+今天在推送的时候发生了如下错误信息：
+
+
+error: 无法推送一些引用到 'https://gitee.com/von_w/demo_app.git'
+提示：更新被拒绝，因为您当前分支的最新提交落后于其对应的远程分支。
+提示：再次推送前，先与远程变更合并（如 'git pull ...'）。详见
+提示：'git push --help' 中的 'Note about fast-forwards' 小节。
+
+解决方案：git push -u origin +master​
 
 
 ```
@@ -177,3 +187,207 @@ git push -u origin master
 …or push an existing repository from the command line
 git remote add origin https://github.com/pjack2001/wymproject.git
 git push -u origin master
+
+
+
+
+```yml
+$ history | cut -c 8-|grep clone
+git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+git clone https://github.com/powerline/fonts
+git clone git://github.com/joelthelion/autojump.git
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+git clone https://github.com/zsh-users/zsh-syntax-highl
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone git://github.com/iptux-src/iptux.git
+git clone git://github.com/rafi/vim-config.git ~/.config/nvim
+git clone --recursive git://github.com/kevinw/pyflakes-vim.git
+git clone git@gitlab.newcapec.net:wangyuming/wymproject.git
+git clone git@gitlab.newcapec.net:wangyuming/wymproject01.git
+git clone https://github.com/TeamStuQ/skill-map.git
+git clone git@github.com:pjack2001/wymproject.git
+git clone https://github.com/kubernetes-sigs/kubespray
+git clone https://github.com/gjmzj/kubeasz.git
+git clone https://github.com/ansiblebook/ansiblebook.git
+git clone https://github.com/oneinstack/oneinstack.git
+git clone https://github.com/Liuhaiyuan/tests_sh.git
+git clone https://github.com/Liuhaiyuan/os_windows_health_check.git
+git clone https://github.com/Liuhaiyuan/OS-Linux-health-check.git
+git clone https://github.com/Liuhaiyuan/os_windows_health_check.git
+git clone https://github.com/Liuhaiyuan/haproxy_sh.git
+git clone https://github.com/Liuhaiyuan/Linux_LVS_Ipvsadm.git
+git clone https://github.com/bluekk935/ToyoDAdoubi.git
+git clone https://github.com/nginxinc/docker-nginx.git
+git clone https://github.com/osixia/docker-keepalived.git
+git clone https://github.com/clangcn/onekey-install-shell.git
+git clone https://github.com/DingGuodong/LinuxBashShellScriptForOps.git
+git clone https://github.com/teddysun/across.git
+git clone https://github.com/licess/lnmp.git
+git clone https://github.com/MeowLove/Linux-Remote-Desktop-Environment.git
+git clone https://github.com/MeowLove/Network-Reinstall-System-Modify.git
+git clone https://github.com/0oVicero0/zhao.git
+git clone https://github.com/MoeClub/MoeClub.github.io.git
+git clone git@gitlab.newcapec.net:wangyuming/wymgit.git
+git clone https://github.com/PacktPublishing/Linux-Shell-Scripting-Cookbook-Third-Edition.git
+git clone git@gitee.com:pjack2001/wokishell.git
+git clone git@gitee.com:aqztcom/kjyw.git
+git clone https://github.com/MeowLove/Network-Reinstall-System-Modify
+git clone https://github.com/MeowLove/Network-Reinstall-System-Modify
+git clone https://github.com/rancher/rancher.git
+git clone https://github.com/dbafree/dstat.git
+git clone https://github.com/opsnull/follow-me-install-kubernetes-cluster.git
+git clone https://github.com/PacktPublishing/Linux-Shell-Scripting-Cookbook-Third-Edition.git
+git clone https://github.com/rancher/k3os.git
+git clone https://github.com/jlevy/the-art-of-command-line.git
+git clone https://github.com/MeowLove/Network-Reinstall-System-Modify.git
+git clone https://github.com/cheat/cheat.git
+git clone https://github.com/LeCoupa/awesome-cheatsheets.git
+git clone https://github.com/openthings/kubernetes-tools.git
+git clone https://github.com/koalaman/shellcheck.git
+git clone https://github.com/oneinstack/oneinstack.git
+git clone https://github.com/Liuhaiyuan/tests_sh.git
+git clone https://github.com/idcos/Cloudboot.git
+git clone https://github.com/bluekk935/ToyoDAdoubi.git
+git clone https://github.com/clangcn/onekey-install-shell.git
+git clone https://github.com/DingGuodong/LinuxBashShellScriptForOps.git
+git clone https://github.com/baskerville/bin.git
+git clone https://github.com/openthings/kubernetes-tools.git
+git clone https://github.com/MeowLove/Linux-Remote-Desktop-Environment.git
+git clone https://github.com/zerotier/ZeroTierOne.git
+git clone https://github.com/sayem314/serverreview-benchmark.git
+git clone https://github.com/MeowLove/Linux-Remote-Desktop-Environment.git
+git clone https://github.com/zerotier/ZeroTierOne.git
+git clone https://github.com/openthings/kubernetes-tools.git
+git clone https://github.com/sayem314/serverreview-benchmark.git
+git clone https://github.com/teddysun/across.git
+git clone https://github.com/afaqurk/linux-dash.git
+git clone https://github.com/ilmarkerm/ansible-oracle-home-mgmt.git
+git clone https://github.com/sysco-middleware/oracle-docker-images.git
+git clone https://github.com/sysco-middleware/ansible-role-oracle-database.git
+git clone https://github.com/sysco-middleware/ansible-role-oracle-database-instance.git
+git clone https://github.com/sysco-middleware/ansible-role-oracle-database-instant-client.git
+git clone https://github.com/robertdebock/ansible-tester.git
+git clone https://github.com/viasite-ansible/ansible-role-zsh.git
+git clone https://github.com/lorin/ansible-quickref.git
+git clone https://github.com/lean-delivery/ansible-role-oracle-db.git
+git clone https://github.com/klewan/ansible-role-oracle-manage-patches.git
+git clone https://github.com/klewan/ansible-role-oracle.git
+git clone https://github.com/KeKe-Li/kubernetes-tutorial.git
+git clone https://github.com/KeKe-Li/book.git
+git clone https://github.com/rootsongjc/cloud-native-sandbox.git
+git clone https://github.com/sysco-middleware/oracle-docker-images.git
+git clone https://github.com/rootsongjc/kubernetes-vagrant-centos-cluster.git
+git clone https://github.com/rootsongjc/kubernetes-handbook.git
+git clone https://github.com/feiskyer/kubernetes-handbook.git
+git clone https://github.com/xiaotian45123/ansible-k8s10x_and_k8s11x.git
+git clone https://github.com/ContainerSolutions/k8s-deployment-strategies.git
+git clone https://github.com/cnych/kubernetes-learning.git
+git clone https://github.com/cnych/qikqiak.com.git
+git clone https://github.com/grycap/ansible-role-kubernetes.git
+git clone https://github.com/liumiaocn/easypack.git
+git clone https://github.com/juju/juju.git
+git clone https://github.com/thoughtbot/dotfiles.git
+git clone https://github.com/gpakosz/.tmux.git
+git clone https://github.com/opsnull/follow-me-install-kubernetes-cluster.git
+git clone https://github.com/SpaceVim/SpaceVim.git
+git clone https://github.com/shadowsocksrr/shadowsocksr-android.git
+git clone https://github.com/teddysun/shadowsocks_install.git
+git clone https://github.com/shadowsocks/shadowsocks-android.git
+git clone https://github.com/shadowsocks/go-shadowsocks2.git
+git clone https://github.com/ToyoDAdoubi/doubi.git
+git clone https://github.com/ansistrano/deploy.git
+git clone https://github.com/shadowsocks/shadowsocks-manager.git
+git clone https://github.com/FelisCatus/SwitchyOmega.git
+git clone https://github.com/trimstray/the-book-of-secret-knowledge.git
+git clone https://github.com/Abelief/kubeasz.git
+git clone https://github.com/yunabe/lgo.git
+git clone https://github.com/chusiang/automate-with-ansible.git
+git clone https://github.com/William-Yeh/docker-ansible.git
+git clone https://github.com/dev-sec/ansible-os-hardening.git
+git clone https://github.com/scottslowe/learning-tools.git
+git clone https://github.com/ansible/molecule.git
+git clone https://github.com/easzlab/kubeasz.git
+git clone https://github.com/rundeck/rundeck.git
+git clone https://github.com/anmoel/ansible-role-kubernetes.git
+git clone https://github.com/wsdjeg/vim-galore-zh_cn.git
+git clone https://github.com/PegasusWang/python-web-guide.git
+git clone https://github.com/PegasusWang/vim-config.git
+git clone https://github.com/freeCodeCamp/devdocs.git
+git clone https://github.com/skywind3000/awesome-cheatsheets.git
+git clone https://github.com/robbyrussell/oh-my-zsh.git
+git clone https://github.com/shadowsocks/shadowsocks-qt5.git
+git clone https://github.com/PegasusWang/vim-config.git
+git clone https://github.com/robbyrussell/oh-my-zsh.git
+git clone https://github.com/kubernetes/minikube.git
+git clone https://github.com/jobbole/awesome-python-cn.git
+git clone https://github.com/hengyunabc/jenkins-ansible-supervisor-deploy.git
+git clone https://github.com/kubernetes-sigs/kubespray.git
+git clone https://github.com/leucos/ansible-tuto.git
+git clone https://github.com/geerlingguy/ansible-role-jenkins.git
+git clone https://github.com/ansible/ansible-examples.git
+git clone https://github.com/turkenh/ansible-interactive-tutorial.git
+git clone https://github.com/geerlingguy/ansible-for-devops.git
+git clone https://github.com/geerlingguy/ansible-vagrant-examples.git
+git clone https://github.com/dennyzhang/devops_public.git
+git clone https://github.com/freeCodeCamp/devdocs.git
+git clone https://github.com/fagiani/shellstack.git
+git clone https://github.com/chenzhiwei/linux.git
+git clone https://github.com/dennyzhang/devops_public.git
+git clone https://github.com/freeCodeCamp/devdocs.git
+git clone https://github.com/licess/lnmp.git
+git clone https://github.com/ansible/ansible-examples.git
+git clone https://github.com/drone/drone.git
+git clone https://github.com/yeasy/docker_practice.git
+git clone https://github.com/chenzhiwei/linux.git
+git clone https://github.com/licess/lnmp.git
+git clone https://github.com/chenzhiwei/linux.git
+git clone https://github.com/ansible/ansible-examples.git
+git clone https://github.com/jessfraz/dockerfiles.git
+git clone https://github.com/licess/lnmp.git
+git clone https://github.com/wsargent/docker-cheat-sheet.git
+git clone https://github.com/chenzhiwei/linux.git
+git clone https://github.com/geekcomputers/Python.git
+git clone https://github.com/ansible/ansible-examples.git
+git clone https://github.com/openshift/openshift-ansible.git
+git clone https://github.com/StreisandEffect/streisand.git
+git clone https://github.com/wsargent/docker-cheat-sheet.git
+git clone https://github.com/openshift/openshift-ansible.git
+git clone https://github.com/ansible/ansible-examples.git
+git clone https://github.com/jessfraz/dockerfiles.git
+git clone https://github.com/StreisandEffect/streisand.git
+git clone https://github.com/ansible/ansible-examples.git
+git clone https://github.com/slimm609/checksec.sh.git
+git clone git@gitee.com:aqztcom/kjyw.git
+git clone git@gitee.com:licess/lnmp.git
+git clone git@gitee.com:kennylee/install-docker.git
+git clone git@gitee.com:xiaocheng2014/simple_shell.git
+git clone git@gitee.com:khs1994-docker/ci.git
+git clone git@gitee.com:khs1994-docker/docker_practice.git
+git clone git@gitee.com:henson01/SuperShell.git
+git clone git@gitee.com:wbqss/doubi.git
+git clone git@gitee.com:zhangtianjie/ShellManageSoftware.git
+git clone git@gitee.com:xbug_xyz/dockercomposes.git
+git clone git@gitee.com:rancococ-code/docker-oracle11g.git
+git clone git@gitee.com:ruzuojun/Lepus.git
+git clone git@gitee.com:acidrain/sshnopasswd.git
+git clone git@gitee.com:ppabc/system_status.git
+git clone https://github.com/aqzt/kjyw.git
+git clone https://github.com/aqzt/boyurl.git
+git clone git@gitee.com:pjack2001/wymgitee.git
+git clone https://github.com/kubernetes/website.git
+git clone https://github.com/kubernetes/website.git
+git clone https://github.com/kubernetes/examples.git
+git clone https://github.com/kubernetes/website
+git clone https://github.com/kubernetes/website.git
+git clone https://github.com/zhangguanzhang/Kubernetes-ansible.git
+git clone https://github.com/easzlab/kubeasz.git
+git clone https://github.com/c-bata/kube-prompt.git
+git clone https://github.com/derailed/k9s.git
+git clone https://github.com/derailed/k9s.git
+git clone https://github.com/c-bata/kube-prompt/releases/download/v1.0.6/kube-prompt_v1.0.6_linux_amd64.zip
+git clone git@gitee.com:mirrors/lazydocker.git
+git clone https://github.com/easzlab/kubeasz.git
+history|grep clone
+
+
+```

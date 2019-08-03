@@ -1,4 +1,10 @@
 # 常用命令
+
+{
+"registry-mirrors": ["https://docker.mirrors.ustc.edu.cn","https://al9ikvwc.mirror.aliyuncs.com"],
+"insecure-registries": ["http://192.168.31.38","http://192.168.102.3:8001","0.0.0.0/0"]
+}
+
 docker run -it -d --name xx -p 81:80 imagesname
 --privileged
 --restart=always  

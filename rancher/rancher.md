@@ -5,6 +5,7 @@
 https://www.cnrancher.com/docs/rancher/v2.x/cn/overview/
 
 
+
 ### 主要安装步骤
 
 ```yml
@@ -27,77 +28,193 @@ cat /media/w/m/v8/old/core/resources/application.properties
 2、建立工作负载
 
 docker pull 192.168.113.38/v8/auth:2019.01.25
-docker pull 192.168.113.38/v8/core:2019.01.28
-docker pull 192.168.113.38/v8/core:2019.03.19
-docker pull 192.168.113.38/v8/eureka:2019.01.29
-docker pull 192.168.113.38/v8/pre-core:2019.01.23
-docker pull 192.168.113.38/v8/webportal:2019.01.28
-docker pull 192.168.113.38/v8/ykt-ui:2019.01.23
-docker pull 192.168.113.38/v8/ykt-ui:2019.03.19
+
+192.168.113.38/kubernetes_incubator/nfs-provisioner:v1.0.9
+
+
+配置NFS，选择项目，应用商店: nfs-provisioner，改私有仓库地址，
+集群，存储，存储类，
+工作负责，添加卷，添加新的持久卷，会自动创建持久卷
+
 
 
 ```
 
-## 搭建v8测试环境
 
-### 一、环境说明
+### 主要安装步骤
 
 ```yml
-镜像上传102.3的/home/y/v8目录
-# docker load -i ykt-ui/ykt-ui.tar.gz
-# docker tag ykt-ui:latest 192.168.113.38/v8/ykt-ui:2019.03.19
-# docker push 192.168.113.38/v8/ykt-ui:2019.03.19
-# docker rmi -f 镜像ID
-
-使用sath89/oracle-12c镜像，５.7G
-# mkdir -p /u01/app/oracle
-# chmod -R 777 /u01/app/oracle
-
-# sudo docker run -d --restart=always -p 8080:8080 -p 5500:5500 -p 1521:1521 -v /u01/app/oracle:/u01/app/oracle -e DBCA_TOTAL_MEMORY=2048 --name oracle12c 192.168.113.38/library/sath89/oracle-12c
-
-查看日志 
-# docker logs -f bf2，发现正在创建数据库实例，安装成功
 
 
-深信服虚拟机
+1、k8s部署应用服务文档
+一、编写目的
+    帮助文档阅读者正确部署k8s下V8平台相关服务。
+二、部署Docker流程
+1、检查依赖环境
+类别	备注
+操作系统	CentOS 7.0+
+Docker	版本18.06
+2、检查生成镜像包完整性
+文件	说明
+Dockerfile	docker镜像生成配置文件
+build.sh	生成镜像脚本
+export.sh	导出镜像脚本
+3、Docker离线环境安装
+1、安装要求
+文件要求	说明
+离线安装包.zip	docker离线安装压缩包
+
+操作步骤
+1. 离线安装包上传到服务器(或者本地解压之后上传到服务器)
+2. 解压压缩包
+3. 执行文件中install.sh安装脚本
+4. 执行命令查看是否安装成功.
+
+成功后的一部分截图
+
+
+docker 配置加速器
+打开附件中的registry.txt文件复制脚本到服务器执行
+sudo tee /etc/docker/daemon.json<<-'EOF'
+{
+"registry-mirrors": ["https://8m0vweth.mirror.aliyuncs.com"],
+"insecure-registries": ["0.0.0.0/0"]
+}
+EOF
+重启docker检查加速器是否配置成功
+1. sudo service docker restart//重启docker服务
+2. docker info //查询是否成功。
+成功配置截图
+
+三、docker打包服务成镜像
+1、确认目录
+1. build.sh脚本文件、export.sh脚本文件和以服务名命名的文件夹在同一级目录
+2. 将jar包和Dockerfile文件放在服务文件夹
+3. 确认文件夹名称为服务名
+2、执行操作
+1. 执行生成镜像命令
+2. 选择导出镜像包到文件夹
+
+四、将镜像推送到镜像库
+1、docker给镜像打标签
+1. 命令:docker tag   ykt-ui:latest  172.16.0.122/library/ykt-ui:v4
+2. 格式:docker tag    镜像名:镜像标签    harbor镜像库的ip/library/镜像名:镜像标签
+3. docker images 查询是否成功
+
+2、docker把镜像包推送到镜像库
+1. 命令:docker push  172.16.0.122/library/ykt-ui:v4
+2. 格式:docker push  harbor镜像库的ip/library/镜像名:镜像标签
+1、推送失败原因：docker未登录harbor
+1. 命令:docker login  172.16.0.122
+2. 格式:docker login  推送的harbor镜像库ip
+3. 输入harbor 账号密码。初始账号/密码:admin/admin
+4. 重新执行推送:docker login  172.16.0.122
+3、登录harbor
+1、访问路径
+1. http://172.16.0.122      http://ip
+2. 初始账户/密码：admin/admin
+
+2、查看推送的镜像
+1. 查看:项目-->镜像库中是否有对应标签的镜像
+
+五、rancher管理页面
+1、访问路径
+1. http://172.16.0.123          http://ip
+2、添加新的主机work流程
+1、进入页面
+1. 选择主机-->点击编辑集群
+
+2、复制并执行命令
+1. 自定义主机命令-->选中work
+2. 复制命令到ssh终端,执行
+
+3、查看是否添加成功
+1. 查看主机列表是否添加新的worker
+
+3、配置服务资源文件
+1、进入资源配置页面
+1.进入资源配置页面
+
+2、配置服务资源映射
+1.点击添加配置映射
+2.定义配置名称和配置映射
+        2.1.名称->服务名(自定义名称)      例:core
+        2.2.配置映射:键-->服务资源配置文件       例:application.porperties
+        2.3.配置映射:值-->配置文件详情内容(可导入)
+
+4、部署启动服务
+1.进入部署页面:工作负载-->选择集群-->选中空间
+2.点击部署服务
+
+3.填写服务名称，镜像地址，命名空间，部署个数
+
+4.部署端口配置（端口默认随机），端口号范围 30000-32767
+
+6. 点击添加券选择配置映射券给服务 添加配置文件
+7. 端口默认400，镜像包不是root用户打包。启动加载配置文件失败。
+8. 配置444或更多权限，启动加载配置文件成功。
+9. 选择映射的配置
+10. 填写docker容器中配置文件的全路径。
+11. 填写配置文件名称。
+12. 点击启动。
+
+
+
+
+```
+
+
+### 环境信息
+
+#### 深信服虚拟机
+```yml
 http://10.10.252.9
 用户名：wangyuming   密码：
 
-ip：192.168.113.37-56，60~89，共50个
+ip：192.168.113.37-56，60~150，共110个
 子网掩码：255.255.254.0
 网关：192.168.112.1
 DNS：211.138.24.66
 
-harbor私有仓库：192.168.113.38，所有项目设置为公有
-38密码newcapec!1
-$ docker login 192.168.113.38
-admin/Newcapec301
-
-
 搭建v8测试环境,wym/newcapectest
-192.168.113.47~52，六台
+192.168.113.47~52，六台ubuntu16.04虚拟机
 
 192.168.113.52 oracle数据库
 192.168.113.51 rancher管理节点
 192.168.113.47~50 rancher节点
 
+```
 
-其他测试
-192.168.113.53 centos7.6-oracle
+#### 初始化常用运行命令
 
+```yml
+配置SSH登录，关闭SElinux和防火墙
+# sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd && systemctl stop firewalld && setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 
+配置阿里yum源并安装
+# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo && curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux bash-completion && yum install -y docker-ce
 
+配置内网yum源并安装
+# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo > /etc/yum.repos.d/Centos-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo > /etc/yum.repos.d/epel-7.repo && curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo > /etc/yum.repos.d/docker-ce.repo && yum clean all && yum makecache && yum install -y wget vim tree net-tools zip unzip tmux bash-completion dstat && yum install -y docker-ce
 
+启动docker
+# systemctl start docker && systemctl enable docker 
 
+配置加速器和私有镜像仓库
+# mkdir -p /etc/docker && echo -e '{"registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com"],"insecure-registries": ["http://192.168.102.37"]}' > /etc/docker/daemon.json && systemctl daemon-reload && systemctl restart docker
+```
 
+#### 环境配置
 
-centos系统
+##### centos系统
+```yml
+
 建立centos7.6-虚拟机，安装docker，配置加速器和私有仓库，安装常用软件
 克隆centos7.6-oracle，改主机名和IP
 
-# hostnamectl set-hostname yjk01
-# cat vi /etc/hostname 
-# cat vi /etc/hosts
+# hostnamectl set-hostname sjx01
+# cat /etc/hostname 
+# cat /etc/hosts
 
 # ip a
 #假设现有的IP地址79,替换为xxx，适用于修改为分配的IP地址
@@ -105,6 +222,13 @@ centos系统
 
 # sed -i '/IPADDR/s@113\.37@113.89@' /etc/sysconfig/network-scripts/ifcfg-ens18
 # systemctl restart network
+
+
+```
+
+##### ubuntu系统
+
+```yml
 
 
 转模板，批量建立12台虚拟机，修改IP和主机名
@@ -118,15 +242,11 @@ $ sudo vi /etc/hosts
 $ sudo vi /etc/network/interfaces
 $ sudo /etc/init.d/networking restart
 
+事先已经下载好阿里源文件，替换一下即可
+$ sudo cp sources.list.aliyun sources.list
 
 
-```
-### 环境准备
-
-```yml
 使用Ubuntu16.04.6
-
-
 
 加速器配置
 $ cat /etc/docker/daemon.json 
@@ -153,10 +273,73 @@ $ cat /etc/docker/daemon.json
 
 ### harbor私有仓库
 
+#### harbor使用
 ```yml
-
 harbor私有仓库：192.168.113.38，所有项目设置为公有
+38密码newcapec!1
+# docker login 192.168.113.38
+admin/Newcapec301
 
+镜像先上传102.3的/home/y/v8目录
+改标签，上传38镜像仓库
+
+# 使用v8_load_tag_push.sh批量操作，和install.sh同级目录
+#centos执行正常，不能用ubuntu执行，会报错
+# ./v8_load_tag_push.sh
+
+# docker load -i ykt-ui/ykt-ui.tar.gz
+# docker tag ykt-ui:latest 192.168.113.38/v8/ykt-ui:2019.03.19
+# docker push 192.168.113.38/v8/ykt-ui:2019.03.19
+# docker rmi -f 镜像ID
+
+上传完批量删除
+$ docker images|grep 102|wc -l
+80
+$ docker images|grep 102|awk '{print $3}'|wc -l
+80
+$ docker images|grep 102|awk '{print $3}'
+
+镜像名包含关键字
+# docker rmi --force `docker images | grep 102 | awk '{print $3}'`   
+根据镜像名删除，不用镜像ID
+# docker rmi --force `docker images|grep wymproject|awk '{print $1":"$2}'`
+docker批量改tag
+# docker images | grep 113 | sed 's/192.168.113.38\/wymproject/192.168.102.3:8001\/wymproject/g' | awk '{print "docker tag"" " $3" "$1":"$2}'|sh
+
+
+
+docker pull 192.168.113.38/v8/auth:2019.01.25
+docker pull 192.168.113.38/v8/core:2019.01.28
+docker pull 192.168.113.38/v8/core:2019.03.19
+docker pull 192.168.113.38/v8/eureka:2019.01.29
+docker pull 192.168.113.38/v8/pre-core:2019.01.23
+docker pull 192.168.113.38/v8/webportal:2019.01.28
+docker pull 192.168.113.38/v8/ykt-ui:2019.01.23
+docker pull 192.168.113.38/v8/ykt-ui:2019.03.19
+
+
+根据rancher-images.txt里的镜像仓库名字，在harbor建项目coredns minio rancher registry jimmidyson 都选择“公开”
+
+有新的镜像可以增加到rancher-images.txt，在harbor建立相应的项目，用rancher-load-images.sh导入
+coredns minio rancher registry jimmidyson 
+gitlab kibana elasticsearch
+
+配置加速器
+使用http://192.168.113.38
+
+$ cat /etc/docker/daemon.json 
+{
+  "registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],
+  "insecure-registries": ["http://192.168.113.38"]
+}
+
+# sudo echo -e '{"registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com/"],"insecure-registries": ["http://192.168.113.38"]}' > /etc/docker/daemon.json
+
+```
+
+#### harbor安装
+
+```yml
 
 harbor：
 https://www.cnrancher.com/docs/rancher/v2.x/cn/install-prepare/registry/single-node-installation/
@@ -193,79 +376,6 @@ sudo docker-compose down -v
 
 
 登录：http://192.168.113.38
-
-根据rancher-images.txt里的镜像仓库名字，在harbor建项目coredns minio rancher registry jimmidyson 都选择“公开”
-
-有新的镜像可以增加到rancher-images.txt，在harbor建立相应的项目，用rancher-load-images.sh导入
-coredns minio rancher registry jimmidyson 
-gitlab kibana elasticsearch
-
-
-使用http://192.168.113.38
-
-$ cat /etc/docker/daemon.json 
-{
-  "registry-mirrors": ["https://al9ikvwc.mirror.aliyuncs.com"],
-  "insecure-registries": ["http://192.168.102.3:8001"]
-}
-
-# sudo echo -e '{"registry-mirrors": ["https://7bezldxe.mirror.aliyuncs.com/"],"insecure-registries": ["http://192.168.113.38"]}' > /etc/docker/daemon.json
-
-
-
-```
-
-### Oracle数据库环境搭建
-
-
-```yml
-
-登录52
-配置oracle数据库
-
-
-使用sath89/oracle-12c镜像，５.7G
-$ docker pull 192.168.113.38/library/sath89/oracle-12c
-# mkdir -p /u01/app/oracle
-# chmod -R 777 /u01/app/oracle
-
-# docker run -d --restart=always -p 8080:8080 -p 5500:5500 -p 1521:1521 -v /u01/app/oracle:/u01/app/oracle -e DBCA_TOTAL_MEMORY=1024 --name oracle12c 192.168.113.38/library/sath89/oracle-12c
-
-wym@rancher12:/u01/app/oracle$ docker exec -it 23e /bin/bash
-root@23e5750b5330:/# su oracle
-oracle@23e5750b5330:/$ cd $ORACLE_HOME
-
-oracle@23e5750b5330:/u01/app/oracle/product/12.1.0/xe$ bin/sqlplus / as sysdba
-
-SQL*Plus: Release 12.1.0.2.0 Production on Tue May 28 00:50:06 2019
-Copyright (c) 1982, 2014, Oracle.  All rights reserved.
-
-Connected to:
-Oracle Database 12c Standard Edition Release 12.1.0.2.0 - 64bit Production
-设置密码不限时间
-SQL> alter profile default limit password_life_time unlimited;
-解锁system用户
-SQL> alter user system account unlock;
-修改system用户的密码为oracle
-SQL> alter user system identified by oracle;
-
-
-
-```
-
-```yml
-└── 数据库脚本
-    ├── 开放平台
-    │   ├── CreateTable.sql
-    │   └── Initdata.sql
-    └── 一卡通
-        ├── 01-creatTable.sql
-        └── 03-initdata.sql
-
-1.建立表空间（可以1个也可以多个）
-
-2.在表空间下建立3个用户datalook、college、cardrpt（如果要执行开放平台脚本需创建openplartform用户）
-我们测试暂时未执行开放平台脚本，脚本在datalook用户下执行即可
 
 ```
 
@@ -501,7 +611,26 @@ sudo docker run -d --restart=unless-stopped -v /home/w/tool/rancher/:/var/lib/ra
 ### 二、安装配置docker-compose
 
 ```yml
+https://docs.docker.com/compose/install/
 
+在Linux系统上安装Compose
+在Linux上，您可以从GitHub上的Compose存储库发行页面下载Docker Compose二进制文件。按照链接中的说明进行操作，该链接涉及curl在终端中运行命令以下载二进制文件。这些分步说明也包含在下面。
+
+运行此命令以下载Docker Compose的当前稳定版本：
+
+# sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+要安装不同版本的Compose，请替换1.24.0 为要使用的Compose版本。
+
+对二进制文件应用可执行权限：
+# sudo chmod +x /usr/local/bin/docker-compose
+注意：如果docker-compose安装后命令失败，请检查您的路径。您还可以创建/usr/bin路径中的符号链接或任何其他目录。
+
+例如：
+# sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+测试安装。
+# docker-compose --version
+docker-compose version 1.24.0, build 1110ad01
 
 ```
 
@@ -811,14 +940,7 @@ $ docker login 192.168.113.38
 Username: admin
 Password: 
 
-$ ./rancher-load-images.sh --images-list rancher-images.txt --images rancher-v2.2.2-images.tar.gz --registry 192.168.113.38
-
-
-
-
-
-
-
+$ ./rancher-load-images.sh --image-list rancher-images.txt --images rancher-v2.2.2-images.tar.gz --registry 192.168.113.38
 
 
 
@@ -2309,3 +2431,722 @@ $ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
 
 ```
 
+### 批量删除多余的日志文件
+
+```yml
+# du -sbh *
+
+按条件，删除多余的app-info日志
+# find /media/w/m/v8/v8_testing/ecard -name "app-info.2019*"
+# for i in `find /media/w/m/v8/v8_testing/ecard -name "app-info.2019*"`; do rm -rf $i; done
+
+core有error日志
+# for i in `find /media/w/m/v8/v8_testing/ecard/core -name "error.2019*"`; do rm -rf $i; done
+
+如果有java程序日志也一块删除
+#rm -rf /media/w/m/v8/v8_testing/ecard/core/resources/nohup.out
+
+selfservice-ui有selfservice-ui-2019日志
+# for i in `find /media/w/m/v8/v8_testing/ecard/selfservice-ui -name "selfservice-ui-2019*"`; do rm -rf $i; done
+
+
+查找7天前的日志
+# find /root/ecard -mtime +7 -name "app-info.*"
+
+查找最近7天的日志
+# find /root/ecard -mtime -7 -name "app-info.*"
+
+
+
+
+
+find . –mtime n中的n指的是24*n, +n、-n、n分别表示：
++n： 大于n
+-n:    小于n
+n：等于n
+
+
+```
+### 批量上传镜像
+
+```yml
+#!/bin/sh
+# File    :   v8_load_tag_push.sh
+# Time    :   2019/07/05 11:46:18
+# Author  :   wangyuming 
+# Version :   0.1
+# License :   (C)Copyright 2018-2019, MIT
+# Desc    :   None
+
+# set -x
+cur_date=`date +%Y%m%d`
+harborurl='192.168.113.38/v8/'
+vertify_file_integrity(){
+    for filename in ${ALL_FILES[*]}
+    do
+        exists="$(ls | grep $filename)"
+        commond_error_exit "$filename not found"
+    done
+}
+ommond_error_exit(){
+    if [ $? -ne 0 ]; then
+        echo $@
+        exit 1
+    fi
+}
+exists_image_file(){
+    file=$1
+    if [ "${file##*.}"x = "tar"x ]||[ "${file##*.}"x = "gz"x ];then
+        return 0
+    fi
+    return 1
+}
+install(){
+    dir=$(ls -l |awk '/^d/ {print $NF}')
+    for f in $dir
+    do
+        cd $f
+        echo "--------install ${f} package--------"
+        #bash autoload.sh
+        # if [ $? -ne 0 ]; then
+            # echo "${f} error"
+        # else
+            # echo "${f} success"
+        # fi
+        load_tag_push 2>&1 | tee -a  $(dirname "$PWD")/load_push.log
+        cd ..
+    done
+    echo "--------install end!--------"
+}
+load_tag_push(){
+    for suf in `ls`
+    do
+        exists_image_file "$suf"
+        if [ $? -eq 0 ]; then
+            # 安装镜像
+            docker load -i "$suf" > /dev/null
+            if [ $? -eq 0 ]; then
+                echo "Scene loaded successfully ${suf}"
+                #bash run.sh
+            else
+                echo "Images ${suf} failed to load"
+            fi
+            # tag镜像
+            docker tag $f ${harborurl}$f:$cur_date > /dev/null
+            if [ $? -eq 0 ]; then
+                echo "Scene taged successfully ${harborurl}$f:$cur_date"
+                #bash run.sh
+            else
+                echo "Images ${harborurl}$f:$cur_date failed to tag"
+            fi
+            # 推送镜像
+            docker push ${harborurl}$f:$cur_date > /dev/null
+            if [ $? -eq 0 ]; then
+                echo "Scene pushed successfully ${harborurl}$f:$cur_date"
+                #bash run.sh
+            else
+                echo "Images ${harborurl}$f:$cur_date failed to push"
+            fi
+            # 删除镜像
+            docker rmi --force `docker images | grep ${harborurl} | awk '{print $3}'`
+            if [ $? -eq 0 ]; then
+                echo "Scene rmied successfully ${harborurl}$f:$cur_date"
+                #bash run.sh
+            else
+                echo "Images ${harborurl}$f:$cur_date failed to rmi"
+            fi
+            exit 0
+            break
+        fi
+    done
+    echo "*.tar.gz or *.tar was not found"
+    exit 1
+}
+vertify_file_integrity
+install
+
+
+```
+###
+
+```yml
+
+
+```
+
+
+### 河南科技大学
+
+```yml
+
+
+4台centos7.6服务器部署rancher环境，root密码Sw_HAUST#2019
+
+10.10.22.41  app1  harbor镜像仓库   #开始用44，后来和rancher管理分开，用41
+10.10.22.44  superapp44  管理机
+
+10.10.22.45  superapp45  工作站1
+10.10.22.48  superapp48  工作站2
+10.10.22.49  superapp49  工作站3
+
+
+首先上传相关文件到44的opt目录，并解压zip文件
+
+rancherv2.2.5  
+rpmpackages-docker18.09.7.zip
+docker-compose-Linux-x86_64
+wokinst
+harbor-offline-installer-v1.8.1.tgz  
+rpmpackages    
+wokinst20190725.zip
+
+
+
+
+https://www.cnrancher.com/docs/rancher/v2.x/cn/install-prepare/basic-environment-configuration/
+
+# hostnamectl set-hostname superapp44
+
+# cat /etc/hosts
+10.10.22.44 superapp44
+10.10.22.45 superapp45
+10.10.22.48 superapp48
+10.10.22.49 superapp49
+
+
+systemctl stop firewalld && setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config && sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+
+
+
+sudo echo 'LANG="en_US.UTF-8"' >> /etc/profile;source /etc/profile
+
+Kernel性能调优
+cat >> /etc/sysctl.conf<<EOF
+net.ipv4.ip_forward=1
+net.bridge.bridge-nf-call-iptables=1
+net.ipv4.neigh.default.gc_thresh1=4096
+net.ipv4.neigh.default.gc_thresh2=6144
+net.ipv4.neigh.default.gc_thresh3=8192
+EOF
+数值根据实际环境自行配置，最后执行sysctl -p保存配置。
+
+内核模块
+警告
+如果要使用ceph存储相关功能，需保证worker节点加载RBD模块
+
+
+# ssh -p 63322 root@10.10.22.45
+root密码Sw_HAUST#2019
+
+ssh-keygen -t rsa -b 2048 回车 回车 回车
+ssh-copy-id $IP  # $IP 为所有节点地址包括自身，按照提示输入 yes 和 root 密码
+
+scp用大写的-P参数
+# scp -P 63322 *.zip root@10.10.22.45:/opt
+
+# cd /opt
+# unzip -O GBK wokinst20190725.zip
+# unzip -O GBK rpmpackages-docker18.09.7.zip
+# mv rpmpackages-docker18.09.7 rpmpackages
+
+或者把ssh端口从63322改回22
+# sed -i 's/^Port .*/Port 22/g' /etc/ssh/sshd_config && systemctl restart sshd
+sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config && systemctl restart sshd
+
+
+
+用wokinst安装docker-ce
+
+# touch /etc/docker/daemon.json
+cat >> /etc/docker/daemon.json<<EOF
+{
+    "oom-score-adjust": -1000,
+    "log-driver": "json-file",
+    "log-opts": {
+    "max-size": "100m",
+    "max-file": "3"
+    },
+    "max-concurrent-downloads": 10,
+    "max-concurrent-uploads": 10,
+    "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"],
+    "insecure-registries": ["http://10.10.22.44:8001"],
+    "storage-driver": "overlay2",
+    "storage-opts": [
+    "overlay2.override_kernel_check=true"
+    ]
+}
+EOF
+
+# cat /etc/docker/daemon.json 
+
+# systemctl daemon-reload && sudo systemctl restart docker
+# docker version
+# docker info
+
+
+
+# mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
+# chmod +x /usr/local/bin/docker-compose
+
+# docker-compose --version
+
+
+harbor：
+https://www.cnrancher.com/docs/rancher/v2.x/cn/install-prepare/registry/single-node-installation/
+
+$ cd /opt
+$ tar zxvf harbor-offline-installer-v1.8.1.tgz
+
+$ vim /opt/harbor/harbor.yml
+hostname = 10.10.22.41
+  port: 8001
+
+harbor_admin_password = Newcapec   
+
+# ./install.sh
+
+# docker-compose ps
+
+# docker-compose start/stop/restart
+
+更新配置
+要更改Harbour的配置，请先停止现有的Harbor实例并进行更新harbor.cfg。然后运行prepare脚本以填充配置。最后重新创建并启动Harbor的实例:
+
+  sudo docker-compose down -v
+  sudo vim harbor.cfg
+  sudo ./prepare
+  sudo docker-compose up -d
+
+删除Harbor的容器，同时将镜像数据和Harbor的数据库文件保存在文件系统上
+sudo docker-compose down -v
+
+删除Harbor的数据库和镜像数据(用于干净的重新安装)
+  rm -r /data/database
+  rm -r /data/registry
+
+
+登录：http://10.10.22.44:8001
+
+harbor API
+http://10.10.22.44:8001/devcenter
+
+
+
+# docker login 10.10.22.44
+Username: admin
+Password: Newcapec
+
+
+
+rancher v2.2.2
+根据rancher-images.txt里的镜像仓库名字，在harbor建项目coredns minio rancher registry jimmidyson 都选择“公开”
+
+有新的镜像可以增加到rancher-images.txt，在harbor建立相应的项目，用rancher-load-images.sh导入
+coredns minio rancher registry jimmidyson 
+gitlab kibana elasticsearch
+
+# 注意：rancher v2.2.5的镜像都改成了rancher仓库，新建一个rancher项目即可
+
+# sh rancher-load-images.sh -h
+# sh rancher-load-images.sh --image-list rancher-images.txt --images rancher-images.tar.gz --registry 10.10.22.44:8001
+
+# 注意：-h帮助有地方不对，应该用--image-list参数，不能用--images-list
+
+registry:2也没有报错，上传到了
+docker pull 10.10.22.44:8001/rancher/registry:2
+
+
+
+默认镜像仓库地址
+https://www.cnrancher.com/docs/rancher/v2.x/cn/installation/air-gap-installation/single-node/config-rancher-for-private-reg/
+
+注意:
+如果要在启动rancher/rancher容器时配置`system-default-registry，可以使用环境变量 CATTLE_SYSTEM_DEFAULT_REGISTRY
+
+#!/bin/sh
+docker run -d --restart=unless-stopped -p 80:80 -p 443:443 \
+-v /opt/rancher:/var/lib/rancher/ \
+-v /root/var/log/auditlog:/var/log/auditlog \
+-e AUDIT_LEVEL=3 \
+-e CATTLE_SYSTEM_DEFAULT_REGISTRY=10.10.22.41:8001 \
+10.10.22.41:8001/rancher/rancher:v2.2.6
+
+
+登录：
+http://10.10.22.44:80
+https://10.10.22.44:443/
+
+admin/Newcapec
+
+建立superapp集群
+配置私有镜像仓库
+
+
+
+
+默认证书是一年，需要修改为长期，可以在rancher的集群界面更新证书
+
+
+
+
+
+
+
+
+
+
+
+排错：
+rancher集群建立失败，
+
+[root@superapp49 ~]# docker ps
+CONTAINER ID        IMAGE                                           COMMAND                  CREATED             STATUS                         PORTS               NAMES
+9deba43a48db        10.10.22.44:8001/rancher/rancher-agent:v2.2.5   "run.sh --server htt…"   About an hour ago   Restarting (1) 2 seconds ago                       unruffled_golick
+
+查看日志报错信息
+# docker logs -f 9de
+
+rancher报错
+E0731 05:09:45.313889       6 streamwatcher.go:109] Unable to decode an event from the watch stream: net/http: request canceled (Client.Timeout exceeded while reading body)
+E0731 05:09:45.314092       6 streamwatcher.go:109] Unable to decode an event from the watch stream: net/http: request canceled (Client.Timeout exceeded while reading body)
+
+2019-07-31 05:10:39.644548 I | mvcc: store.index: compact 8992
+2019-07-31 05:10:39.645563 I | mvcc: finished scheduled compaction at 8992 (took 603.018µs)
+2019-07-31 05:15:39.647073 I | mvcc: store.index: compact 9322
+2019-07-31 05:15:39.648766 I | mvcc: finished scheduled compaction at 9322 (took 1.079494ms)
+2019/07/31 05:19:03 [ERROR] CatalogController system-library [catalog] failed with : Clone failed: Cloning into 'management-state/catalog-cache/2284e9d6c1e82c5a56a5cb7c1d5c0144835734b1b66da6f75122d99c7989618f'...
+fatal: unable to access 'https://git.rancher.io/system-charts/': Could not resolve host: git.rancher.io
+: exit status 128
+2019/07/31 05:19:03 [ERROR] CatalogController library [catalog] failed with : Clone failed: Cloning into 'management-state/catalog-cache/380859f1003fe7603cddc6c15b34b7263f1f0deaa92ddcde465811d032ee7078'...
+fatal: unable to access 'https://git.rancher.io/charts/': Could not resolve host: git.rancher.io
+: exit status 128
+2019-07-31 05:20:39.650060 I | mvcc: store.index: compact 9652
+2019-07-31 05:20:39.652275 I | mvcc: finished scheduled compaction at 9652 (took 1.557829ms)
+2019-07-31 05:25:39.653537 I | mvcc: store.index: compact 9983
+2019-07-31 05:25:39.655562 I | mvcc: finished scheduled compaction at 9983 (took 1.38204ms)
+2019-07-31 05:30:39.656223 I | mvcc: store.index: compact 10313
+2019-07-31 05:30:39.658086 I | mvcc: finished scheduled compaction at 10313 (took 1.238485ms)
+
+rancher-agent报错
+INFO: Arguments: --server https://10.10.22.44:8443 --token REDACTED --ca-checksum 399dc67ffabea29500df1c56d48a6d2408d54ff0795f7e5072465ab48784e1df --worker
+RTNETLINK answers: Network is unreachable
+ERROR: -- --address is a required option
+
+
+
+ - Rancher Server URL
+此URL地址可以是IP也可以是域名，集群所有节点将使用该URL来注册到Rancher，所以需要保证所有节点能访问该地址。
+
+如果Rancher Server是多节点HA运行，请不要设置Rancher Server URL为某一个节点的IP地址，避免因某一个节点出现故障影响整个集群。如果Rancher Server URL使用域名，请把域名解析到所有Rancher Server节点IP或者VIP上。
+
+首次登录Rancher Server时，系统会提示您设置此URL。如果登录时设置有误，需要在创建集群前修改，如果在创建好集群后修改Rancher Server URL,之前注册的集群将会受到影响。
+
+
+
+
+
+
+```
+### 删除rancher节点
+
+```yml
+https://www.cnblogs.com/TiestoRay/p/8554748.html
+
+删除Rancher节点的正确姿势
+在Rancher上疏散该节点
+删除节点
+登录该节点宿主机，删除rancher相关容器
+# docker rm -f -v $(docker ps -aq)
+删除该节点的所有volume
+# docker volume rm $(docker volume ls)
+最后删除/var/lib/rancher文件夹，比如我挂载的/opt/rancher
+# rm -rf /opt/rancher
+
+节点删除成功！
+
+docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v /opt/rancher:/var/lib/rancher/ -v /root/var/log/auditlog:/var/log/auditlog -e AUDIT_LEVEL=3 -e CATTLE_SYSTEM_DEFAULT_REGISTRY=10.10.22.41:8001 10.10.22.41:8001/rancher/rancher:v2.2.6
+
+```
+### 清除已运行过Rancher和K8S的主机上的环境数据
+
+```yml
+
+
+本文命令主要是参考《强力优化Rancher k8s中国区的使用体验》一文
+（ http://www.cnrancher.com/optimizing-rancher-k8s-use-experience-in-china/ ），
+原文只有截图，没有文字命令，使用不方便。
+如果想不重新安装系统、希望继续在这台主机上安装使用Rancher和K8S，才需要使用以下命令，
+
+因都是删除容器、Etcd、Rancher、K8S目录和数据的命令，
+只可用在测试机器上，在生产机器上慎用！
+只可用在测试机器上，在生产机器上慎用！
+只可用在测试机器上，在生产机器上慎用！
+ 
+
+
+
+#删除所有容器
+sudo docker rm -f $(sudo docker ps -qa)
+
+#删除/var/etcd目录
+sudo rm -rf /var/etcd
+
+#删除/var/lib/kubelet/目录，删除前先卸载
+for m in $(sudo tac /proc/mounts | sudo awk '{print $2}'|sudo grep /var/lib/kubelet);do
+sudo umount $m||true
+done
+sudo rm -rf /var/lib/kubelet/
+
+#删除/var/lib/rancher/目录，删除前先卸载
+for m in $(sudo tac /proc/mounts | sudo awk '{print $2}'|sudo grep /var/lib/rancher);do
+sudo umount $m||true
+done
+sudo rm -rf /var/lib/rancher/
+
+#删除/run/kubernetes/ 目录
+sudo rm -rf /run/kubernetes/
+
+#删除所有的数据卷
+sudo docker volume rm $(sudo docker volume ls -q)
+
+#再次显示所有的容器和数据卷，确保没有残留
+sudo docker ps -a
+sudo docker volume ls
+
+```
+###
+
+```yml
+
+步骤：
+
+$ sudo curl https://gist.githubusercontent.com/mukang/bbf04782bd206c00a26d4d366d3cde63/raw/c7d7e4e2c9f0c1d2b34c75de70627bb28166c063/cleanup.sh > ./cleanup.sh && chmod a+x ./cleanup.sh && sudo ./cleanup.sh
+$ for mount in $(mount | grep tmpfs | grep '/var/lib/kubelet' | awk '{ print $3 }') /var/lib/kubelet /var/lib/rancher; do sudo umount $mount; done
+$ sudo rm -rf /etc/ceph /etc/cni /etc/kubernetes /opt/cni /opt/rke /run/secrets/kubernetes.io /run/calico /run/flannel /var/lib/calico /var/lib/etcd /var/lib/cni /var/lib/kubelet /var/lib/rancher/rke/log /var/log/containers /var/log/pods /var/run/calico
+$ sudo reboot
+
+```
+### 官方文档-快速入门
+
+```yml
+https://www.cnrancher.com/docs/rancher/v2.x/cn/overview/quick-start-guide/
+
+```
+
+
+###
+
+```yml
+
+
+```
+
+###
+
+```yml
+
+cat >> /etc/docker/daemon.json<<EOF
+{
+    "oom-score-adjust": -1000,
+    "log-driver": "json-file",
+    "log-opts": {
+    "max-size": "100m",
+    "max-file": "3"
+    },
+    "max-concurrent-downloads": 10,
+    "max-concurrent-uploads": 10,
+    "registry-mirrors": ["https://docker.mirrors.ustc.edu.cn"],
+    "insecure-registries": ["http://192.168.113.38"],
+    "storage-driver": "overlay2",10.10.22.41
+    "storage-opts": [
+    "overlay2.override_kernel_check=true"
+    ]
+}
+EOF
+
+
+# cat /etc/docker/daemon.json 
+{
+  "registry-mirrors": [
+    "https://dockerhub.azk8s.cn",
+    "https://docker.mirrors.ustc.edu.cn",
+    "http://hub-mirror.c.163.com"
+  ],
+  "insecure-registries": ["http://192.168.113.37:8001"],
+  "max-concurrent-downloads": 10,
+  "log-driver": "json-file",
+  "log-level": "warn",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+    },
+  "data-root": "/var/lib/docker"
+}
+
+
+
+
+# systemctl daemon-reload && sudo systemctl restart docker
+
+
+$ docker login 192.168.113.37:8001
+Username: admin
+Password: Newcapec301
+
+
+sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 \
+-v /home/wym/rancher:/var/lib/rancher/ \
+-v /root/var/log/auditlog:/var/log/auditlog \
+-e AUDIT_LEVEL=3 \
+-e CATTLE_SYSTEM_DEFAULT_REGISTRY=192.168.113.38 \
+192.168.113.38/rancher/rancher:v2.2.2
+
+docker run -d --restart=unless-stopped -p 80:80 -p 443:443 \
+-v /opt/rancher:/var/lib/rancher/ \
+-v /root/var/log/auditlog:/var/log/auditlog \
+-e AUDIT_LEVEL=3 \
+-e CATTLE_SYSTEM_DEFAULT_REGISTRY=192.168.113.37:8001 \
+192.168.113.37:8001/rancher/rancher:v2.2.6
+
+# sudo docker run -d --restart=unless-stopped -v /home/w/tool/rancher/:/var/lib/rancher/ -p 8099:80 -p 8443:443 rancher/rancher:v2.2.2
+
+# sh rancher-load-images.sh -h
+# sh rancher-load-images.sh --image-list rancher-images.txt --images rancher-images.tar.gz --registry 192.168.113.37:8001
+
+```
+
+###
+
+```yml
+
+
+```
+
+### 20190802发现rancher平台报错
+
+```yml
+
+
+
+Error
+Unexpected error &http.httpError{err:"net/http: request canceled (Client.Timeout exceeded while reading body)", timeout:true} when reading response body. Please retry.
+
+
+get service account cattle-prometheus:cluster-monitoring for monitor failed, Get https://192.168.113.48:6443/api/v1/namespaces/cattle-prometheus/serviceaccounts/cluster-monitoring?timeout=30s: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
+
+
+
+ Rancher-鞠宏超
+这个你需要检查一下你的主机端口是否开放了
+
+https://rancher.com/docs/rke/latest/en/os/#ports
+ 
+看下这个文档的说明，检查一下这些端口是不是都可以访问
+
+sudo ufw disable
+
+当前集群Updating中...，在API准备就绪之前，直接与API交互的功能将不可用。
+
+[Failed to start [rke-port-checker] container on host [192.168.113.41]: error during connect: Post http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/2d9fc5cf29aadaa5bc3ca4f3a453590f6eb979ac8778f3264a88f1f1b8aa183e/start: tunnel disconnect]; [[network] Host [192.168.113.42] is not able to connect to the following ports: [192.168.113.41:6443]. Please check network policies and firewall rules]
+
+
+检查端口
+
+$ sudo netstat -atunlp|grep 6443
+$ sudo lsof -i:6443
+
+$ sudo netstat -nlpt
+$ sudo netstat -aon|grep 6443
+
+$ sudo telnet 192.168.113.41 6443
+Trying 192.168.113.41...
+Connected to 192.168.113.41.
+Escape character is '^]'.
+Connection closed by foreign host.
+
+$ sudo lsof -i:6443
+
+$ sudo netstat -tln|grep 6443
+tcp6       0      0 :::6443                 :::*                    LISTEN
+
+$ sudo netstat -ntlp
+
+
+好像是被tcp6占了6443端口
+
+
+在Ubuntu上完全禁用IPv6
+如果要在Ubuntu Linux系统上完全禁用IPv6，则需要对Linux内核参数进行一些更改。
+
+$ sudo vi /etc/sysctl.d/99-sysctl.conf
+
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+保存并关闭文件。 然后执行以下命令加载上述更改。
+
+sudo sysctl -p
+现在运行以下命令。 您应该看到1，这意味着IPv6已成功禁用。
+
+$ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+1
+
+
+
+```
+
+###
+
+```yml
+
+ Rancher-鞠宏超
+这个你需要检查一下你的主机端口是否开放了
+
+https://rancher.com/docs/rke/latest/en/os/#ports
+ 
+看下这个文档的说明，检查一下这些端口是不是都可以访问
+
+有关本地节点流量的信息
+Kubernetes healthchecks（livenessProbe和readinessProbe）在主机上执行。在大多数节点上，默认情况下允许这样做。在iptables节点上应用严格的主机防火墙（即）策略时，或者当您使用具有多个接口（多宿主）的节点时，此流量将被阻止。在这种情况下，您必须在安全组配置中明确允许主机防火墙中的此流量，或者在公共/私有云托管计算机（即AWS或OpenStack）的情况下。请记住，在安全组中使用安全组作为源或目标时，这仅适用于节点/实例的专用接口。
+
+如果使用外部防火墙，请确保在用于运行的计算机rke和要在群集中使用的节点之间打开此端口。
+
+使用打开端口TCP / 6443 iptables
+# Open TCP/6443 for all
+iptables -A INPUT -p tcp --dport 6443 -j ACCEPT
+
+# Open TCP/6443 for one specific IP
+iptables -A INPUT -p tcp -s your_ip_here --dport 6443 -j ACCEPT
+使用打开端口TCP / 6443 firewalld
+# Open TCP/6443 for all
+firewall-cmd --zone=public --add-port=6443/tcp --permanent
+firewall-cmd --reload
+
+# Open TCP/6443 for one specific IP
+firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4"
+  source address="your_ip_here/32"
+  port protocol="tcp" port="6443" accept'
+firewall-cmd --reload
+SSH服务器配置
+您的SSH服务器系统范围配置文件位于/etc/ssh/sshd_config，必须包含允许TCP转发的此行：
+
+AllowTcpForwarding yes
+
+
+```
+
+###
+
+```yml
+
+
+```
+
+###
+
+```yml
+
+
+```

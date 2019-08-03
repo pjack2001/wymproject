@@ -2,6 +2,16 @@
 # Ubuntu使用总结
 
 
+
+## Ubuntu安装前备份
+```yml
+cp .bash_history /media/w/m/history-bak
+
+
+
+
+```
+
 ## Dell vostro3480安装ubuntu18.04
 ```yml
 
@@ -61,8 +71,94 @@ AC5XK-0ZD4H-088HP-9NQZV-ZG2R4
 
 
 
-## 
+## 安装Ubuntu18.04配置常用软件
 ```yml
+
+$ sudo apt install -y terminator vim synaptic meld tmux iptux unity-tweak-tool p7zip zip unzip exfat-utils catfish gcc
+
+
+
+
+$ sudo ./VMware-Workstation-Full-14.1.1-7528167.x86_64.bundle
+
+
+$ sudo dpkg -i virtualbox-6.0_6.0.6-130049~Ubuntu~bionic_amd64.deb
+
+
+$ sudo dpkg -i wps-office_10.1.0.6757_amd64.deb
+安装字体
+$ sudo apt install -y ttf-wqy-microhei
+
+
+
+
+ubunru18.04下面安装docker18.03
+
+开始安装doker
+
+    由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本：
+
+    sudo apt-get remove docker docker-engine docker-ce docker.io
+
+     
+    更新apt包索引：
+
+    sudo apt-get update
+
+     
+    安装以下包以使apt可以通过HTTPS使用存储库（repository）：
+
+    sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
+     
+    添加Docker官方的GPG密钥：
+
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+     
+    这个时间点（2018.06.09），Ubuntu 18.04 LTS (Bionic Beaver) 对应的docker package is not available，所以只能通过下面的语句安装stable存储库
+
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable" 
+
+    再更新一下apt包索引：
+
+    sudo apt-get update
+
+     
+    安装最新版本的Docker CE：
+
+    sudo apt-get install -y docker-ce
+
+     
+    这里安装的最新版，其实是安装你电脑上可用的最新版，查看系统可用的版本：
+
+    apt-cache madison docker-ce
+
+     
+    选择要安装的特定版本，第二列是版本字符串，第三列是存储库名称，它指示包来自哪个存储库，以及扩展它的稳定性级别。要安装一个特定的版本，将版本字符串附加到包名中，并通过等号(=)分隔它们：
+
+    sudo apt-get install docker-ce=<VERSION>
+
+     
+    验证docker
+    查看docker服务是否启动：
+
+    systemctl status docker
+
+     
+    若未启动，则启动docker服务：
+
+    sudo systemctl start docker
+
+     
+    测试经典的hello world：
+
+    sudo docker run hello-world
+
+
+
+$ sudo usermod -aG docker ak
+
 
 
 ```
