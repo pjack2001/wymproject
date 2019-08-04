@@ -24,7 +24,8 @@ error: 无法推送一些引用到 'https://gitee.com/von_w/demo_app.git'
 提示：再次推送前，先与远程变更合并（如 'git pull ...'）。详见
 提示：'git push --help' 中的 'Note about fast-forwards' 小节。
 
-解决方案：git push -u origin +master​
+解决方案：
+# git push -u origin +master​
 
 
 ```
