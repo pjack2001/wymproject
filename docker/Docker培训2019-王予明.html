@@ -1,0 +1,1297 @@
+<!DOCTYPE html><html><head>
+      <title>Docker&#x57F9;&#x8BAD;2019-&#x738B;&#x4E88;&#x660E;</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:////home/w/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.4.3/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+      
+      
+
+      
+      
+      
+      
+      
+      
+
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <h1 class="mume-header" id="docker%E5%9F%B9%E8%AE%AD">Docker&#x57F9;&#x8BAD;</h1>
+
+<p>&#xA9;&#x738B;&#x4E88;&#x660E;2019</p>
+<h2 class="mume-header" id="%E5%AD%A6%E4%B9%A0%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">&#x5B66;&#x4E60;&#x53C2;&#x8003;&#x8D44;&#x6599;</h2>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x6CE8;&#x610F;&#xFF1A;&#x5B66;&#x4E60;&#x6280;&#x672F;&#xFF0C;&#x6700;&#x597D;&#x7684;&#x662F;&#x5B98;&#x65B9;&#x6587;&#x6863;&#xFF0C;&#x800C;&#x4E14;&#x8981;&#x591A;&#x7EC3;&#x591A;&#x64CD;&#x4F5C;
+
+Docker&#x5B98;&#x7F51;&#xFF1A; 
+http<span class="token punctuation">:</span>//www.docker.com
+https<span class="token punctuation">:</span>//hub.docker.com
+https<span class="token punctuation">:</span>//docs.docker.com/install/linux/docker<span class="token punctuation">-</span>ce/centos/
+
+&#x53C2;&#x8003;&#x8D44;&#x6599;&#xFF1A;
+1&#x3001;&#x300A;Docker&#x4ECE;&#x5165;&#x95E8;&#x5230;&#x5B9E;&#x8DF5;&#x300B;
+2&#x3001;&#x83DC;&#x9E1F;&#x6559;&#x7A0B;&#xFF1A; 
+http<span class="token punctuation">:</span>//www.runoob.com/docker/docker<span class="token punctuation">-</span>tutorial.html
+</pre><h2 class="mume-header" id="%E4%B8%80-docker%E7%AE%80%E4%BB%8B">&#x4E00;&#x3001;Docker&#x7B80;&#x4ECB;</h2>
+
+<h3 class="mume-header" id="1-%E7%AE%80%E4%BB%8B">1&#x3001;&#x7B80;&#x4ECB;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x5BB9;&#x5668;&#x5B9A;&#x4E49;
+&#x5BB9;&#x5668;&#x662F;&#x4E00;&#x79CD;&#x8F7B;&#x91CF;&#x7EA7;&#x3001;&#x53EF;&#x79FB;&#x690D;&#x3001;&#x81EA;&#x5305;&#x542B;&#x7684;&#x8F6F;&#x4EF6;&#x6253;&#x5305;&#x6280;&#x672F;&#xFF0C;&#x4F7F;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x53EF;&#x4EE5;&#x5728;&#x51E0;&#x4E4E;&#x4EFB;&#x4F55;&#x5730;&#x65B9;&#x4EE5;&#x76F8;&#x540C;&#x7684;&#x65B9;&#x5F0F;&#x8FD0;&#x884C;&#x3002;&#x5F00;&#x53D1;&#x4EBA;&#x5458;&#x5728;&#x81EA;&#x5DF1;&#x7B14;&#x8BB0;&#x672C;&#x4E0A;&#x521B;&#x5EFA;&#x5E76;&#x6D4B;&#x8BD5;&#x597D;&#x7684;&#x5BB9;&#x5668;&#xFF0C;&#x65E0;&#x9700;&#x4EFB;&#x4F55;&#x4FEE;&#x6539;&#x5C31;&#x80FD;&#x591F;&#x5728;&#x751F;&#x4EA7;&#x7CFB;&#x7EDF;&#x7684;&#x865A;&#x62DF;&#x673A;&#x3001;&#x7269;&#x7406;&#x670D;&#x52A1;&#x5668;&#x6216;&#x516C;&#x6709;&#x4E91;&#x4E3B;&#x673A;&#x4E0A;&#x8FD0;&#x884C;&#x3002;
+
+Docker &#x662F;&#x4E00;&#x4E2A;&#x5F00;&#x6E90;&#x7684;&#x5E94;&#x7528;&#x5BB9;&#x5668;&#x5F15;&#x64CE;&#xFF0C;&#x57FA;&#x4E8E; Go &#x8BED;&#x8A00; &#x5E76;&#x9075;&#x4ECE;Apache2.0&#x534F;&#x8BAE;&#x5F00;&#x6E90;&#x3002;
+
+Docker &#x53EF;&#x4EE5;&#x8BA9;&#x5F00;&#x53D1;&#x8005;&#x6253;&#x5305;&#x4ED6;&#x4EEC;&#x7684;&#x5E94;&#x7528;&#x4EE5;&#x53CA;&#x4F9D;&#x8D56;&#x5305;&#x5230;&#x4E00;&#x4E2A;&#x8F7B;&#x91CF;&#x7EA7;&#x3001;&#x53EF;&#x79FB;&#x690D;&#x7684;&#x5BB9;&#x5668;&#x4E2D;&#xFF0C;&#x7136;&#x540E;&#x53D1;&#x5E03;&#x5230;&#x4EFB;&#x4F55;&#x6D41;&#x884C;&#x7684; Linux &#x673A;&#x5668;&#x4E0A;&#xFF0C;&#x4E5F;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x865A;&#x62DF;&#x5316;&#x3002;
+
+&#x5BB9;&#x5668;&#x662F;&#x5B8C;&#x5168;&#x4F7F;&#x7528;&#x6C99;&#x7BB1;&#x673A;&#x5236;&#xFF0C;&#x76F8;&#x4E92;&#x4E4B;&#x95F4;&#x4E0D;&#x4F1A;&#x6709;&#x4EFB;&#x4F55;&#x63A5;&#x53E3;&#xFF08;&#x7C7B;&#x4F3C; iPhone &#x7684; app&#xFF09;<span class="token punctuation">,</span>&#x66F4;&#x91CD;&#x8981;&#x7684;&#x662F;&#x5BB9;&#x5668;&#x6027;&#x80FD;&#x5F00;&#x9500;&#x6781;&#x4F4E;&#x3002;
+
+Docker &#x4ECE; 17.03 &#x7248;&#x672C;&#x4E4B;&#x540E;&#x5206;&#x4E3A; CE&#xFF08;Community Edition<span class="token punctuation">:</span> &#x793E;&#x533A;&#x7248;&#xFF09; &#x548C; EE&#xFF08;Enterprise Edition<span class="token punctuation">:</span> &#x4F01;&#x4E1A;&#x7248;&#xFF09;&#xFF0C;&#x6211;&#x4EEC;&#x7528;&#x793E;&#x533A;&#x7248;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;
+</pre><h3 class="mume-header" id="2-docker%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">2&#x3001;Docker&#x7684;&#x5E94;&#x7528;&#x573A;&#x666F;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">1&#xFF09;&#x7B80;&#x5316;&#x914D;&#x7F6E;
+&#x865A;&#x62DF;&#x673A;&#x7684;&#x6700;&#x5927;&#x597D;&#x5904;&#x662F;&#x80FD;&#x5728;&#x4F60;&#x7684;&#x786C;&#x4EF6;&#x8BBE;&#x65BD;&#x4E0A;&#x8FD0;&#x884C;&#x5404;&#x79CD;&#x914D;&#x7F6E;&#x4E0D;&#x4E00;&#x6837;&#x7684;&#x5E73;&#x53F0;(&#x8F6F;&#x4EF6;<span class="token punctuation">,</span> &#x7CFB;&#x7EDF;)<span class="token punctuation">,</span> Docker&#x5728;&#x964D;&#x4F4E;&#x989D;&#x5916;&#x5F00;&#x9500;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#x63D0;&#x4F9B;&#x4E86;&#x540C;&#x6837;&#x7684;&#x529F;&#x80FD;. &#x5B83;&#x80FD;&#x8BA9;&#x4F60;&#x5C06;&#x8FD0;&#x884C;&#x73AF;&#x5883;&#x548C;&#x914D;&#x7F6E;&#x653E;&#x5728;&#x4EE3;&#x7801;&#x6C47;&#x603B;&#x7136;&#x540E;&#x90E8;&#x7F72;<span class="token punctuation">,</span> &#x540C;&#x4E00;&#x4E2A;Docker&#x7684;&#x914D;&#x7F6E;&#x53EF;&#x4EE5;&#x5728;&#x4E0D;&#x540C;&#x7684;&#x73AF;&#x5883;&#x73AF;&#x5883;&#x4E2D;&#x4F7F;&#x7528;<span class="token punctuation">,</span> &#x8FD9;&#x6837;&#x5C31;&#x964D;&#x4F4E;&#x4E86;&#x786C;&#x4EF6;&#x8981;&#x6C42;&#x548C;&#x5E94;&#x7528;&#x73AF;&#x5883;&#x4E4B;&#x95F4;&#x8026;&#x5408;&#x5EA6;.
+
+2&#xFF09;&#x4EE3;&#x7801;&#x6D41;&#x6C34;&#x7EBF;&#x7BA1;&#x7406;
+&#x4EE3;&#x7801;&#x4ECE;&#x5F00;&#x53D1;&#x8005;&#x7684;&#x673A;&#x5668;&#x5230;&#x6700;&#x7EC8;&#x5728;&#x751F;&#x4EA7;&#x73AF;&#x5883;&#x4E0A;&#x7684;&#x90E8;&#x7F72;<span class="token punctuation">,</span> &#x9700;&#x8981;&#x7ECF;&#x8FC7;&#x5F88;&#x591A;&#x7684;&#x4E2D;&#x575A;&#x73AF;&#x5883;. &#x800C;&#x6BCF;&#x4E00;&#x4E2A;&#x4E2D;&#x95F4;&#x73AF;&#x5883;&#x90FD;&#x6709;&#x81EA;&#x5DF1;&#x5FAE;&#x5C0F;&#x7684;&#x5DEE;&#x522B;<span class="token punctuation">,</span> Docker&#x7ED9;&#x5E94;&#x7528;&#x63D0;&#x4F9B;&#x4E86;&#x4E00;&#x4E2A;&#x4ECE;&#x5F00;&#x53D1;&#x5230;&#x4E0A;&#x7EBF;&#x5747;&#x4E00;&#x81F4;&#x7684;&#x73AF;&#x5883;<span class="token punctuation">,</span> &#x8BA9;&#x4EE3;&#x7801;&#x7684;&#x6D41;&#x6C34;&#x7EBF;&#x53D8;&#x5F97;&#x7B80;&#x5355;&#x4E0D;&#x5C11;.
+
+3&#xFF09;&#x63D0;&#x5347;&#x5F00;&#x53D1;&#x6548;&#x7387;
+&#x4E0D;&#x540C;&#x73AF;&#x5883;&#x4E2D;<span class="token punctuation">,</span> <span class="token key atrule">&#x5F00;&#x53D1;&#x8005;&#x7684;&#x5171;&#x540C;&#x76EE;&#x6807;</span><span class="token punctuation">:</span>
+    a.&#x60F3;&#x8BA9;&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x5C3D;&#x91CF;&#x8D34;&#x8FD1;&#x751F;&#x4EA7;&#x73AF;&#x5883;.
+    b.&#x60F3;&#x5FEB;&#x901F;&#x642D;&#x5EFA;&#x5F00;&#x53D1;&#x73AF;&#x5883;
+
+&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x7684;&#x673A;&#x5668;&#x901A;&#x5E38;&#x5185;&#x5B58;&#x6BD4;&#x8F83;&#x5C0F;<span class="token punctuation">,</span> &#x4E4B;&#x524D;&#x4F7F;&#x7528;&#x865A;&#x62DF;&#x7684;&#x65F6;&#x5019;<span class="token punctuation">,</span> &#x6211;&#x4EEC;&#x7ECF;&#x5E38;&#x9700;&#x8981;&#x4E3A;&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x7684;&#x673A;&#x5668;&#x52A0;&#x5185;&#x5B58;<span class="token punctuation">,</span> &#x800C;&#x73B0;&#x5728;Docker&#x53EF;&#x4EE5;&#x8F7B;&#x6613;&#x7684;&#x8BA9;&#x51E0;&#x5341;&#x4E2A;&#x670D;&#x52A1;&#x5728;Docker&#x4E2D;&#x8DD1;&#x8D77;&#x6765;.
+
+4&#xFF09;&#x9694;&#x79BB;&#x5E94;&#x7528;
+&#x5F00;&#x53D1;&#x65F6;&#x4F1A;&#x5728;&#x4E00;&#x4E2A;&#x53F0;&#x673A;&#x5668;&#x4E0A;&#x8FD0;&#x884C;&#x4E0D;&#x540C;&#x7684;&#x5E94;&#x7528;.
+    a.&#x4E3A;&#x4E86;&#x964D;&#x4F4E;&#x6210;&#x672C;<span class="token punctuation">,</span> &#x8FDB;&#x884C;&#x670D;&#x52A1;&#x5668;&#x6574;&#x5408;
+    b.&#x5C06;&#x4E00;&#x4E2A;&#x6574;&#x4F53;&#x5F0F;&#x7684;&#x5E94;&#x7528;&#x62C6;&#x5206;&#x6210;&#x4F4E;&#x8026;&#x5408;&#x7684;&#x5355;&#x4E2A;&#x670D;&#x52A1;(&#x5FAE;&#x670D;&#x52A1;&#x67B6;&#x6784;)
+
+5&#xFF09;&#x6574;&#x5408;&#x670D;&#x52A1;&#x5668;
+Docker&#x9694;&#x79BB;&#x5E94;&#x7528;&#x7684;&#x80FD;&#x529B;&#x4F7F;&#x5F97;Docker&#x53EF;&#x4EE5;&#x6574;&#x5408;&#x591A;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#x4EE5;&#x964D;&#x4F4E;&#x6210;&#x672C;. &#x7531;&#x4E8E;&#x6CA1;&#x6709;&#x591A;&#x4E2A;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x7684;&#x5185;&#x5B58;&#x5360;&#x7528;<span class="token punctuation">,</span> &#x4EE5;&#x53CA;&#x80FD;&#x5728;&#x591A;&#x4E2A;&#x5B9E;&#x4F8B;&#x4E4B;&#x95F4;&#x5171;&#x4EAB;&#x6CA1;&#x6709;&#x4F7F;&#x7528;&#x7684;&#x5185;&#x5B58;<span class="token punctuation">,</span> Docker&#x53EF;&#x4EE5;&#x6BD4;&#x865A;&#x62DF;&#x673A;&#x63D0;&#x4F9B;&#x66F4;&#x597D;&#x7684;&#x670D;&#x52A1;&#x5668;&#x6574;&#x5408;&#x89E3;&#x51B3;&#x65B9;&#x6848;.
+
+6&#xFF09;&#x8C03;&#x8BD5;&#x80FD;&#x529B;
+Docker&#x63D0;&#x4F9B;&#x4E86;&#x5F88;&#x591A;&#x7684;&#x5DE5;&#x5177;<span class="token punctuation">,</span> &#x8FD9;&#x4E9B;&#x5DE5;&#x5177;&#x4E0D;&#x4E00;&#x5B9A;&#x53EA;&#x662F;&#x9488;&#x5BF9;&#x5BB9;&#x5668;<span class="token punctuation">,</span> &#x4F46;&#x662F;&#x5374;&#x9002;&#x7528;&#x4E8E;&#x5BB9;&#x5668;. &#x4ED6;&#x4EEC;&#x63D0;&#x4F9B;&#x4E86;&#x5F88;&#x591A;&#x529F;&#x80FD;<span class="token punctuation">,</span> &#x5305;&#x62EC;&#x53EF;&#x4EE5;&#x4E3A;&#x5BB9;&#x5668;&#x8BBE;&#x7F6E;&#x68C0;&#x67E5;&#x70B9;<span class="token punctuation">,</span> &#x8BBE;&#x7F6E;&#x7248;&#x672C;<span class="token punctuation">,</span> &#x67E5;&#x770B;&#x4E24;&#x4E2A;&#x5BB9;&#x5668;&#x4E4B;&#x95F4;&#x7684;&#x5DEE;&#x522B;<span class="token punctuation">,</span> &#x8FD9;&#x4E9B;&#x7279;&#x6027;&#x53EF;&#x4EE5;&#x5E2E;&#x52A9;&#x8C03;&#x8BD5;Bug.
+
+7&#xFF09;&#x591A;&#x79DF;&#x6237;&#x73AF;&#x5883;
+&#x591A;&#x79DF;&#x6237;&#x73AF;&#x5883;&#x7684;&#x5E94;&#x7528;&#x4E2D;<span class="token punctuation">,</span> &#x5B83;&#x53EF;&#x4EE5;&#x907F;&#x514D;&#x5173;&#x952E;&#x5E94;&#x7528;&#x7684;&#x91CD;&#x5199;.&#x6211;&#x4EEC;&#x4E00;&#x4E2A;&#x7279;&#x522B;&#x7684;&#x5173;&#x4E8E;&#x8FD9;&#x4E2A;&#x573A;&#x666F;&#x7684;&#x4F8B;&#x5B50;&#x662F;&#x4E3A;loT(&#x7269;&#x8054;&#x7F51;)&#x7684;&#x5E94;&#x7528;&#x5F00;&#x53D1;&#x4E00;&#x4E2A;&#x5FEB;&#x901F;<span class="token punctuation">,</span> &#x6613;&#x7528;&#x7684;&#x591A;&#x79DF;&#x6237;&#x73AF;&#x5883;. &#x8FD9;&#x79CD;&#x591A;&#x79DF;&#x6237;&#x7684;&#x57FA;&#x672C;&#x4EE3;&#x7801;&#x975E;&#x5E38;&#x590D;&#x6742;<span class="token punctuation">,</span> &#x5F88;&#x96BE;&#x5904;&#x7406;<span class="token punctuation">,</span> &#x91CD;&#x65B0;&#x89C4;&#x5212;&#x4EE5;&#x5E94;&#x7528;&#x4E0D;&#x4F46;&#x6D88;&#x8017;&#x65F6;&#x95F4;<span class="token punctuation">,</span> &#x4E5F;&#x6D6A;&#x8D39;&#x91D1;&#x94B1;.
+&#x4F7F;&#x7528;Docker<span class="token punctuation">,</span> &#x53EF;&#x4EE5;&#x4E3A;&#x6BCF;&#x4E00;&#x4E2A;&#x79DF;&#x6237;&#x7684;&#x5E94;&#x7528;&#x5C42;&#x7684;&#x591A;&#x4E2A;&#x5B9E;&#x4F8B;&#x521B;&#x5EFA;&#x9694;&#x79BB;&#x7684;&#x73AF;&#x5883;<span class="token punctuation">,</span> &#x8FD9;&#x4E0D;&#x4EC5;&#x7B80;&#x5355;&#x800C;&#x4E14;&#x6210;&#x672C;&#x4F4E;&#x5EC9;<span class="token punctuation">,</span> &#x56E0;&#x4E3A;Docker&#x73AF;&#x5883;&#x542F;&#x52A8;&#x7684;&#x901F;&#x5EA6;&#x5FEB;<span class="token punctuation">,</span> diff&#x547D;&#x4EE4;&#x5F88;&#x9AD8;&#x6548;.
+
+8&#xFF09;&#x5FEB;&#x901F;&#x90E8;&#x7F72;
+Docker&#x4E3A;&#x8FDB;&#x7A0B;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5BB9;&#x5668;<span class="token punctuation">,</span> &#x4E0D;&#x9700;&#x8981;&#x542F;&#x52A8;&#x4E00;&#x4E2A;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;<span class="token punctuation">,</span> &#x65F6;&#x95F4;&#x7F29;&#x77ED;&#x4E3A;&#x79D2;&#x7EA7;&#x522B;.
+&#x53EF;&#x4EE5;&#x5728;&#x6570;&#x636E;&#x4E2D;&#x5FC3;&#x521B;&#x5EFA;&#x9500;&#x6BC1;&#x8D44;&#x6E90;&#x800C;&#x65E0;&#x987B;&#x62C5;&#x5FC3;&#x91CD;&#x65B0;&#x542F;&#x52A8;&#x5E26;&#x6765;&#x7684;&#x5F00;&#x9500;. &#x901A;&#x5E38;&#x6570;&#x636E;&#x4E2D;&#x5FC3;&#x7684;&#x8D44;&#x6E90;&#x5229;&#x7528;&#x7387;&#x53EA;&#x6709;30% <span class="token punctuation">,</span> &#x901A;&#x8FC7;&#x4F7F;&#x7528;Docker&#x5E76;&#x8FDB;&#x884C;&#x6709;&#x6548;&#x7684;&#x8D44;&#x6E90;&#x5206;&#x914D;&#x53EF;&#x4EE5;&#x63D0;&#x9AD8;&#x8D44;&#x6E90;&#x7684;&#x5229;&#x7528;&#x7387;.
+</pre><h3 class="mume-header" id="3-docker-%E7%9A%84%E4%BC%98%E7%82%B9">3&#x3001;Docker &#x7684;&#x4F18;&#x70B9;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">1&#xFF09;&#x7B80;&#x5316;&#x7A0B;&#x5E8F;&#xFF1A;
+Docker&#x8BA9;&#x5F00;&#x53D1;&#x8005;&#x53EF;&#x4EE5;&#x6253;&#x5305;&#x4ED6;&#x4EEC;&#x7684;&#x5E94;&#x7528;&#x4EE5;&#x53CA;&#x4F9D;&#x8D56;&#x5305;&#x5230;&#x4E00;&#x4E2A;&#x53EF;&#x79FB;&#x690D;&#x7684;&#x5BB9;&#x5668;&#x4E2D;&#xFF0C;&#x7136;&#x540E;&#x53D1;&#x5E03;&#x5230;&#x4EFB;&#x4F55;&#x6D41;&#x884C;&#x7684; Linux &#x673A;&#x5668;&#x4E0A;&#xFF0C;&#x4FBF;&#x53EF;&#x4EE5;&#x5B9E;&#x73B0;&#x865A;&#x62DF;&#x5316;&#x3002;Docker&#x6539;&#x53D8;&#x4E86;&#x865A;&#x62DF;&#x5316;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x4F7F;&#x5F00;&#x53D1;&#x8005;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x5C06;&#x81EA;&#x5DF1;&#x7684;&#x6210;&#x679C;&#x653E;&#x5165;Docker&#x4E2D;&#x8FDB;&#x884C;&#x7BA1;&#x7406;&#x3002;&#x65B9;&#x4FBF;&#x5FEB;&#x6377;&#x5DF2;&#x7ECF;&#x662F; Docker&#x7684;&#x6700;&#x5927;&#x4F18;&#x52BF;&#xFF0C;&#x8FC7;&#x53BB;&#x9700;&#x8981;&#x7528;&#x6570;&#x5929;&#x4E43;&#x81F3;&#x6570;&#x5468;&#x7684;	&#x4EFB;&#x52A1;&#xFF0C;&#x5728;Docker&#x5BB9;&#x5668;&#x7684;&#x5904;&#x7406;&#x4E0B;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x6570;&#x79D2;&#x5C31;&#x80FD;&#x5B8C;&#x6210;&#x3002;
+
+2&#xFF09;&#x907F;&#x514D;&#x9009;&#x62E9;&#x6050;&#x60E7;&#x75C7;&#xFF1A;
+&#x5982;&#x679C;&#x4F60;&#x6709;&#x9009;&#x62E9;&#x6050;&#x60E7;&#x75C7;&#xFF0C;&#x8FD8;&#x662F;&#x8D44;&#x6DF1;&#x60A3;&#x8005;&#x3002;Docker&#x5E2E;&#x4F60;&#x6253;&#x5305;&#x4F60;&#x7684;&#x7EA0;&#x7ED3;&#xFF01;&#x6BD4;&#x5982;Docker&#x955C;&#x50CF;&#xFF1B;Docker&#x955C;&#x50CF;&#x4E2D;&#x5305;&#x542B;&#x4E86;&#x8FD0;&#x884C;&#x73AF;&#x5883;&#x548C;&#x914D;&#x7F6E;&#xFF0C;&#x6240;&#x4EE5;Docker&#x53EF;&#x4EE5;&#x7B80;&#x5316;&#x90E8;&#x7F72;&#x591A;&#x79CD;&#x5E94;&#x7528;&#x5B9E;&#x4F8B;&#x5DE5;&#x4F5C;&#x3002;&#x6BD4;&#x5982;Web&#x5E94;&#x7528;&#x3001;&#x540E;&#x53F0;&#x5E94;&#x7528;&#x3001;&#x6570;&#x636E;&#x5E93;&#x5E94;&#x7528;&#x3001;&#x5927;&#x6570;&#x636E;&#x5E94;&#x7528;&#x6BD4;&#x5982;Hadoop&#x96C6;&#x7FA4;&#x3001;&#x6D88;&#x606F;&#x961F;&#x5217;&#x7B49;&#x7B49;&#x90FD;&#x53EF;&#x4EE5;&#x6253;&#x5305;&#x6210;&#x4E00;&#x4E2A;&#x955C;&#x50CF;&#x90E8;&#x7F72;&#x3002;
+
+3&#xFF09;&#x8282;&#x7701;&#x5F00;&#x652F;&#xFF1A;
+&#x4E00;&#x65B9;&#x9762;&#xFF0C;&#x4E91;&#x8BA1;&#x7B97;&#x65F6;&#x4EE3;&#x5230;&#x6765;&#xFF0C;&#x4F7F;&#x5F00;&#x53D1;&#x8005;&#x4E0D;&#x5FC5;&#x4E3A;&#x4E86;&#x8FFD;&#x6C42;&#x6548;&#x679C;&#x800C;&#x914D;&#x7F6E;&#x9AD8;&#x989D;&#x7684;&#x786C;&#x4EF6;&#xFF0C;Docker&#x6539;&#x53D8;&#x4E86;&#x9AD8;&#x6027;&#x80FD;&#x5FC5;&#x7136;&#x9AD8;&#x4EF7;&#x683C;&#x7684;&#x601D;&#x7EF4;&#x5B9A;&#x52BF;&#x3002;Docker&#x4E0E;&#x4E91;&#x7684;&#x7ED3;&#x5408;&#xFF0C;&#x8BA9;&#x4E91;&#x7A7A;&#x95F4;&#x5F97;&#x5230;&#x66F4;&#x5145;&#x5206;&#x7684;&#x5229;&#x7528;&#x3002;&#x4E0D;&#x4EC5;&#x89E3;&#x51B3;&#x4E86;&#x786C;&#x4EF6;&#x7BA1;&#x7406;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x4E5F;&#x6539;&#x53D8;&#x4E86;&#x865A;&#x62DF;&#x5316;&#x7684;&#x65B9;&#x5F0F;&#x3002;
+</pre><h3 class="mume-header" id="3-docker%E7%9A%84%E7%BC%BA%E7%82%B9">3&#x3001;docker&#x7684;&#x7F3A;&#x70B9;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">Docker&#x7684;&#x5B89;&#x88C5;&#x975E;&#x5E38;&#x5BB9;&#x6613;.&#x76EE;&#x524D;<span class="token punctuation">,</span>Docker&#x652F;&#x6301;&#x6240;&#x6709;&#x7684;Linux&#x7CFB;&#x5217;&#x7CFB;&#x7EDF;<span class="token punctuation">,</span>(Ubuntu<span class="token punctuation">,</span>RHEL<span class="token punctuation">,</span>Debian&#x7B49;).&#x901A;&#x8FC7;Boot2Docker&#x865A;&#x62DF;&#x5DE5;&#x5177;<span class="token punctuation">,</span>&#x5728;OS X&#x548C;Windows&#x4E0B;&#x4E5F;&#x80FD;&#x591F;&#x6B63;&#x5E38;&#x8FD0;&#x884C;Docker.
+<span class="token key atrule">&#x6CE8;</span><span class="token punctuation">:</span> <span class="token key atrule">Docker&#x8FD0;&#x884C;&#x73AF;&#x5883;&#x7684;&#x9650;&#x5236;</span><span class="token punctuation">:</span>
+    1&#xFF09;&#x5FC5;&#x987B;&#x662F;64&#x4F4D;&#x673A;&#x5668;&#x4E0A;&#x8FD0;&#x884C;<span class="token punctuation">,</span>&#x76EE;&#x524D;&#x4EC5;&#x652F;&#x6301; x86_64&#x548C;AMD64<span class="token punctuation">,</span>32&#x7CFB;&#x7EDF;&#x4E0D;&#x652F;&#x6301;.
+    2)&#x7CFB;&#x7EDF;&#x7684;Linux&#x5185;&#x6838;&#x5FC5;&#x987B;&#x662F;3.8&#x6216;&#x8005;&#x66F4;&#x9AD8;<span class="token punctuation">,</span>&#x5185;&#x6838;&#x652F;&#x6301;Device Mapper<span class="token punctuation">,</span>AUFS<span class="token punctuation">,</span>VFS<span class="token punctuation">,</span>btrfs&#x7B49;&#x5B58;&#x50A8;&#x683C;&#x5F0F;.
+    3)&#x5185;&#x6838;&#x5FC5;&#x987B;&#x652F;&#x6301;cgroups&#x548C;&#x547D;&#x540D;&#x7A7A;&#x95F4;.
+</pre><h3 class="mume-header" id="4-docker%E7%9A%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9">4&#x3001;docker&#x7684;&#x76F8;&#x5173;&#x77E5;&#x8BC6;&#x70B9;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">Docker&#x7EC4;&#x4EF6;&#xFF08;&#x6838;&#x5FC3;&#xFF09;&#xFF1A;&#x955C;&#x50CF;&#x3001;&#x5BB9;&#x5668;&#x3001;&#x5E93;&#x3002;
+
+&#x91C7;&#x7528;C/S&#x67B6;&#x6784;&#xFF1A;&#x5BA2;&#x6237;&#x7AEF;&#xFF08;&#x6267;&#x884C;&#x7A0B;&#x5E8F;&#xFF09;&#x2192;&#x901A;&#x8FC7;&#x547D;&#x4EE4;&#x884C;&#x548C;API&#x5F62;&#x5F0F;&#x548C;&#x5B88;&#x5019;&#x7A0B;&#x5E8F;&#xFF08;&#x63D0;&#x4F9B;Docker&#x670D;&#x52A1;&#xFF09;&#x8FDB;&#x884C;&#x901A;&#x8BAF;&#x3002;
+
+&#x955C;&#x50CF;&#xFF1A;&#x4E00;&#x4E2A;&#x53EA;&#x8BFB;&#x7684;&#x9759;&#x6001;&#x6A21;&#x677F;&#xFF08;&#x6846;&#x67B6;&#x4F53;&#x7CFB;&#xFF09;&#xFF1B;&#x5305;&#x542B;&#x73AF;&#x5883;&#x548C;&#x5E94;&#x7528;&#x6267;&#x884C;&#x4EE3;&#x7801;&#xFF08;&#x6846;&#x67B6;&#x8BED;&#x8A00;&#xFF09;&#xFF1B;&#x91C7;&#x7528;&#x5206;&#x5C42;&#x673A;&#x5236;&#x3002;&#x5C06;&#x65B0;&#x589E;&#x6570;&#x636E;&#x901A;&#x8FC7;&#x8054;&#x5408;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x9644;&#x52A0;&#x5728;&#x539F;&#x57FA;&#x7840;&#x4E0A;&#x3002;
+
+&#x5BB9;&#x5668;&#xFF1A;&#x4E00;&#x4E2A;&#x8FD0;&#x884C;&#x65F6;&#x73AF;&#x5883;&#xFF0C;&#x662F;&#x955C;&#x50CF;&#x7684;&#x8FD0;&#x884C;&#x72B6;&#x6001;&#xFF0C;&#x662F;&#x955C;&#x50CF;&#x6267;&#x884C;&#x7684;&#x4E00;&#x79CD;&#x52A8;&#x6001;&#x8868;&#x73B0;&#x3002;
+
+&#x5E93;&#xFF1A;&#x4F7F;&#x7528;&#x6CE8;&#x518C;&#x670D;&#x52A1;&#x5668;&#xFF08;&#x5171;&#x6709;&#x7684;or&#x79C1;&#x6709;&#x7684;&#xFF09;&#x5B58;&#x50A8;&#x548C;&#x5171;&#x4EAB;&#x7528;&#x6237;&#x7684;&#x955C;&#x50CF;&#xFF0C;&#x662F;&#x67D0;&#x4E2A;&#x7279;&#x5B9A;&#x7528;&#x6237;&#x5B58;&#x50A8;&#x955C;&#x50CF;&#x7684;&#x76EE;&#x5F55;&#x3002;
+
+<span class="token important">*Docker</span>&#x7279;&#x6027;&#xFF1A;
+
+*&#x9694;&#x79BB;&#x6027;&#xFF1A;libcontainer&#xFF08;&#x9ED8;&#x8BA4;&#x5BB9;&#x5668;&#xFF09;=<span class="token punctuation">&gt;</span>&#x5185;&#x6838;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x3002;
+
+*&#x5B89;&#x5168;&#x6027;&#xFF1A;&#x5185;&#x90E8;&#xFF08;cgroups&#xFF09;<span class="token punctuation">|</span> &#x5BB9;&#x5668;&#x548C;&#x5BBF;&#x4E3B;&#x4E3B;&#x673A;&#xFF08;&#x5185;&#x6838;&#x80FD;&#x529B;&#x673A;&#x5236;&#xFF09;&#x3002;
+
+*&#x53EF;&#x5EA6;&#x91CF;&#x6027;&#xFF1A;cgroups&#xFF08;&#x63A7;&#x5236;&#x7EC4;&#xFF09;&#x2192;&#x8D44;&#x6E90;&#x5EA6;&#x91CF;&#x548C;&#x5206;&#x914D;&#xFF08;&#x7528;&#x6237;&#xFF09;&#x3002;
+
+*&#x79FB;&#x690D;&#x6027;&#xFF1A;AUFS&#xFF08;&#x5FEB;&#x901F;&#x66F4;&#x65B0;&#xFF09;&#x2192;&#x5C42;&#x7684;&#x6982;&#x5FF5;&#x3002;
+
+<span class="token punctuation">---</span><span class="token punctuation">-</span><span class="token punctuation">-</span>&#x4F7F;&#x7528;AUFS&#x4F5C;&#x4E3A;Docker&#x5BB9;&#x5668;&#x7684;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#xFF0C;&#x63D0;&#x4F9B;&#x7684;&#x597D;&#x5904;&#xFF1A;
+    1&#xFF09;&#x8282;&#x7701;&#x5B58;&#x50A8;&#x7A7A;&#x95F4;<span class="token punctuation">:</span>&#x591A;&#x4E2A;&#x5BB9;&#x5668;&#x53EF;&#x4EE5;&#x5171;&#x4EAB;&#x4E00;&#x4E2A;&#x57FA;&#x7840;&#x955C;&#x50CF;&#x5B58;&#x50A8;.
+    2&#xFF09;&#x5FEB;&#x901F;&#x90E8;&#x7F72;<span class="token punctuation">:</span>&#x5F53;&#x8981;&#x90E8;&#x7F72;&#x591A;&#x4E2A;&#x6765;&#x81EA;&#x540C;&#x4E00;&#x4E2A;&#x57FA;&#x7840;&#x955C;&#x50CF;&#x7684;&#x5BB9;&#x5668;&#x65F6;<span class="token punctuation">,</span>&#x907F;&#x514D;&#x591A;&#x6B21;&#x590D;&#x5236;&#x64CD;&#x4F5C;.
+    3&#xFF09;&#x5347;&#x7EA7;&#x65B9;&#x4FBF;<span class="token punctuation">:</span>&#x5347;&#x7EA7;&#x4E00;&#x4E2A;&#x57FA;&#x7840;&#x955C;&#x50CF;&#x5373;&#x53EF;&#x5F71;&#x50CF;&#x5230;&#x6240;&#x6709;&#x57FA;&#x4E8E;&#x5B83;&#x7684;&#x5BB9;&#x5668;.
+    4&#xFF09;&#x589E;&#x91CF;&#x4FEE;&#x6539;<span class="token punctuation">:</span>&#x53EF;&#x4EE5;&#x5728;&#x4E0D;&#x6539;&#x53D8;&#x57FA;&#x7840;&#x955C;&#x50CF;&#x7684;&#x540C;&#x65F6;&#x4FEE;&#x6539;&#x5176;&#x4ED6;&#x76EE;&#x5F55;&#x6587;&#x4EF6;<span class="token punctuation">,</span>&#x6240;&#x6709;&#x7684;&#x64CD;&#x4F5C;&#x90FD;&#x53D1;&#x751F;&#x5728;&#x6700;&#x4E0A;&#x5C42;&#x7684;&#x5199;&#x64CD;&#x4F5C;&#x5C42;<span class="token punctuation">,</span>&#x589E;&#x52A0;&#x4E86;&#x57FA;&#x7840;&#x955C;&#x50CF;&#x7684;&#x53EF;&#x5171;&#x4EAB;&#x5185;&#x5BB9;.
+</pre><h2 class="mume-header" id="%E4%BA%8C-%E5%87%86%E5%A4%87">&#x4E8C;&#x3001;&#x51C6;&#x5907;</h2>
+
+<h3 class="mume-header" id="1-%E4%BD%BF%E7%94%A8centos7%E7%B3%BB%E7%BB%9F">1&#x3001;&#x4F7F;&#x7528;Centos7&#x7CFB;&#x7EDF;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x6CE8;&#x610F;&#xFF1A;root&#x7528;&#x6237;&#x6267;&#x884C;&#x547D;&#x4EE4;&#x4E0D;&#x7528;&#x52A0;sudo
+
+1)&#x8BBE;&#x7F6E;&#x666E;&#x901A;&#x7528;&#x6237;&#x7684;sudo&#x6743;&#x9650;
+<span class="token comment"># yum install -y sudo</span>
+<span class="token comment"># chmod u+w /etc/sudoers</span>
+<span class="token comment"># echo &apos;wym    ALL=(ALL)       ALL&apos; &gt;&gt; /etc/sudoers</span>
+
+2)&#x68C0;&#x67E5;selinux&#x548C;&#x9632;&#x706B;&#x5899;&#x662F;&#x5426;&#x5173;&#x95ED;
+
+&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x7981;&#x7528;SELINUX
+<span class="token comment"># vim /etc/selinux/config</span>
+SELINUX=disabled
+
+<span class="token comment"># setenforce 0  #&#x4E34;&#x65F6;&#x5173;&#x95ED;</span>
+<span class="token comment"># getenforce  #&#x67E5;&#x770B;&#x72B6;&#x6001;</span>
+
+<span class="token comment"># systemctl disable firewalld.service   #&#x7981;&#x6B62;&#x9632;&#x706B;&#x5899;&#x81EA;&#x542F;&#x52A8;</span>
+<span class="token comment"># systemctl stop firewalld.service      #&#x505C;&#x6B62;&#x9632;&#x706B;&#x5899;</span>
+<span class="token comment"># systemctl status firewalld.service    #&#x67E5;&#x770B;&#x9632;&#x706B;&#x5899;&#x72B6;&#x6001;</span>
+</pre><h3 class="mume-header" id="2-%E6%9B%B4%E6%8D%A2%E9%98%BF%E9%87%8Cyum%E6%BA%90%E9%9C%80%E8%A6%81%E8%BF%9E%E5%A4%96%E7%BD%91">2&#x3001;&#x66F4;&#x6362;&#x963F;&#x91CC;yum&#x6E90;&#xFF0C;&#x9700;&#x8981;&#x8FDE;&#x5916;&#x7F51;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x5EFA;&#x7ACB;&#x5907;&#x4EFD;&#x76EE;&#x5F55;
+<span class="token comment"># sudo mkdir -p /etc/yum.repos.d/repobak</span>
+&#x5907;&#x4EFD;&#x539F;&#x6709;&#x6587;&#x4EF6;
+<span class="token comment"># sudo mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak</span>
+&#x62C9;&#x53D6;&#x963F;&#x91CC;&#x6E90;&#x6587;&#x4EF6;
+<span class="token comment"># sudo curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span>
+<span class="token comment"># sudo curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo</span>
+<span class="token comment"># sudo curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo</span>
+
+&#x6E05;&#x9664;&#x5E76;&#x751F;&#x6210;&#x7F13;&#x5B58;
+<span class="token comment"># sudo yum clean all &amp;&amp; yum makecache</span>
+&#x67E5;&#x770B;
+<span class="token comment">#sudo yum repolist</span>
+
+</pre><h3 class="mume-header" id="3-%E5%85%AC%E5%8F%B8%E5%86%85%E7%BD%91yum%E6%BA%90">3&#x3001;&#x516C;&#x53F8;&#x5185;&#x7F51;yum&#x6E90;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x81EA;&#x5DF1;&#x642D;&#x5EFA;&#x7684;&#x5185;&#x7F51;yum&#x6E90;&#x914D;&#x7F6E;&#x6587;&#x4EF6;
+<span class="token comment"># sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo &gt; /etc/yum.repos.d/Centos-7.repo</span>
+<span class="token comment"># sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo &gt; /etc/yum.repos.d/epel-7.repo</span>
+<span class="token comment"># sudo curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo &gt; /etc/yum.repos.d/docker-ce.repo</span>
+<span class="token comment"># sudo yum clean all &amp;&amp; yum makecache</span>
+</pre><h2 class="mume-header" id="%E4%B8%89-%E5%AE%89%E8%A3%85docker">&#x4E09;&#x3001;&#x5B89;&#x88C5;Docker</h2>
+
+<h3 class="mume-header" id="1-%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85">1&#x3001;&#x5B98;&#x65B9;&#x5B89;&#x88C5;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x5B98;&#x65B9;&#x6587;&#x6863;&#xFF1A;
+https<span class="token punctuation">:</span>//docs.docker.com/install/linux/docker<span class="token punctuation">-</span>ce/centos/
+
+sudo yum install <span class="token punctuation">-</span>y yum<span class="token punctuation">-</span>utils device<span class="token punctuation">-</span>mapper<span class="token punctuation">-</span>persistent<span class="token punctuation">-</span>data lvm2
+sudo yum repolist
+sudo yum install epel<span class="token punctuation">-</span>release   <span class="token comment">#&#x5B89;&#x88C5;&#x7B2C;&#x4E09;&#x65B9;&#x6E90;</span>
+sudo yum<span class="token punctuation">-</span>config<span class="token punctuation">-</span>manager <span class="token punctuation">-</span><span class="token punctuation">-</span>add<span class="token punctuation">-</span>repo https<span class="token punctuation">:</span>//download.docker.com/linux/centos/docker<span class="token punctuation">-</span>ce.repo
+
+sudo yum list docker<span class="token punctuation">-</span>ce <span class="token punctuation">-</span><span class="token punctuation">-</span>showduplicates <span class="token punctuation">|</span> sort <span class="token punctuation">-</span>r
+sudo yum install docker<span class="token punctuation">-</span>ce docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>cli containerd.io
+
+<span class="token comment"># yum install -y docker-ce-18.06.1.ce</span>
+<span class="token comment"># yum install -y docker-ce-18.09.3-3.el7</span>
+
+sudo systemctl start docker
+sudo systemctl enable docker
+
+&#x67E5;&#x770B;&#x662F;&#x5426;&#x5B89;&#x88C5;Docker&#x8F6F;&#x4EF6;&#x5305;
+<span class="token comment"># yum list installed | grep docker</span>
+<span class="token comment"># rpm -qa|grep docker</span>
+<span class="token comment"># docker version</span>
+
+
+$ curl <span class="token punctuation">-</span>fsSL https<span class="token punctuation">:</span>//get.docker.com <span class="token punctuation">-</span>o get<span class="token punctuation">-</span>docker.sh
+$ sudo sh get<span class="token punctuation">-</span>docker.sh
+
+&#x5982;&#x679C;&#x60A8;&#x60F3;&#x5C06;Docker&#x7528;&#x4F5C;&#x975E;root&#x7528;&#x6237;&#xFF0C;&#x60A8;&#x73B0;&#x5728;&#x5E94;&#x8BE5;&#x8003;&#x8651;&#x5C06;&#x60A8;&#x7684;&#x7528;&#x6237;&#x6DFB;&#x52A0;&#x5230;&#x201C;docker&#x201D;&#x7EC4;&#xFF0C;&#x4F8B;&#x5982;&#xFF1A;
+sudo groupadd docker
+sudo usermod <span class="token punctuation">-</span>aG docker $USER
+
+$ sudo yum remove docker<span class="token punctuation">-</span>ce
+$ sudo rm <span class="token punctuation">-</span>rf /var/lib/docker
+</pre><h3 class="mume-header" id="11%E5%AE%89%E8%A3%85%E4%BD%8E%E7%89%88%E6%9C%AC%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98">1.1&#x5B89;&#x88C5;&#x4F4E;&#x7248;&#x672C;&#xFF0C;&#x89E3;&#x51B3;&#x4F9D;&#x8D56;&#x95EE;&#x9898;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x901A;&#x8FC7;&#x8FD9;&#x4E2A;&#x5730;&#x5740;&#x6211;&#x4EEC;&#x67E5;&#x770B;&#x548C;&#x6211;&#x4EEC;&#x5B89;&#x88C5;docker&#x7248;&#x672C;&#x4E00;&#x81F4;&#x7684;rpm&#x5305;
+https<span class="token punctuation">:</span>//download.docker.com/linux/centos/7/x86_64/stable/Packages/
+
+&#x8981;&#x5148;&#x5B89;&#x88C5;docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux<span class="token punctuation">-</span>17.03.2.ce&#xFF0C;&#x5426;&#x5219;&#x5B89;&#x88C5;docker<span class="token punctuation">-</span>ce&#x4F1A;&#x62A5;&#x9519;
+sudo yum install <span class="token punctuation">-</span>y https<span class="token punctuation">:</span>//download.docker.com/linux/centos/7/x86_64/stable/Packages/docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux<span class="token punctuation">-</span>17.03.2.ce<span class="token punctuation">-</span>1.el7.centos.noarch.rpm 
+
+&#x7136;&#x540E;&#x518D;&#x5B89;&#x88C5; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>17.03.2.ce&#xFF0C;&#x5C31;&#x80FD;&#x6B63;&#x5E38;&#x5B89;&#x88C5;
+sudo yum <span class="token punctuation">-</span>y install docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>17.03.2.ce docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>cli<span class="token punctuation">-</span>17.03.2.ce containerd.io
+</pre><h3 class="mume-header" id="2-%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85">2&#x3001;&#x79BB;&#x7EBF;&#x5B89;&#x88C5;&#x5305;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x8BF7;&#x6CE8;&#x610F;&#xFF1A;<span class="token punctuation">-</span><span class="token punctuation">-</span>downloadonly&#x53C2;&#x6570;&#x5C06;&#x81EA;&#x52A8;&#x4E0B;&#x8F7D;&#x7A0B;&#x5E8F;&#x5305;&#x5B89;&#x88C5;&#x65F6;&#x6240;&#x9700;&#x8981;&#x7684;&#x6240;&#x6709;&#x4F9D;&#x8D56;&#xFF0C;&#x6240;&#x4EE5;&#x5EFA;&#x8BAE;&#x5728;&#x5168;&#x65B0;&#x7684;&#x7CFB;&#x7EDF;&#x4E2D;&#x4F7F;&#x7528;&#x672C;&#x547D;&#x4EE4;&#xFF0C;&#x56E0;&#x4E3A;&#x5728;&#x5DF2;&#x7ECF;&#x5B89;&#x88C5;&#x8FC7;&#x90E8;&#x5206;&#x4F9D;&#x8D56;&#x7684;&#x7CFB;&#x7EDF;&#x4E0A;&#xFF0C;yum&#x4E0D;&#x4F1A;&#x5C06;&#x6240;&#x6709;&#x9700;&#x8981;&#x7684;&#x4F9D;&#x8D56;&#x4E0B;&#x8F7D;&#x5B8C;&#x5168;&#xFF0C;&#x4F8B;&#x5982;&#x4E0B;&#x9762;&#x8FD9;&#x5E45;&#x56FE;&#x6240;&#x793A;
+
+1&#xFF09;&#x4F7F;&#x7528;<span class="token punctuation">-</span><span class="token punctuation">-</span>downloadonly&#x53C2;&#x6570;&#x4E4B;&#x540E;&#xFF0C;yum&#x5728;&#x4E0B;&#x8F7D;&#x5B8C;&#x7A0B;&#x5E8F;&#x5305;&#x540E;&#x5C31;&#x4F1A;&#x663E;&#x793A;&#x4E00;&#x53E5;&#x201C;exiting because &quot;Download Only&quot; specified&#x201D;&#x5E76;&#x81EA;&#x52A8;&#x9000;&#x51FA;&#xFF0C;&#x6B64;&#x65F6;&#x8981;&#x4E0B;&#x8F7D;&#x7684;&#x7A0B;&#x5E8F;&#x5305;&#x5DF2;&#x7ECF;&#x88AB;&#x653E;&#x7F6E;&#x5230;&#x4E86;yum&#x7684;&#x9ED8;&#x8BA4;&#x5B58;&#x653E;&#x4F4D;&#x7F6E;&#xFF0C;&#x5728;CentOS 7 x64&#x4E0B;&#xFF0C;&#x8FD9;&#x4E2A;&#x9ED8;&#x8BA4;&#x8DEF;&#x5F84;&#x662F;&#xFF1A;
+
+/var/cache/yum/x86_64/7/&lt;repo<span class="token punctuation">&gt;</span>/packages/
+
+2&#xFF09;&#x5982;&#x679C;&#x8981;&#x6307;&#x5B9A;yum&#x7684;&#x4E0B;&#x8F7D;&#x76EE;&#x5F55;&#xFF0C;&#x8FD8;&#x9700;&#x8981;&#x4E00;&#x4E2A;&#x201C;<span class="token punctuation">-</span><span class="token punctuation">-</span>downloaddir&#x201D;&#x53C2;&#x6570;&#xFF0C;&#x4F8B;&#x5982;&#x6211;&#x8981;&#x5C06;nginx&#x7A0B;&#x5E8F;&#x5305;&#x4E0B;&#x8F7D;&#x5230;&#x5F53;&#x524D;&#x6587;&#x4EF6;&#x5939;&#x4E0B;&#xFF0C;&#x5C31;&#x4F7F;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;&#xFF1A;
+
+yum install <span class="token punctuation">-</span>y <span class="token punctuation">-</span><span class="token punctuation">-</span>downloadonly <span class="token punctuation">-</span><span class="token punctuation">-</span>downloaddir=. nginx
+
+&#x4E0B;&#x8F7D;&#x79BB;&#x7EBF;&#x7684;docker&#x5B89;&#x88C5;&#x5305;
+<span class="token comment"># yum install -y --downloadonly --downloaddir=/rpmpackage/docker-ce docker-ce-18.06.1.ce </span>
+
+3&#xFF09;yum&#x79BB;&#x7EBF;&#x5B89;&#x88C5;
+&#x5728;&#x521A;&#x521A;&#x7B2C;&#x4E8C;&#x6B65;&#x4E2D;&#x6211;&#x4EEC;&#x4F7F;&#x7528;&#x4E86;yum <span class="token punctuation">-</span><span class="token punctuation">-</span>downloadonly&#x547D;&#x4EE4;&#x79BB;&#x7EBF;&#x4E0B;&#x8F7D;&#x4E86;&#x60F3;&#x8981;&#x7684;&#x7A0B;&#x5E8F;&#x5305;&#x5B89;&#x88C5;&#x6587;&#x4EF6;&#xFF0C;&#x73B0;&#x5728;&#x6211;&#x4EEC;&#x6709;&#x4E00;&#x53F0;&#x56E0;&#x4E3A;&#x79CD;&#x79CD;&#x539F;&#x56E0;&#x800C;&#x4E0D;&#x80FD;&#x4E0A;&#x7F51;&#x7684;&#x7CFB;&#x7EDF;&#xFF0C;&#x6211;&#x4EEC;&#x73B0;&#x5728;&#x8981;&#x628A;&#x521A;&#x521A;&#x4E0B;&#x8F7D;&#x4E0B;&#x6765;&#x7684;&#x7A0B;&#x5E8F;&#x5305;&#x5B89;&#x88C5;&#x5230;&#x8FD9;&#x53F0;&#x7535;&#x8111;&#x4E0A;&#x8BE5;&#x600E;&#x4E48;&#x529E;&#x5462;&#xFF1F;
+
+&#x5F88;&#x7B80;&#x5355;&#xFF0C;&#x7528;yum localinstall&#x547D;&#x4EE4;&#x3002;
+
+&#x9996;&#x5148;&#x5C06;&#x6211;&#x4EEC;&#x4E0B;&#x8F7D;&#x4E0B;&#x6765;&#x7684;&#x7A0B;&#x5E8F;&#x5305;&#x53CA;&#x5176;&#x4F9D;&#x8D56;&#x53BB;&#x4F7F;&#x7528;U&#x76D8;&#x7B49;&#x65B9;&#x5F0F;&#x62F7;&#x8D1D;&#x5230;&#x8FD9;&#x53F0;&#x4E0D;&#x80FD;&#x4E0A;&#x7F51;&#x7684;&#x7535;&#x8111;&#x4E2D;&#xFF0C;&#x7136;&#x540E;&#x8FDB;&#x5165;&#x7A0B;&#x5E8F;&#x5305;&#x5B58;&#x653E;&#x76EE;&#x5F55;&#xFF0C;&#x6267;&#x884C;&#x4E0B;&#x9762;&#x7684;&#x547D;&#x4EE4;&#xFF08;&#x4EE5;supervisor&#x4E3A;&#x4F8B;&#xFF09;&#xFF1A;
+
+yum localinstall <span class="token punctuation">-</span>y <span class="token punctuation">-</span><span class="token punctuation">-</span>nogpgcheck supervisor<span class="token punctuation">-</span>3.1.4<span class="token punctuation">-</span>1.el7.noarch.rpm \
+       python<span class="token punctuation">-</span>backports<span class="token punctuation">-</span>1.0<span class="token punctuation">-</span>8.el7.x86_64.rpm \
+       python<span class="token punctuation">-</span>backports<span class="token punctuation">-</span>ssl_match_hostname<span class="token punctuation">-</span>3.4.0.2<span class="token punctuation">-</span>4.el7.noarch.rpm \
+       python<span class="token punctuation">-</span>meld3<span class="token punctuation">-</span>0.6.10<span class="token punctuation">-</span>1.el7.x86_64.rpm \
+       python<span class="token punctuation">-</span>setuptools<span class="token punctuation">-</span>0.9.8<span class="token punctuation">-</span>7.el7.noarch.rpm
+ 
+1.&#x4F7F;&#x7528;yum localinstall&#x547D;&#x4EE4;&#x9700;&#x8981;&#x7684;&#x7A0B;&#x5E8F;&#x5305;&#x65F6;&#x9700;&#x8981;&#x540C;&#x65F6;&#x5B89;&#x88C5;&#x7A0B;&#x5E8F;&#x5305;&#x6240;&#x6709;&#x7684;&#x4F9D;&#x8D56;&#x9879;&#x76EE;&#xFF0C;&#x5426;&#x5219;&#x8FD8;&#x662F;&#x4F1A;&#x5C1D;&#x8BD5;&#x8054;&#x7F51;&#x53BB;&#x4E0B;&#x8F7D;&#x7F3A;&#x5C11;&#x7684;&#x4F9D;&#x8D56;&#x9879;&#x76EE;&#xFF1B;
+2.&#x201C;<span class="token punctuation">-</span><span class="token punctuation">-</span>nogpgcheck&#x201D;&#x53C2;&#x6570;&#x4E3B;&#x8981;&#x662F;&#x4E3A;&#x4E86;&#x4E0D;&#x8BA9;yum&#x5BF9;&#x7A0B;&#x5E8F;&#x5305;&#x8FDB;&#x884C;GPG&#x9A8C;&#x8BC1;&#xFF1B;
+3.&#x9664;&#x4E86;yum localinstall&#x547D;&#x4EE4;&#x4EE5;&#x5916;&#xFF0C;&#x8FD8;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;rpm <span class="token punctuation">-</span>ivh&#x547D;&#x4EE4;&#x5B89;&#x88C5;rpm&#x5305;&#xFF0C;&#x8FD9;&#x91CC;&#x4E0D;&#x518D;&#x5355;&#x72EC;&#x8BA8;&#x8BBA;&#x3002;
+
+&#x6216;&#x8005;&#x6784;&#x5EFA;&#x672C;&#x5730;yum&#x5E93;&#x6765;&#x5B89;&#x88C5;&#x3002;
+
+&#x9700;&#x8981;&#x8BF4;&#x660E;&#x7684;&#x662F;&#xFF0C;&#x4E3A;&#x4E86;&#x5728;&#x79BB;&#x7EBF;&#x73AF;&#x5883;&#x5EFA;&#x8F6F;&#x4EF6;&#x6E90;&#xFF0C;createrepo&#x662F;&#x5FC5;&#x4E0D;&#x53EF;&#x5C11;&#x7684;&#x6A21;&#x5757;&#xFF0C;&#x56E0;&#x6B64;&#x9700;&#x8981;&#x4E0B;&#x8F7D;createrepo&#x76F8;&#x5173;&#x6A21;&#x5757;&#x3002;
+
+<span class="token comment"># yum install --downloadonly --downloaddir=/rpmpackage/createrepo createrepo</span>
+ 
+&#x4E00;&#x822C;&#x4F1A;&#x4E0B;&#x8F7D;&#x4E09;&#x4E2A;&#x5305;&#xFF0C;&#x4E00;&#x4E2A;&#x662F;createrepo&#xFF0C;&#x53E6;&#x5916;&#x4E24;&#x4E2A;&#x662F;&#x4F9D;&#x8D56;&#x5305;&#x3002;
+
+<span class="token comment"># rpm -ivh python-deltarpm-3.6-3.el7.x86_64.rpm </span>
+<span class="token comment"># rpm -ivh createrepo-0.9.9-28.el7.noarch.rpm</span>
+
+centos7.4&#x9ED8;&#x8BA4;&#x5DF2;&#x7ECF;&#x5B89;&#x88C5;&#x7684;
+deltarpm<span class="token punctuation">-</span>3.6<span class="token punctuation">-</span>3.el7.x86_64
+libxml2<span class="token punctuation">-</span>python<span class="token punctuation">-</span>2.9.1<span class="token punctuation">-</span>6.el7_2.3.x86_64
+
+createrepo&#x6784;&#x5EFA;&#x672C;&#x5730;&#x8F6F;&#x4EF6;&#x6E90;
+
+&#x5047;&#x8BBE;&#x5B89;&#x88C5;&#x5305;&#x5728;&#x76EE;&#x6807;&#x673A;&#x7684;/rpmpackage/createrepo&#x76EE;&#x5F55;&#x4E0B;&#x3002;
+
+<span class="token comment"># createrepo  /rpmpackage/docker-ce/</span>
+
+&#x4FEE;&#x6539;yum&#x8F6F;&#x4EF6;&#x6E90;
+
+&#x79FB;&#x9664;&#x73B0;&#x6709;&#x7684;&#x8F6F;&#x4EF6;&#x6E90;
+<span class="token comment"># mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo_bk</span>
+ 
+&#x5F00;&#x542F;&#x672C;&#x5730;&#x8F6F;&#x4EF6;&#x6E90;
+<span class="token comment"># vim /etc/yum.repos.d/CentOS-Media.repo</span>
+<span class="token punctuation">[</span>docker<span class="token punctuation">-</span>ce<span class="token punctuation">]</span>
+name=local docker<span class="token punctuation">-</span>ce
+baseurl=file<span class="token punctuation">:</span>////rpmpackage/docker<span class="token punctuation">-</span>ce/
+enabled=1
+gpgcheck=0
+
+&#x8FD9;&#x6837;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;yum&#x91C7;&#x7528;&#x672C;&#x5730;&#x6E90;&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x3002;
+
+&#x8F93;&#x5165;yum repolist&#x770B;&#x662F;&#x5426;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x81EA;&#x5DF1;&#x6784;&#x5EFA;&#x7684;&#x672C;&#x5730;&#x6E90; 
+
+&#x6E05;&#x9664;&#x7F13;&#x5B58; <span class="token comment">#yum clean all</span>
+&#x521B;&#x5EFA;&#x7F13;&#x5B58; <span class="token comment">#yum makecache</span>
+
+&#x67E5;&#x770B;&#x672C;&#x5730;&#x6E90;&#x662F;&#x5426;&#x6210;&#x529F;&#xFF0C;&#x901A;&#x8FC7;yum list&#x662F;&#x5426;&#x8F93;&#x51FA;&#x65B0;&#x7684;rpm&#x5305;&#x3002;&#x67E5;&#x8BE2;&#x5230;&#x5219;&#x8BC1;&#x660E;&#x6210;&#x529F;
+&#x67E5;&#x770B;&#x5305;&#x4FE1;&#x606F;
+<span class="token comment"># yum info docker-ce</span>
+
+
+&#x5728;&#x76EE;&#x6807;&#x673A;&#x5B89;&#x88C5;&#x76EE;&#x6807;&#x8F6F;&#x4EF6;
+&#x4F7F;&#x7528;yum&#x6B63;&#x5E38;&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5373;&#x53EF;&#x3002;
+
+<span class="token comment"># yum install -y docker-ce</span>
+<span class="token comment"># yum install -y docker-ce-18.06.1.ce #docker-ce-18.09.2</span>
+ 
+&#x5982;&#x679C;&#x7528;&#x7684;&#x662F;&#x7EAF;&#x51C0;&#x7684;&#x865A;&#x62DF;&#x673A;&#x73AF;&#x5883;&#xFF0C;&#x5E76;&#x4E14;&#x548C;&#x76EE;&#x6807;&#x673A;&#x4FDD;&#x6301;&#x4E00;&#x81F4;&#xFF0C;&#x90A3;&#x4E48;&#x4F9D;&#x8D56;&#x5305;&#x5C31;&#x4F1A;&#x90FD;&#x5B89;&#x88C5;&#xFF0C;yum&#x5B89;&#x88C5;&#x5C31;&#x4F1A;&#x5F88;&#x987A;&#x5229;&#x3002;&#x9664;&#x975E;&#x4E2A;&#x522B;&#x5305;&#x4F1A;&#x6709;&#x4F9D;&#x8D56;&#x51B2;&#x7A81;&#xFF0C;A&#x4F9D;&#x8D56;B&#xFF0C;B&#x53C8;&#x4F9D;&#x8D56;A&#xFF0C;&#x5BFC;&#x81F4;&#x65E0;&#x6CD5;&#x5B89;&#x88C5;&#xFF0C;&#x6B64;&#x65F6;&#x53EF;&#x4EE5;&#x7528;rpm&#x547D;&#x4EE4;&#x5F3A;&#x5236;&#x5B89;&#x88C5;&#x5176;&#x4E2D;&#x4E00;&#x4E2A;&#xFF0C;&#x518D;&#x7528;yum&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5373;&#x53EF;&#x3002;
+
+<span class="token comment"># rpm -ivh demo.rpm --nodeps --force</span>
+
+&#x5982;&#x679C;&#x5B89;&#x88C5;&#x4E2D;&#x51FA;&#x73B0;&#x7C7B;&#x4F3C;&#x4E0B;&#x9762;&#x7684;&#x9519;&#x8BEF;&#xFF1A;
+ Package fglrx<span class="token punctuation">-</span>glc22<span class="token punctuation">-</span>4.1.0<span class="token punctuation">-</span>3.2.5.i586.rpm is not signed
+
+&#x9700;&#x8981;&#x52A0;&#x4E2A; <span class="token punctuation">-</span><span class="token punctuation">-</span>nogpgcheck &#x53C2;&#x6570;&#x3002;
+<span class="token comment"># yum localinstall fglrx-glc22-4.1.0-3.2.5.i586.rpm --nogpgcheck</span>
+</pre><h3 class="mume-header" id="3-%E9%80%89%E6%8B%A9%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85docker%E7%89%88%E6%9C%AC">3&#x3001;&#x9009;&#x62E9;&#x9700;&#x8981;&#x5B89;&#x88C5;docker&#x7248;&#x672C;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token comment"># sudo yum install -y yum-utils device-mapper-persistent-data lvm2</span>
+<span class="token comment"># sudo yum list docker-ce --showduplicates</span>
+<span class="token comment"># sudo yum install -y docker-ce &#x6216;&#x5B89;&#x88C5;&#x7279;&#x5B9A;&#x7248;&#x672C;</span>
+
+<span class="token comment"># yum install -y docker-ce-18.09.3-3.el7</span>
+
+<span class="token comment"># sudo systemctl start docker</span>
+<span class="token comment"># sudo systemctl enable docker</span>
+
+<span class="token comment"># yum list docker-ce --showduplicates</span>
+Failed to set locale<span class="token punctuation">,</span> defaulting to C
+Loaded plugins<span class="token punctuation">:</span> fastestmirror
+Determining fastest mirrors
+ * base<span class="token punctuation">:</span> mirrors.aliyun.com
+ * extras<span class="token punctuation">:</span> mirrors.aliyun.com
+ * updates<span class="token punctuation">:</span> mirrors.aliyun.com
+Installed Packages
+docker<span class="token punctuation">-</span>ce.x86_64                  18.03.1.ce<span class="token punctuation">-</span>1.el7.centos                   @docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable
+Available Packages
+docker<span class="token punctuation">-</span>ce.x86_64                  17.03.0.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.03.1.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.03.2.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.03.3.ce<span class="token punctuation">-</span>1.el7                          docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.06.0.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.06.1.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.06.2.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.09.0.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.09.1.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.12.0.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  17.12.1.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  18.03.0.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  18.03.1.ce<span class="token punctuation">-</span>1.el7.centos                   docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  18.06.0.ce<span class="token punctuation">-</span>3.el7                          docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  18.06.1.ce<span class="token punctuation">-</span>3.el7                          docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  18.06.2.ce<span class="token punctuation">-</span>3.el7                          docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  18.06.3.ce<span class="token punctuation">-</span>3.el7                          docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  3<span class="token punctuation">:</span>18.09.0<span class="token punctuation">-</span>3.el7                           docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  3<span class="token punctuation">:</span>18.09.1<span class="token punctuation">-</span>3.el7                           docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  3<span class="token punctuation">:</span>18.09.2<span class="token punctuation">-</span>3.el7                           docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  3<span class="token punctuation">:</span>18.09.3<span class="token punctuation">-</span>3.el7                           docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  3<span class="token punctuation">:</span>18.09.4<span class="token punctuation">-</span>3.el7                           docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+docker<span class="token punctuation">-</span>ce.x86_64                  3<span class="token punctuation">:</span>18.09.5<span class="token punctuation">-</span>3.el7                           docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>stable 
+</pre><h3 class="mume-header" id="4-%E5%88%A0%E9%99%A4docker">4&#x3001;&#x5220;&#x9664;Docker</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token comment"># yum remove docker-ce</span>
+<span class="token comment"># rm -rf /var/lib/docker</span>
+
+<span class="token comment"># yum -y remove docker docker-common docker-selinux docker-engine docker-engine-selinux container-selinux docker-ce</span>
+
+<span class="token comment"># yum -y remove docker-ce-cli</span>
+
+
+&#x67E5;&#x770B;&#x662F;&#x5426;&#x5B89;&#x88C5;Docker&#x8F6F;&#x4EF6;&#x5305;
+<span class="token comment"># yum list installed | grep docker</span>
+<span class="token comment"># rpm -qa|grep docker</span>
+
+</pre><h3 class="mume-header" id="5-%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F">5&#x3001;&#x955C;&#x50CF;&#x52A0;&#x901F;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x9274;&#x4E8E;&#x56FD;&#x5185;&#x7F51;&#x7EDC;&#x95EE;&#x9898;&#xFF0C;&#x540E;&#x7EED;&#x62C9;&#x53D6;Docker&#x955C;&#x50CF;&#x5341;&#x5206;&#x7F13;&#x6162;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x9700;&#x8981;&#x914D;&#x7F6E;&#x52A0;&#x901F;&#x5668;&#x6765;&#x89E3;&#x51B3;&#x3002;
+
+&#x65B0;&#x7248;&#x7684;Docker&#x4F7F;&#x7528;/etc/docker/daemon.json(Linux&#xFF09;&#x6765;&#x914D;&#x7F6E;&#x5B88;&#x62A4;&#x8FDB;&#x7A0B;&#x3002;
+
+&#x8BF7;&#x5728;&#x8BE5;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x4E2D;&#x52A0;&#x5165;&#xFF08;&#x6CA1;&#x6709;&#x8BE5;&#x6587;&#x4EF6;&#x7684;&#x8BDD;&#xFF0C;&#x8BF7;&#x5148;&#x5EFA;&#x4E00;&#x4E2A;&#xFF09;&#xFF1A;
+
+&#x5982;&#x679C;&#x6CA1;&#x6709;&#xFF0C;&#x5C31;&#x5EFA;&#x7ACB;docker&#x6587;&#x4EF6;&#x5939;
+sudo mkdir <span class="token punctuation">-</span>p /etc/docker
+
+&#x53EF;&#x4EE5;&#x9009;&#x62E9;&#x591A;&#x4E2A;&#x52A0;&#x901F;&#x5668;&#xFF0C;&#x5EFA;&#x8BAE;&#x963F;&#x91CC;&#xFF0C;&#x4F46;&#x662F;&#x9700;&#x8981;&#x6CE8;&#x518C;
+<span class="token comment"># https://xxxx.mirror.aliyuncs.com</span>
+<span class="token comment"># http://hub-mirror.c.163.com </span>
+<span class="token comment"># http://f1361db2.m.daocloud.io</span>
+
+&#x9ED8;&#x8BA4;&#x6CA1;&#x6709;daemon.json<span class="token punctuation">,</span>&#x81EA;&#x5DF1;&#x7528;&#x4E0B;&#x9762;&#x7684;&#x4E00;&#x79CD;&#x65B9;&#x6CD5;&#x65B0;&#x5EFA;
+<span class="token comment"># vi /etc/docker/daemon.json</span>
+<span class="token punctuation">{</span>
+  <span class="token key atrule">&quot;registry-mirrors&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;https://xxxx.mirror.aliyuncs.com&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+<span class="token key atrule">&quot;registry-mirrors&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span><span class="token punctuation">,</span><span class="token string">&quot;https://al9ikvwc.mirror.aliyuncs.com&quot;</span><span class="token punctuation">]</span>
+
+&#x6216;
+<span class="token comment"># sudo tee /etc/docker/daemon.json &lt;&lt;-&apos;EOF&apos;</span>
+<span class="token punctuation">{</span>
+  <span class="token key atrule">&quot;registry-mirrors&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;http://hub-mirror.c.163.com&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+EOF
+
+&#x6216;
+<span class="token comment"># sudo echo -e &quot;{\n \&quot;registry-mirrors\&quot;: [\&quot;http://hub-mirror.c.163.com\&quot;]\n}&quot; &gt; /etc/docker/daemon.json</span>
+<span class="token comment">#sudo echo -e &apos;{&quot;registry-mirrors&quot;: [&quot;https://7bezldxe.mirror.aliyuncs.com/&quot;],&quot;insecure-registries&quot;: [&quot;http://192.168.113.38&quot;]}&apos; &gt; /etc/docker/daemon.json</span>
+&#x6216;
+<span class="token comment"># sudo curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io</span>
+
+&#x6CE8;&#x610F;&#x67E5;&#x770B;&#x683C;&#x5F0F;&#x662F;&#x5426;&#x6B63;&#x786E;
+<span class="token comment"># cat /etc/docker/daemon.json</span>
+
+&#x91CD;&#x65B0;&#x52A0;&#x8F7D;&#x5E76;&#x542F;&#x52A8;
+<span class="token comment"># systemctl daemon-reload</span>
+<span class="token comment"># systemctl restart docker</span>
+
+</pre><h3 class="mume-header" id="6-windows-docker-%E5%AE%89%E8%A3%85">6&#x3001;Windows Docker &#x5B89;&#x88C5;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">win7&#x3001;win8 &#x7B49;&#x9700;&#x8981;&#x5229;&#x7528; docker toolbox &#x6765;&#x5B89;&#x88C5;&#xFF0C;&#x56FD;&#x5185;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x963F;&#x91CC;&#x4E91;&#x7684;&#x955C;&#x50CF;&#x6765;&#x4E0B;&#x8F7D;&#xFF0C;&#x4E0B;&#x8F7D;&#x5730;&#x5740;&#xFF1A;
+http<span class="token punctuation">:</span>//mirrors.aliyun.com/docker<span class="token punctuation">-</span>toolbox/windows/docker<span class="token punctuation">-</span>toolbox/
+
+docker toolbox &#x662F;&#x4E00;&#x4E2A;&#x5DE5;&#x5177;&#x96C6;&#xFF0C;&#x5B83;&#x4E3B;&#x8981;&#x5305;&#x542B;&#x4EE5;&#x4E0B;&#x4E00;&#x4E9B;&#x5185;&#x5BB9;&#xFF1A;
+    Docker CLI &#x5BA2;&#x6237;&#x7AEF;&#xFF0C;&#x7528;&#x6765;&#x8FD0;&#x884C;docker&#x5F15;&#x64CE;&#x521B;&#x5EFA;&#x955C;&#x50CF;&#x548C;&#x5BB9;&#x5668;
+    Docker Machine. &#x53EF;&#x4EE5;&#x8BA9;&#x4F60;&#x5728;windows&#x7684;&#x547D;&#x4EE4;&#x884C;&#x4E2D;&#x8FD0;&#x884C;docker&#x5F15;&#x64CE;&#x547D;&#x4EE4;
+    Docker Compose. &#x7528;&#x6765;&#x8FD0;&#x884C;docker<span class="token punctuation">-</span>compose&#x547D;&#x4EE4;
+    Kitematic. &#x8FD9;&#x662F;Docker&#x7684;GUI&#x7248;&#x672C;
+    Docker QuickStart shell. &#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x5DF2;&#x7ECF;&#x914D;&#x7F6E;&#x597D;Docker&#x7684;&#x547D;&#x4EE4;&#x884C;&#x73AF;&#x5883;
+    Oracle VM Virtualbox. &#x865A;&#x62DF;&#x673A;
+</pre><h2 class="mume-header" id="%E5%9B%9B-docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">&#x56DB;&#x3001;docker&#x5E38;&#x7528;&#x547D;&#x4EE4;</h2>
+
+<h3 class="mume-header" id="1-docker%E5%91%BD%E4%BB%A4">1&#x3001;docker&#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">docker   <span class="token comment"># docker &#x547D;&#x4EE4;&#x5E2E;&#x52A9;</span>
+
+<span class="token key atrule">Commands</span><span class="token punctuation">:</span>
+    attach    Attach to a running container                 <span class="token comment"># &#x5F53;&#x524D; shell &#x4E0B; attach &#x8FDE;&#x63A5;&#x6307;&#x5B9A;&#x8FD0;&#x884C;&#x955C;&#x50CF;</span>
+    build     Build an image from a Dockerfile              <span class="token comment"># &#x901A;&#x8FC7; Dockerfile &#x5B9A;&#x5236;&#x955C;&#x50CF;</span>
+    commit    Create a new image from a container&apos;s changes <span class="token comment"># &#x63D0;&#x4EA4;&#x5F53;&#x524D;&#x5BB9;&#x5668;&#x4E3A;&#x65B0;&#x7684;&#x955C;&#x50CF;</span>
+    cp        Copy files/folders from the containers filesystem to the host path
+              <span class="token comment"># &#x4ECE;&#x5BB9;&#x5668;&#x4E2D;&#x62F7;&#x8D1D;&#x6307;&#x5B9A;&#x6587;&#x4EF6;&#x6216;&#x8005;&#x76EE;&#x5F55;&#x5230;&#x5BBF;&#x4E3B;&#x673A;&#x4E2D;</span>
+    create    Create a new container                        <span class="token comment"># &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x5BB9;&#x5668;&#xFF0C;&#x540C; run&#xFF0C;&#x4F46;&#x4E0D;&#x542F;&#x52A8;&#x5BB9;&#x5668;</span>
+    diff      Inspect changes on a container&apos;s filesystem   <span class="token comment"># &#x67E5;&#x770B; docker &#x5BB9;&#x5668;&#x53D8;&#x5316;</span>
+    events    Get real time events from the server          <span class="token comment"># &#x4ECE; docker &#x670D;&#x52A1;&#x83B7;&#x53D6;&#x5BB9;&#x5668;&#x5B9E;&#x65F6;&#x4E8B;&#x4EF6;</span>
+    exec      Run a command in an existing container        <span class="token comment"># &#x5728;&#x5DF2;&#x5B58;&#x5728;&#x7684;&#x5BB9;&#x5668;&#x4E0A;&#x8FD0;&#x884C;&#x547D;&#x4EE4;</span>
+    export    Stream the contents of a container as a tar archive   
+              <span class="token comment"># &#x5BFC;&#x51FA;&#x5BB9;&#x5668;&#x7684;&#x5185;&#x5BB9;&#x6D41;&#x4F5C;&#x4E3A;&#x4E00;&#x4E2A; tar &#x5F52;&#x6863;&#x6587;&#x4EF6;[&#x5BF9;&#x5E94; import ]</span>
+    history   Show the history of an image                  <span class="token comment"># &#x5C55;&#x793A;&#x4E00;&#x4E2A;&#x955C;&#x50CF;&#x5F62;&#x6210;&#x5386;&#x53F2;</span>
+    images    List images                                   <span class="token comment"># &#x5217;&#x51FA;&#x7CFB;&#x7EDF;&#x5F53;&#x524D;&#x955C;&#x50CF;</span>
+    import    Create a new filesystem image from the contents of a tarball  
+              <span class="token comment"># &#x4ECE;tar&#x5305;&#x4E2D;&#x7684;&#x5185;&#x5BB9;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x6587;&#x4EF6;&#x7CFB;&#x7EDF;&#x6620;&#x50CF;[&#x5BF9;&#x5E94; export]</span>
+    info      Display system<span class="token punctuation">-</span>wide information               <span class="token comment"># &#x663E;&#x793A;&#x7CFB;&#x7EDF;&#x76F8;&#x5173;&#x4FE1;&#x606F;</span>
+    inspect   Return low<span class="token punctuation">-</span>level information on a container   <span class="token comment"># &#x67E5;&#x770B;&#x5BB9;&#x5668;&#x8BE6;&#x7EC6;&#x4FE1;&#x606F;</span>
+    kill      Kill a running container                      <span class="token comment"># kill &#x6307;&#x5B9A; docker &#x5BB9;&#x5668;</span>
+    load      Load an image from a tar archive              <span class="token comment"># &#x4ECE;&#x4E00;&#x4E2A; tar &#x5305;&#x4E2D;&#x52A0;&#x8F7D;&#x4E00;&#x4E2A;&#x955C;&#x50CF;[&#x5BF9;&#x5E94; save]</span>
+    login     Register or Login to the docker registry server   
+              <span class="token comment"># &#x6CE8;&#x518C;&#x6216;&#x8005;&#x767B;&#x9646;&#x4E00;&#x4E2A; docker &#x6E90;&#x670D;&#x52A1;&#x5668;</span>
+    logout    Log out from a Docker registry server         <span class="token comment"># &#x4ECE;&#x5F53;&#x524D; Docker registry &#x9000;&#x51FA;</span>
+    logs      Fetch the logs of a container                 <span class="token comment"># &#x8F93;&#x51FA;&#x5F53;&#x524D;&#x5BB9;&#x5668;&#x65E5;&#x5FD7;&#x4FE1;&#x606F;</span>
+    port      Lookup the public<span class="token punctuation">-</span>facing port which is NAT<span class="token punctuation">-</span>ed to PRIVATE_PORT
+              <span class="token comment"># &#x67E5;&#x770B;&#x6620;&#x5C04;&#x7AEF;&#x53E3;&#x5BF9;&#x5E94;&#x7684;&#x5BB9;&#x5668;&#x5185;&#x90E8;&#x6E90;&#x7AEF;&#x53E3;</span>
+    pause     Pause all processes within a container        <span class="token comment"># &#x6682;&#x505C;&#x5BB9;&#x5668;</span>
+    ps        List containers                               <span class="token comment"># &#x5217;&#x51FA;&#x5BB9;&#x5668;&#x5217;&#x8868;</span>
+    pull      Pull an image or a repository from the docker registry server
+              <span class="token comment"># &#x4ECE;docker&#x955C;&#x50CF;&#x6E90;&#x670D;&#x52A1;&#x5668;&#x62C9;&#x53D6;&#x6307;&#x5B9A;&#x955C;&#x50CF;&#x6216;&#x8005;&#x5E93;&#x955C;&#x50CF;</span>
+    push      Push an image or a repository to the docker registry server
+              <span class="token comment"># &#x63A8;&#x9001;&#x6307;&#x5B9A;&#x955C;&#x50CF;&#x6216;&#x8005;&#x5E93;&#x955C;&#x50CF;&#x81F3;docker&#x6E90;&#x670D;&#x52A1;&#x5668;</span>
+    restart   Restart a running container                   <span class="token comment"># &#x91CD;&#x542F;&#x8FD0;&#x884C;&#x7684;&#x5BB9;&#x5668;</span>
+    rm        Remove one or more containers                 <span class="token comment"># &#x79FB;&#x9664;&#x4E00;&#x4E2A;&#x6216;&#x8005;&#x591A;&#x4E2A;&#x5BB9;&#x5668;</span>
+    rmi       Remove one or more images                 
+              <span class="token comment"># &#x79FB;&#x9664;&#x4E00;&#x4E2A;&#x6216;&#x591A;&#x4E2A;&#x955C;&#x50CF;[&#x65E0;&#x5BB9;&#x5668;&#x4F7F;&#x7528;&#x8BE5;&#x955C;&#x50CF;&#x624D;&#x53EF;&#x5220;&#x9664;&#xFF0C;&#x5426;&#x5219;&#x9700;&#x5220;&#x9664;&#x76F8;&#x5173;&#x5BB9;&#x5668;&#x624D;&#x53EF;&#x7EE7;&#x7EED;&#x6216; -f &#x5F3A;&#x5236;&#x5220;&#x9664;]</span>
+    run       Run a command in a new container
+              <span class="token comment"># &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x65B0;&#x7684;&#x5BB9;&#x5668;&#x5E76;&#x8FD0;&#x884C;&#x4E00;&#x4E2A;&#x547D;&#x4EE4;</span>
+    save      Save an image to a tar archive                <span class="token comment"># &#x4FDD;&#x5B58;&#x4E00;&#x4E2A;&#x955C;&#x50CF;&#x4E3A;&#x4E00;&#x4E2A; tar &#x5305;[&#x5BF9;&#x5E94; load]</span>
+    search    Search for an image on the Docker Hub         <span class="token comment"># &#x5728; docker hub &#x4E2D;&#x641C;&#x7D22;&#x955C;&#x50CF;</span>
+    start     Start a stopped containers                    <span class="token comment"># &#x542F;&#x52A8;&#x5BB9;&#x5668;</span>
+    stop      Stop a running containers                     <span class="token comment"># &#x505C;&#x6B62;&#x5BB9;&#x5668;</span>
+    tag       Tag an image into a repository                <span class="token comment"># &#x7ED9;&#x6E90;&#x4E2D;&#x955C;&#x50CF;&#x6253;&#x6807;&#x7B7E;</span>
+    top       Lookup the running processes of a container   <span class="token comment"># &#x67E5;&#x770B;&#x5BB9;&#x5668;&#x4E2D;&#x8FD0;&#x884C;&#x7684;&#x8FDB;&#x7A0B;&#x4FE1;&#x606F;</span>
+    unpause   Unpause a paused container                    <span class="token comment"># &#x53D6;&#x6D88;&#x6682;&#x505C;&#x5BB9;&#x5668;</span>
+    version   Show the docker version information           <span class="token comment"># &#x67E5;&#x770B; docker &#x7248;&#x672C;&#x53F7;</span>
+    wait      Block until a container stops<span class="token punctuation">,</span> then print its exit code   
+              <span class="token comment"># &#x622A;&#x53D6;&#x5BB9;&#x5668;&#x505C;&#x6B62;&#x65F6;&#x7684;&#x9000;&#x51FA;&#x72B6;&#x6001;&#x503C;</span>
+Run &apos;docker COMMAND <span class="token punctuation">-</span><span class="token punctuation">-</span>help&apos; for more information on a command.
+
+docker run <span class="token punctuation">[</span>OPTIONS<span class="token punctuation">]</span> IMAGE <span class="token punctuation">[</span>COMMAND<span class="token punctuation">]</span> <span class="token punctuation">[</span>ARG<span class="token punctuation">...</span><span class="token punctuation">]</span>
+OPTIONS&#x8BF4;&#x660E;&#xFF1A;
+<span class="token punctuation">-</span>a stdin<span class="token punctuation">:</span> &#x6307;&#x5B9A;&#x6807;&#x51C6;&#x8F93;&#x5165;&#x8F93;&#x51FA;&#x5185;&#x5BB9;&#x7C7B;&#x578B;&#xFF0C;&#x53EF;&#x9009; STDIN/STDOUT/STDERR &#x4E09;&#x9879;&#xFF1B;
+<span class="token punctuation">-</span><span class="token key atrule">d</span><span class="token punctuation">:</span> &#x540E;&#x53F0;&#x8FD0;&#x884C;&#x5BB9;&#x5668;&#xFF0C;&#x5E76;&#x8FD4;&#x56DE;&#x5BB9;&#x5668;ID&#xFF1B;
+<span class="token punctuation">-</span><span class="token key atrule">i</span><span class="token punctuation">:</span> &#x4EE5;&#x4EA4;&#x4E92;&#x6A21;&#x5F0F;&#x8FD0;&#x884C;&#x5BB9;&#x5668;&#xFF0C;&#x901A;&#x5E38;&#x4E0E; <span class="token punctuation">-</span>t &#x540C;&#x65F6;&#x4F7F;&#x7528;&#xFF1B;
+<span class="token punctuation">-</span><span class="token key atrule">p</span><span class="token punctuation">:</span> &#x7AEF;&#x53E3;&#x6620;&#x5C04;&#xFF0C;&#x683C;&#x5F0F;&#x4E3A;&#xFF1A;&#x4E3B;&#x673A;(&#x5BBF;&#x4E3B;)&#x7AEF;&#x53E3;<span class="token punctuation">:</span>&#x5BB9;&#x5668;&#x7AEF;&#x53E3;
+<span class="token punctuation">-</span><span class="token key atrule">t</span><span class="token punctuation">:</span> &#x4E3A;&#x5BB9;&#x5668;&#x91CD;&#x65B0;&#x5206;&#x914D;&#x4E00;&#x4E2A;&#x4F2A;&#x8F93;&#x5165;&#x7EC8;&#x7AEF;&#xFF0C;&#x901A;&#x5E38;&#x4E0E; <span class="token punctuation">-</span>i &#x540C;&#x65F6;&#x4F7F;&#x7528;&#xFF1B;
+<span class="token punctuation">-</span><span class="token key atrule">-name=&quot;nginx-lb&quot;</span><span class="token punctuation">:</span> &#x4E3A;&#x5BB9;&#x5668;&#x6307;&#x5B9A;&#x4E00;&#x4E2A;&#x540D;&#x79F0;&#xFF1B;
+<span class="token punctuation">-</span><span class="token punctuation">-</span>dns 8.8.8.8<span class="token punctuation">:</span> &#x6307;&#x5B9A;&#x5BB9;&#x5668;&#x4F7F;&#x7528;&#x7684;DNS&#x670D;&#x52A1;&#x5668;&#xFF0C;&#x9ED8;&#x8BA4;&#x548C;&#x5BBF;&#x4E3B;&#x4E00;&#x81F4;&#xFF1B;
+<span class="token punctuation">-</span><span class="token punctuation">-</span>dns<span class="token punctuation">-</span>search example.com<span class="token punctuation">:</span> &#x6307;&#x5B9A;&#x5BB9;&#x5668;DNS&#x641C;&#x7D22;&#x57DF;&#x540D;&#xFF0C;&#x9ED8;&#x8BA4;&#x548C;&#x5BBF;&#x4E3B;&#x4E00;&#x81F4;&#xFF1B;
+<span class="token punctuation">-</span>h &quot;mars&quot;<span class="token punctuation">:</span> &#x6307;&#x5B9A;&#x5BB9;&#x5668;&#x7684;hostname&#xFF1B;
+<span class="token punctuation">-</span>e username=&quot;ritchie&quot;<span class="token punctuation">:</span> &#x8BBE;&#x7F6E;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#xFF1B;
+<span class="token punctuation">-</span><span class="token punctuation">-</span>env<span class="token punctuation">-</span>file=<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">:</span> &#x4ECE;&#x6307;&#x5B9A;&#x6587;&#x4EF6;&#x8BFB;&#x5165;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#xFF1B;
+<span class="token punctuation">-</span><span class="token punctuation">-</span>cpuset=&quot;0<span class="token punctuation">-</span>2&quot; or <span class="token punctuation">-</span><span class="token punctuation">-</span>cpuset=&quot;0<span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token key atrule">2&quot;</span><span class="token punctuation">:</span> &#x7ED1;&#x5B9A;&#x5BB9;&#x5668;&#x5230;&#x6307;&#x5B9A;CPU&#x8FD0;&#x884C;&#xFF1B;
+<span class="token punctuation">-</span>m <span class="token punctuation">:</span>&#x8BBE;&#x7F6E;&#x5BB9;&#x5668;&#x4F7F;&#x7528;&#x5185;&#x5B58;&#x6700;&#x5927;&#x503C;&#xFF1B;
+<span class="token punctuation">-</span><span class="token key atrule">-net=&quot;bridge&quot;</span><span class="token punctuation">:</span> &#x6307;&#x5B9A;&#x5BB9;&#x5668;&#x7684;&#x7F51;&#x7EDC;&#x8FDE;&#x63A5;&#x7C7B;&#x578B;&#xFF0C;&#x652F;&#x6301; bridge/host/none/container<span class="token punctuation">:</span> &#x56DB;&#x79CD;&#x7C7B;&#x578B;&#xFF1B;
+<span class="token punctuation">-</span><span class="token punctuation">-</span>link=<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">:</span> &#x6DFB;&#x52A0;&#x94FE;&#x63A5;&#x5230;&#x53E6;&#x4E00;&#x4E2A;&#x5BB9;&#x5668;&#xFF1B;
+<span class="token punctuation">-</span><span class="token punctuation">-</span>expose=<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">:</span> &#x5F00;&#x653E;&#x4E00;&#x4E2A;&#x7AEF;&#x53E3;&#x6216;&#x4E00;&#x7EC4;&#x7AEF;&#x53E3;&#xFF1B;
+
+
+&#x5B9E;&#x4F8B;&#xFF1A;
+<span class="token comment"># docker run -itd --name box1 busybox</span>
+<span class="token comment"># docker ps</span>
+<span class="token comment"># docker exec -it 802 /bin/sh</span>
+</pre><h3 class="mume-header" id="2-docker%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">2&#x3001;docker&#x5E38;&#x7528;&#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">$ sudo docker <span class="token comment">#&#x663E;&#x793A;docker&#x547D;&#x4EE4;</span>
+$ sudo docker <span class="token punctuation">-</span>v <span class="token comment">#&#x663E;&#x793A; Docker &#x7248;&#x672C;&#x4FE1;&#x606F;</span>
+$ sudo docker version <span class="token comment">#&#x663E;&#x793A; Docker &#x7248;&#x672C;&#x4FE1;&#x606F;</span>
+$ sudo docker info <span class="token comment">#&#x663E;&#x793A; Docker &#x7CFB;&#x7EDF;&#x4FE1;&#x606F;&#xFF0C;&#x5305;&#x62EC;&#x955C;&#x50CF;&#x548C;&#x5BB9;&#x5668;&#x6570;</span>
+
+$ sudo docker search centos
+$ sudo docker search centos <span class="token punctuation">-</span><span class="token punctuation">-</span>no<span class="token punctuation">-</span>trunc <span class="token comment">#&#x53EF;&#x663E;&#x793A;&#x5B8C;&#x6574;&#x7684;&#x955C;&#x50CF;&#x63CF;&#x8FF0;</span>
+$ sudo docker search <span class="token punctuation">-</span>s 10 tomcat    <span class="token comment"># &#x641C;&#x7D22;10&#x661F;&#x4EE5;&#x4E0A;&#x7684;tomcat&#x955C;&#x50CF;</span>
+
+$ sudo docker pull tomcat <span class="token comment">#&#x62C9;&#x53D6;&#x6307;&#x5B9A;&#x955C;&#x50CF;&#xFF0C;&#x53EF;&#x4EE5;&#x52A0;&#x7248;&#x672C;</span>
+$ sudo docker pull nginx<span class="token punctuation">:</span>1.15.9<span class="token punctuation">-</span>alpine
+$ sudo docker run <span class="token punctuation">-</span>itd <span class="token punctuation">-</span><span class="token punctuation">-</span>name nginx1 <span class="token punctuation">-</span>p 8081<span class="token punctuation">:</span>80 nginx<span class="token punctuation">:</span>1.15.9<span class="token punctuation">-</span>alpine
+
+$ sudo docker images <span class="token comment">#&#x663E;&#x793A;&#x6240;&#x6709;&#x955C;&#x50CF;</span>
+
+&#x628A;&#x955C;&#x50CF;&#x4FDD;&#x5B58;&#x6210;&#x4E00;&#x4E2A;tar&#x6587;&#x4EF6;&#xFF0C;&#x6CE8;&#x610F;&#x5982;&#x679C;&#x76EE;&#x5F55;&#x6CA1;&#x6709;&#xFF0C;&#x9700;&#x8981;&#x63D0;&#x524D;&#x5EFA;&#x7ACB;&#x4E00;&#x4E0B;&#xFF0C;docker&#x4E0D;&#x4F1A;&#x5E2E;&#x4F60;&#x5EFA;&#x7ACB;&#x76EE;&#x5F55;&#x7684;
+$ sudo docker save &#x955C;&#x50CF;&#x540D; <span class="token punctuation">-</span>o /imagesbak/xxx.tar
+
+&#x7B5B;&#x9009;&#x5173;&#x952E;&#x5B57;&#x6279;&#x91CF;&#x6253;&#x5305;
+<span class="token comment"># docker save $(docker images | grep &#x5173;&#x952E;&#x5B57; | awk &apos;BEGIN{OFS=&quot;:&quot;;ORS=&quot; &quot;}{print $1,$2}&apos;) -o /imagesbak/dockerimages.tar</span>
+
+&#x52A0;&#x8F7D;&#x955C;&#x50CF;&#x5907;&#x4EFD;
+$ sudo docker load <span class="token punctuation">-</span>i /imagesbak/xxx.tar
+
+$ sudo docker rmi &#x955C;&#x50CF;ID
+
+&#x62F7;&#x8D1D;docker&#x5BB9;&#x5668;&#x91CC;&#x7684;&#x6587;&#x4EF6;
+$ docker cp nginx1<span class="token punctuation">:</span>/etc/nginx/nginx.conf /home/w/tool/nginx/conf/nginx.conf
+
+$ sudo docker ps <span class="token comment">#&#x5217;&#x51FA;&#x6240;&#x6709;&#x8FD0;&#x884C;&#x4E2D;&#x5BB9;&#x5668;</span>
+$ sudo docker ps <span class="token punctuation">-</span>a <span class="token comment">#&#x5217;&#x51FA;&#x6240;&#x6709;&#x5BB9;&#x5668;&#xFF08;&#x542B;&#x6C89;&#x7761;&#x955C;&#x50CF;&#xFF09;</span>
+$ sudo docker ps <span class="token punctuation">-</span>l <span class="token comment">#&#x4EC5;&#x5217;&#x51FA;&#x6700;&#x65B0;&#x521B;&#x5EFA;&#x7684;&#x4E00;&#x4E2A;&#x5BB9;&#x5668;</span>
+$ sudo docker ps <span class="token punctuation">-</span>n=3 <span class="token comment">#&#x5217;&#x51FA;&#x6700;&#x8FD1;&#x521B;&#x5EFA;&#x7684;3&#x4E2A;&#x5BB9;&#x5668;</span>
+$ sudo docker ps <span class="token punctuation">-</span>s <span class="token comment">#&#x663E;&#x793A;&#x5BB9;&#x5668;&#x5927;&#x5C0F;</span>
+
+$ sudo docker stop &#x505C;&#x6B62;&#x5BB9;&#x5668;&#x540D;&#x6216;ID
+$ sudo docker start &#x542F;&#x52A8;&#x5BB9;&#x5668;&#x540D;&#x6216;ID
+$ sudo docker restart &#x91CD;&#x542F;&#x5BB9;&#x5668;&#x540D;&#x6216;ID
+
+&#x8FDB;&#x5165;&#x5BB9;&#x5668;
+$ sudo docker exec <span class="token punctuation">-</span>it &#x5BB9;&#x5668;ID /bin/sh
+
+<span class="token comment"># &#x8FDB;&#x5165;docker &#x5BB9;&#x5668;&#x7684;&#x5C0F;&#x811A;&#x672C;</span>
+
+&#x4E0B;&#x9762;&#x662F;&#x4E00;&#x4E2A;&#x901A;&#x8FC7;nsenter&#x8FDB;&#x5165;docker&#x5BB9;&#x5668;&#x7684;&#x4F8B;&#x5B50;&#x811A;&#x672C;&#xFF1A; 
+&#x6587;&#x4EF6;&#x540D;&#x5B57;&#xFF1A;ns 
+&#x4F7F;&#x7528;&#x65B9;&#x6CD5;&#xFF1A;&#x5C06;&#x6587;&#x4EF6;&#x653E;&#x5165;&#x7CFB;&#x7EDF;PATH&#x8DEF;&#x5F84;&#x4E0B;&#xFF0C;&#x8FDB;&#x5165;&#x5BB9;&#x5668;&#x65B9;&#x5F0F;ns &lt;container<span class="token punctuation">-</span>name/container<span class="token punctuation">-</span>id<span class="token punctuation">&gt;</span>
+
+&#x5982;&#x679C;docker&#x5BB9;&#x5668;&#x6CA1;&#x6709;&#x63D0;&#x4F9B;ssh<span class="token punctuation">,</span>&#x90A3;&#x4E48;&#x8FDB;&#x5165;docker&#x5BB9;&#x5668;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x4E00;&#x822C;&#x662F; attach <span class="token punctuation">,</span>exec<span class="token punctuation">,</span>nsenter
+attach &#x8FDB;&#x5165;&#x540E;&#x518D;&#x9000;&#x51FA;&#xFF0C;&#x4F1A;&#x5F15;&#x8D77;docker &#x5BB9;&#x5668;&#x505C;&#x6B62;&#x3002;exec &#x6BCF;&#x6B21;&#x8F93;&#x5165;&#x6BD4;&#x8F83;&#x9EBB;&#x70E6;&#x3002;
+&#x6BD4;&#x8F83;&#x65B9;&#x4FBF;&#x7684;&#x662F;&#x7528; nsenter . nsenter &#x8FDB;&#x5165;&#x9700;&#x8981;&#x67E5;docker &#x5BB9;&#x5668;&#x7684;pid &#x3002;&#x6240;&#x4EE5;&#xFF0C;&#x5199;&#x4E86;&#x4E0B;&#x9762;&#x7684;&#x811A;&#x672C;&#xFF0C;&#x65B9;&#x4FBF;&#x8FDB;&#x5165;&#x3002;
+
+<span class="token comment">#!/bin/bash  </span>
+docker ps  
+echo &quot;======================================\r&quot;  
+read <span class="token punctuation">-</span>p &quot;input docker name<span class="token punctuation">:</span>&quot; did  
+PID=$(docker inspect <span class="token punctuation">-</span><span class="token punctuation">-</span>format &quot;<span class="token punctuation">{</span><span class="token punctuation">{</span>.State.Pid<span class="token punctuation">}</span><span class="token punctuation">}</span>&quot; $did)  
+nsenter <span class="token punctuation">-</span><span class="token punctuation">-</span>target $PID <span class="token punctuation">-</span><span class="token punctuation">-</span>mount <span class="token punctuation">-</span><span class="token punctuation">-</span>uts <span class="token punctuation">-</span><span class="token punctuation">-</span>ipc <span class="token punctuation">-</span><span class="token punctuation">-</span>net <span class="token punctuation">-</span><span class="token punctuation">-</span>pid 
+ 
+&#x8BE5;&#x811A;&#x672C;&#x4F1A;&#x63D0;&#x793A;&#x5F53;&#x524D;&#x8FD0;&#x884C;&#x7684;docker&#x5BB9;&#x5668;&#xFF0C;&#x7136;&#x540E;&#x8F93;&#x5165;docker &#x7684;id &#x540E;&#xFF0C;&#x5C31;&#x8FDB;&#x5165;&#x4E86;docker&#x5BB9;&#x5668;
+
+
+&#x5220;&#x9664;&#xFF0C;&#x5BB9;&#x5668;&#x8981;&#x5148;&#x505C;&#x6B62;
+$ sudo docker rm &#x5BB9;&#x5668;ID
+<span class="token punctuation">-</span>f &#x5F3A;&#x884C;&#x79FB;&#x9664;&#x8BE5;&#x5BB9;&#x5668;&#xFF0C;&#x5373;&#x4F7F;&#x5176;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#xFF1B;
+<span class="token punctuation">-</span>l &#x79FB;&#x9664;&#x5BB9;&#x5668;&#x95F4;&#x7684;&#x7F51;&#x7EDC;&#x8FDE;&#x63A5;&#xFF0C;&#x800C;&#x975E;&#x5BB9;&#x5668;&#x672C;&#x8EAB;&#xFF1B;
+<span class="token punctuation">-</span>v &#x79FB;&#x9664;&#x4E0E;&#x5BB9;&#x5668;&#x5173;&#x8054;&#x7684;&#x7A7A;&#x95F4;&#x3002;
+
+&#x67E5;&#x770B;
+$ sudo docker top <span class="token comment">#&#x67E5;&#x770B;&#x4E00;&#x4E2A;&#x6B63;&#x5728;&#x8FD0;&#x884C;&#x5BB9;&#x5668;&#x8FDB;&#x7A0B;</span>
+$ sudo docker inspect &#x955C;&#x50CF;&#x6216;&#x5BB9;&#x5668;ID  <span class="token comment">#&#x68C0;&#x67E5;&#x955C;&#x50CF;&#x6216;&#x8005;&#x5BB9;&#x5668;&#x7684;&#x53C2;&#x6570;&#xFF0C;&#x9ED8;&#x8BA4;&#x8FD4;&#x56DE; JSON &#x683C;&#x5F0F;</span>
+$ sudo docker logs <span class="token punctuation">-</span>f &#x5BB9;&#x5668;ID <span class="token comment">#&#x67E5;&#x770B;&#x6307;&#x5B9A;&#x5BB9;&#x5668;&#x7684;&#x65E5;&#x5FD7;&#x8BB0;&#x5F55;</span>
+
+$ docker stats &#x5BB9;&#x5668;ID <span class="token comment">#&#x67E5;&#x770B;&#x5BB9;&#x5668;&#x7684;&#x6027;&#x80FD;</span>
+$ docker system df <span class="token comment">#&#x67E5;&#x770B;Docker&#x7684;&#x78C1;&#x76D8;&#x4F7F;&#x7528;&#x60C5;&#x51B5;</span>
+$ sudo du <span class="token punctuation">-</span>hs /var/lib/docker/ <span class="token comment">#&#x67E5;&#x770B;docker&#x76EE;&#x5F55;&#x7A7A;&#x95F4;</span>
+
+
+&#x5176;&#x4ED6;&#x547D;&#x4EE4;
+
+<span class="token comment">#&#x83B7;&#x53D6;Container IP&#x5730;&#x5740;&#xFF08;Container&#x72B6;&#x6001;&#x5FC5;&#x987B;&#x662F;Up&#xFF09;</span>
+$ sudo docker inspect &#x5BB9;&#x5668;ID <span class="token punctuation">|</span> grep IPAddress <span class="token punctuation">|</span> cut <span class="token punctuation">-</span>d &apos;&quot;&apos; <span class="token punctuation">-</span>f 4    
+
+<span class="token comment">#&#x83B7;&#x53D6;&#x73AF;&#x5883;&#x53D8;&#x91CF;</span>
+$ sudo docker exec 677 env  
+PATH=/usr/local/sbin<span class="token punctuation">:</span>/usr/local/bin<span class="token punctuation">:</span>/usr/sbin<span class="token punctuation">:</span>/usr/bin<span class="token punctuation">:</span>/sbin<span class="token punctuation">:</span>/bin
+HOSTNAME=3863f1da45f4
+HOME=/root
+
+</pre><h3 class="mume-header" id="3-%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9Cdocker%E5%91%BD%E4%BB%A4">3&#x3001;&#x6279;&#x91CF;&#x64CD;&#x4F5C;docker&#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x7B5B;&#x9009;&#x5173;&#x952E;&#x5B57;
+<span class="token comment"># docker save $(docker images | grep geerlingguy | awk &apos;BEGIN{OFS=&quot;:&quot;;ORS=&quot; &quot;}{print $1,$2}&apos;) -o /home/wym/wymdockerimagesgeerlingguy.tar</span>
+
+&#x6279;&#x91CF;&#x5220;&#x9664;&#x6CA1;&#x6709;&#x542F;&#x52A8;&#x7684;&#x5BB9;&#x5668;
+<span class="token comment"># docker rm $(docker ps --all -q -f status=exited)</span>
+
+&#x5220;&#x9664;&#x6CA1;&#x6709;&#x4F7F;&#x7528;&#x7684;&#x955C;&#x50CF;
+<span class="token comment"># docker rmi -f $(docker images | grep &quot;&lt;none&gt;&quot; | awk &quot;{print \$3}&quot;)</span>
+
+docker&#x6279;&#x91CF;&#x5220;&#x9664;&#x5BB9;&#x5668;&#x3001;&#x955C;&#x50CF;
+1&#x3001;&#x5220;&#x9664;&#x6240;&#x6709;&#x5BB9;&#x5668;
+<span class="token comment"># docker rm `docker ps -a -q`</span>
+2&#x3001;&#x5220;&#x9664;&#x6240;&#x6709;&#x955C;&#x50CF;
+<span class="token comment"># docker rmi --force `docker images -q`</span>
+3&#x3001;&#x6309;&#x6761;&#x4EF6;&#x5220;&#x9664;&#x955C;&#x50CF;
+&#x3000;&#x3000;&#x6CA1;&#x6709;&#x6253;&#x6807;&#x7B7E;
+<span class="token comment"># docker rmi `docker images -q | awk &apos;/^&lt;none&gt;/ { print $3 }&apos;`</span>
+
+&#x3000;&#x3000;&#x955C;&#x50CF;&#x540D;&#x5305;&#x542B;&#x5173;&#x952E;&#x5B57;
+<span class="token comment"># docker rmi --force `docker images | grep doss-api | awk &apos;{print $3}&apos;`    //&#x5176;&#x4E2D;doss-api&#x4E3A;&#x5173;&#x952E;&#x5B57;</span>
+
+&#x6279;&#x91CF;&#x5EFA;&#x7ACB;100&#x4E2A;docker&#x5BB9;&#x5668;&#xFF0C;&#x5E76;&#x7ED1;&#x5B9A;&#x7AEF;&#x53E3;
+<span class="token comment"># for i in &apos;seq 2201 2299&apos;;do docker run -itd -p $i:22 -p 1$i:80 centos68 /bin/bash</span>
+
+&#x6279;&#x91CF;&#x5F00;&#x542F;&#x5BB9;&#x5668;&#x7684;sshd&#x670D;&#x52A1;
+<span class="token comment"># for i in &apos;docker ps -aq&apos;;do docker exec $i /etc/init.d/sshd start;done</span>
+
+&#x7B5B;&#x9009;&#x51FA;ubuntu&#x5BB9;&#x5668;&#xFF0C;print $1&#x8868;&#x793A;&#x8F93;&#x51FA;&#x7B2C;&#x4E00;&#x5217;
+<span class="token comment"># docker ps -a|grep ubuntu|awk &apos;{print $1}&apos;</span>
+&#x7B5B;&#x9009;&#x51FA;ubuntu&#x5BB9;&#x5668;&#xFF0C;&#x5E76;&#x505C;&#x6B62;
+<span class="token comment"># docker ps -a|grep ubuntu|awk &apos;{print $1}&apos;|xargs docker stop</span>
+&#x7B5B;&#x9009;&#x51FA;ubuntu&#x5BB9;&#x5668;&#xFF0C;&#x5E76;&#x5220;&#x9664;
+<span class="token comment"># docker ps -a|grep ubuntu|awk &apos;{print $1}&apos;|xargs docker rm</span>
+&#x7B5B;&#x9009;&#x51FA;ubuntu&#x955C;&#x50CF;ID&#xFF0C;print $1&#x8868;&#x793A;&#x8F93;&#x51FA;&#x7B2C;&#x4E09;&#x5217;
+<span class="token comment"># docker images|grep ubuntu|awk &apos;{print $3}&apos;</span>
+&#x7B5B;&#x9009;&#x51FA;ubuntu&#x955C;&#x50CF;ID&#xFF0C;&#x5E76;&#x5220;&#x9664;&#x955C;&#x50CF;
+<span class="token comment"># docker images|grep ubuntu|awk &apos;{print $3}&apos;|xargs docker rmi</span>
+</pre><h2 class="mume-header" id="%E5%85%AD-docker%E5%AE%9E%E6%88%98">&#x516D;&#x3001;Docker&#x5B9E;&#x6218;</h2>
+
+<h3 class="mume-header" id="1-docker%E4%BD%BF%E7%94%A8tomcat%E7%8E%AF%E5%A2%83">1&#x3001;docker&#x4F7F;&#x7528;tomcat&#x73AF;&#x5883;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token comment"># docker pull tomcat:8.5.38-jre8-alpine</span>
+<span class="token comment"># docker inspect tomcat:8.5.38-jre8-alpine  #&#x67E5;&#x770B;&#x955C;&#x50CF;&#x4FE1;&#x606F;&#xFF0C;&#x6BD4;&#x5982;&#x67E5;&#x770B;tomcat&#x7684;&#x8DEF;&#x5F84;CATALINA_HOME=/usr/local/tomcat</span>
+
+&#x542F;&#x52A8;&#x5BB9;&#x5668;&#xFF0C;&#x6620;&#x5C04;&#x5230;&#x4E3B;&#x673A;8018&#x7AEF;&#x53E3;&#xFF0C;&#x6302;&#x8F7D;/home/wym/tomcat/test&#x76EE;&#x5F55;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#xFF0C;&#x5219;&#x4F1A;&#x81EA;&#x52A8;&#x521B;&#x5EFA;
+<span class="token comment"># docker run -dit -p 8018:8080 --name tomcat01 -v /home/wym/tomcat/test:/usr/local/tomcat/webapps/test tomcat:8.5.38-jre8-alpine</span>
+
+$ docker ps <span class="token punctuation">-</span>l <span class="token comment">#&#x67E5;&#x770B;&#x6700;&#x65B0;&#x7684;&#x5BB9;&#x5668;</span>
+$ docker exec <span class="token punctuation">-</span>it 677 /bin/bash  <span class="token comment">#&#x8FDB;&#x5165;&#x5BB9;&#x5668;</span>
+
+&#x67E5;&#x770B;tomcat
+http<span class="token punctuation">:</span>//192.168.113.37<span class="token punctuation">:</span>8018/
+
+&#x67E5;&#x770B;&#x76F8;&#x5173;&#x9875;&#x9762;
+http<span class="token punctuation">:</span>//192.168.113.37/test/helloworld.html
+
+&#x5728;&#x672C;&#x673A;&#x64CD;&#x4F5C;&#xFF0C;&#x7F16;&#x5199;helloworld.html&#x6587;&#x4EF6;&#xFF0C;&#x5BB9;&#x5668;&#x91CC;&#x540C;&#x65F6;&#x4E5F;&#x6709;&#xFF0C;&#x9875;&#x9762;&#x4E5F;&#x540C;&#x65F6;&#x663E;&#x793A;
+<span class="token comment"># cd /home/wym/tomcat/test</span>
+<span class="token comment"># echo &quot;&lt;h1&gt; Hello World !&lt;h1&gt;&quot; &gt; hello.html</span>
+</pre><h3 class="mume-header" id="2-docker%E4%BD%BF%E7%94%A8mysql">2&#x3001;docker&#x4F7F;&#x7528;mysql</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token comment"># docker pull mysql:5.7</span>
+<span class="token comment"># docker run --name mysql01 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=newcapec -d mysql:5.7.25</span>
+
+<span class="token comment"># docker inspect mysql01</span>
+<span class="token comment"># docker exec mysql01 env</span>
+
+&#x4F7F;&#x7528;&#x6570;&#x636E;&#x5E93;&#x5DE5;&#x5177;&#x5C31;&#x53EF;&#x4EE5;&#x8FDC;&#x7A0B;&#x8FDE;&#x63A5;mysql01&#xFF0C;&#x4E3B;&#x673A;IP&#xFF0C;&#x7AEF;&#x53E3;3306&#xFF0C;&#x7528;&#x6237;&#x540D;root&#xFF0C;&#x5BC6;&#x7801;newcapec
+
+<span class="token comment"># docker exec -it mysql01 /bin/sh</span>
+<span class="token comment"># mysql -u root -p</span>
+mysql<span class="token punctuation">&gt;</span> show databases;
+</pre><h2 class="mume-header" id="%E4%B8%83-%E4%BD%BF%E7%94%A8docker-compose">&#x4E03;&#x3001;&#x4F7F;&#x7528;docker-compose</h2>
+
+<h3 class="mume-header" id="1-%E5%AE%89%E8%A3%85">1&#x3001;&#x5B89;&#x88C5;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">https<span class="token punctuation">:</span>//docs.docker.com/compose/install/
+
+&#x5728;Linux&#x7CFB;&#x7EDF;&#x4E0A;&#x5B89;&#x88C5;Compose
+&#x5728;Linux&#x4E0A;&#xFF0C;&#x60A8;&#x53EF;&#x4EE5;&#x4ECE;GitHub&#x4E0A;&#x7684;Compose&#x5B58;&#x50A8;&#x5E93;&#x53D1;&#x884C;&#x9875;&#x9762;&#x4E0B;&#x8F7D;Docker Compose&#x4E8C;&#x8FDB;&#x5236;&#x6587;&#x4EF6;&#x3002;&#x6309;&#x7167;&#x94FE;&#x63A5;&#x4E2D;&#x7684;&#x8BF4;&#x660E;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#xFF0C;&#x8BE5;&#x94FE;&#x63A5;&#x6D89;&#x53CA;curl&#x5728;&#x7EC8;&#x7AEF;&#x4E2D;&#x8FD0;&#x884C;&#x547D;&#x4EE4;&#x4EE5;&#x4E0B;&#x8F7D;&#x4E8C;&#x8FDB;&#x5236;&#x6587;&#x4EF6;&#x3002;&#x8FD9;&#x4E9B;&#x5206;&#x6B65;&#x8BF4;&#x660E;&#x4E5F;&#x5305;&#x542B;&#x5728;&#x4E0B;&#x9762;&#x3002;
+
+&#x8FD0;&#x884C;&#x6B64;&#x547D;&#x4EE4;&#x4EE5;&#x4E0B;&#x8F7D;Docker Compose&#x7684;&#x5F53;&#x524D;&#x7A33;&#x5B9A;&#x7248;&#x672C;&#xFF1A;
+
+<span class="token comment"># sudo curl -L &quot;https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)&quot; -o /usr/local/bin/docker-compose</span>
+&#x8981;&#x5B89;&#x88C5;&#x4E0D;&#x540C;&#x7248;&#x672C;&#x7684;Compose&#xFF0C;&#x8BF7;&#x66FF;&#x6362;1.24.0 &#x4E3A;&#x8981;&#x4F7F;&#x7528;&#x7684;Compose&#x7248;&#x672C;&#x3002;
+
+&#x5BF9;&#x4E8C;&#x8FDB;&#x5236;&#x6587;&#x4EF6;&#x5E94;&#x7528;&#x53EF;&#x6267;&#x884C;&#x6743;&#x9650;&#xFF1A;
+<span class="token comment"># sudo chmod +x /usr/local/bin/docker-compose</span>
+&#x6CE8;&#x610F;&#xFF1A;&#x5982;&#x679C;docker<span class="token punctuation">-</span>compose&#x5B89;&#x88C5;&#x540E;&#x547D;&#x4EE4;&#x5931;&#x8D25;&#xFF0C;&#x8BF7;&#x68C0;&#x67E5;&#x60A8;&#x7684;&#x8DEF;&#x5F84;&#x3002;&#x60A8;&#x8FD8;&#x53EF;&#x4EE5;&#x521B;&#x5EFA;/usr/bin&#x8DEF;&#x5F84;&#x4E2D;&#x7684;&#x7B26;&#x53F7;&#x94FE;&#x63A5;&#x6216;&#x4EFB;&#x4F55;&#x5176;&#x4ED6;&#x76EE;&#x5F55;&#x3002;
+
+&#x4F8B;&#x5982;&#xFF1A;
+<span class="token comment"># sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose</span>
+
+&#x6D4B;&#x8BD5;&#x5B89;&#x88C5;&#x3002;
+<span class="token comment"># docker-compose --version</span>
+docker<span class="token punctuation">-</span>compose version 1.24.0<span class="token punctuation">,</span> build 1110ad01
+
+</pre><h3 class="mume-header" id="2-%E5%B8%B8%E7%94%A8docker-compose%E5%91%BD%E4%BB%A4">2&#x3001;&#x5E38;&#x7528;docker-compose&#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x9996;&#x5148;&#x8981;&#x8FDB;&#x5165;docker<span class="token punctuation">-</span>compose.yml&#x6240;&#x5728;&#x76EE;&#x5F55;&#xFF0C;&#x518D;&#x6267;&#x884C;&#x547D;&#x4EE4;
+
+&#x5176;&#x5B83;&#x547D;&#x4EE4;&#xFF08;&#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x540E;&#x6700;&#x597D;&#x628A;&#x5BB9;&#x5668;&#x5220;&#x9664;&#x518D;&#x521B;&#x5EFA;&#xFF09;&#xFF1A;
+docker<span class="token punctuation">-</span>compose up <span class="token punctuation">-</span>d               <span class="token comment">###&#x540E;&#x53F0;&#x542F;&#x52A8;&#xFF0C;&#x5982;&#x679C;&#x5BB9;&#x5668;&#x4E0D;&#x5B58;&#x5728;&#x6839;&#x636E;&#x955C;&#x50CF;&#x81EA;&#x52A8;&#x521B;&#x5EFA;</span>
+docker<span class="token punctuation">-</span>compose down <span class="token punctuation">-</span>v         <span class="token comment">###&#x505C;&#x6B62;&#x5BB9;&#x5668;&#x5E76;&#x5220;&#x9664;&#x5BB9;&#x5668;</span>
+docker<span class="token punctuation">-</span>compose start                 <span class="token comment">###&#x542F;&#x52A8;&#x5BB9;&#x5668;&#xFF0C;&#x5BB9;&#x5668;&#x4E0D;&#x5B58;&#x5728;&#x5C31;&#x65E0;&#x6CD5;&#x542F;&#x52A8;&#xFF0C;&#x4E0D;&#x4F1A;&#x81EA;&#x52A8;&#x521B;&#x5EFA;&#x955C;&#x50CF;</span>
+docker<span class="token punctuation">-</span>compose stop                 <span class="token comment">###&#x505C;&#x6B62;&#x5BB9;&#x5668;</span>
+docker<span class="token punctuation">-</span>compose logs        <span class="token comment">###&#x67E5;&#x770B;&#x65E5;&#x5FD7;&#xFF08;harbor&#x65E5;&#x5FD7;&#x5B58;&#x653E;&#x5730;&#x5740; /var/logs/harbor&#xFF09;</span>
+docke<span class="token punctuation">-</span>compose ps             <span class="token comment">###&#x67E5;&#x770B;&#x5BB9;&#x5668;</span>
+
+&#x5982;&#x679C;&#x7528;&#x7684;&#x4E0D;&#x662F;&#x6807;&#x51C6;yml&#x540D;&#x79F0;docker<span class="token punctuation">-</span>compose.yml&#xFF0C;&#x5C31;&#x8981;&#x7528;<span class="token punctuation">-</span>f&#x53C2;&#x6570;&#x6307;&#x5B9A;&#x81EA;&#x5B9A;&#x4E49;&#x7684;yml&#x6587;&#x4EF6;
+$ docker<span class="token punctuation">-</span>compose <span class="token punctuation">-</span>f docker<span class="token punctuation">-</span>wordpress.yml ps
+</pre><h3 class="mume-header" id="3-docker-compose-%E5%91%BD%E4%BB%A4">3&#x3001;docker-compose &#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token key atrule">Commands</span><span class="token punctuation">:</span>
+  build              Build or rebuild services <span class="token comment">#&#x6784;&#x5EFA;&#x6216;&#x91CD;&#x5EFA;&#x670D;&#x52A1;</span>
+  bundle             Generate a Docker bundle from the Compose file
+  config             Validate and view the compose file
+  create             Create services
+  down               Stop and remove containers<span class="token punctuation">,</span> networks<span class="token punctuation">,</span> images<span class="token punctuation">,</span> and volumes
+  events             Receive real time events from containers
+  exec               Execute a command in a running container
+  help               Get help on a command <span class="token comment">#&#x547D;&#x4EE4;&#x5E2E;&#x52A9;</span>
+  kill               Kill containers <span class="token comment">#&#x6740;&#x6389;&#x5BB9;&#x5668;</span>
+  logs               View output from containers <span class="token comment">#&#x663E;&#x793A;&#x5BB9;&#x5668;&#x7684;&#x8F93;&#x51FA;&#x5185;&#x5BB9;</span>
+  pause              Pause services
+  port               Print the public port for a port binding <span class="token comment">#&#x6253;&#x5370;&#x7ED1;&#x5B9A;&#x7684;&#x5F00;&#x653E;&#x7AEF;&#x53E3;</span>
+  ps                 List containers <span class="token comment">#&#x663E;&#x793A;&#x5BB9;&#x5668;</span>
+  pull               Pull service images <span class="token comment">#&#x62C9;&#x53D6;&#x670D;&#x52A1;&#x955C;&#x50CF;</span>
+  push               Push service images
+  restart            Restart services <span class="token comment">#&#x91CD;&#x542F;&#x670D;&#x52A1;</span>
+  rm                 Remove stopped containers <span class="token comment">#&#x5220;&#x9664;&#x505C;&#x6B62;&#x7684;&#x5BB9;&#x5668;</span>
+  run                Run a one<span class="token punctuation">-</span>off command <span class="token comment">#&#x8FD0;&#x884C;&#x4E00;&#x4E2A;&#x4E00;&#x6B21;&#x6027;&#x547D;&#x4EE4;</span>
+  scale              Set number of containers for a service <span class="token comment">#&#x8BBE;&#x7F6E;&#x670D;&#x52A1;&#x7684;&#x5BB9;&#x5668;&#x6570;&#x76EE;</span>
+  start              Start services <span class="token comment">#&#x5F00;&#x542F;&#x670D;&#x52A1;</span>
+  stop               Stop services <span class="token comment">#&#x505C;&#x6B62;&#x670D;&#x52A1;</span>
+  top                Display the running processes
+  unpause            Unpause services
+  up                 Create and start containers <span class="token comment">#&#x521B;&#x5EFA;&#x5E76;&#x542F;&#x52A8;&#x5BB9;&#x5668;</span>
+  version            Show the Docker<span class="token punctuation">-</span>Compose version information
+</pre><h3 class="mume-header" id="3-%E4%BE%8B%E5%AD%90">3&#x3001;&#x4F8B;&#x5B50;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">docker<span class="token punctuation">-</span>compose &#x5982;&#x4F55;&#x914D;&#x7F6E;
+&#x5148;&#x770B;&#x770B;&#x6211;&#x81EA;&#x5DF1;&#x5199;&#x7684;&#x4E00;&#x4E2A; docker<span class="token punctuation">-</span>compose.yml
+
+<span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">&apos;2&apos;</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+    <span class="token key atrule">nginx</span><span class="token punctuation">:</span>
+            <span class="token key atrule">image</span><span class="token punctuation">:</span> bitnami/nginx<span class="token punctuation">:</span>latest
+            <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> <span class="token string">&apos;80:80&apos;</span>
+                <span class="token punctuation">-</span> <span class="token string">&apos;1443:443&apos;</span>
+            <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> /root/wp_yunlan/nginx/<span class="token punctuation">:</span>/bitnami/nginx/
+    <span class="token key atrule">mariadb</span><span class="token punctuation">:</span>
+            <span class="token key atrule">image</span><span class="token punctuation">:</span> bitnami/mariadb<span class="token punctuation">:</span>latest
+            <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> /root/wp_yunlan/mariadb<span class="token punctuation">:</span>/bitnami/mariadb
+    <span class="token key atrule">wordpress</span><span class="token punctuation">:</span>
+            <span class="token key atrule">image</span><span class="token punctuation">:</span> bitnami/wordpress<span class="token punctuation">:</span>latest
+            <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> mariadb
+                <span class="token punctuation">-</span> nginx
+            <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> WORDPRESS_USERNAME=neptunemoon    <span class="token comment">#&#x8FD9;&#x4E2A;&#x8D26;&#x6237;&#x4F60;&#x662F;&#x81EA;&#x5DF1;&#x8BBE;&#x5B9A;&#x7684;</span>
+                <span class="token punctuation">-</span> WORDPRESS_PASSWORD=123123         <span class="token comment">#&#x8FD9;&#x4E2A;&#x5BC6;&#x7801;&#x662F;&#x4F60;&#x81EA;&#x5DF1;&#x8BBE;&#x5B9A;&#x7684;</span>
+            <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> <span class="token string">&apos;8080:80&apos;</span>
+                <span class="token punctuation">-</span> <span class="token string">&apos;8081:443&apos;</span>
+            <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+                <span class="token punctuation">-</span> /root/wp_yunlan/wordpress<span class="token punctuation">:</span>/bitnami/wordpress
+                <span class="token punctuation">-</span> /root/wp_yunlan/apache<span class="token punctuation">:</span>/bitnami/apache
+                <span class="token punctuation">-</span> /root/wp_yunlan/php<span class="token punctuation">:</span>/bitnami/php
+nginx &#x548C; mariadb&#xFF0C;wordpress &#x662F;&#x8981;&#x542F;&#x52A8;&#x7684;&#x4E09;&#x4E2A;&#x670D;&#x52A1;
+
+&#x987A;&#x5E8F;&#x4E0D;&#x662F;&#x91CD;&#x8981;&#x7684;<span class="token punctuation">,</span>&#x6211;&#x4EEC;&#x770B;&#x89C1;wordpress&#x4E2D;&#x6709;&#x4E2A; depends_on<span class="token punctuation">:</span> &#x7684;&#x5C5E;&#x6027;
+
+<span class="token key atrule">depends_on</span><span class="token punctuation">:</span> &#x4F9D;&#x8D56;
+&#x4EE3;&#x8868;wordpress &#x4F9D;&#x8D56;&#x4E8E;
+<span class="token punctuation">-</span> mariadb
+<span class="token punctuation">-</span> nginx
+&#x4E24;&#x4E2A;&#x670D;&#x52A1;&#xFF0C; &#x6240;&#x4EE5;&#x4ED6;&#x4EEC;&#x4E24;&#x4E2A;&#x4F1A;&#x5148;&#x542F;&#x52A8;
+
+<span class="token key atrule">image</span><span class="token punctuation">:</span> &#x955C;&#x50CF;&#xFF0C;&#x5C31;&#x662F;&#x4F60;&#x7684; docker &#x955C;&#x50CF;
+
+<span class="token comment"># docker search mariadb &#x627E;&#x5230;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x7684;&#x955C;&#x50CF;</span>
+</pre><h2 class="mume-header" id="%E5%85%AB-docker%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E">&#x516B;&#x3001;Docker&#x79C1;&#x6709;&#x4ED3;&#x5E93;&#x4F7F;&#x7528;&#x8BF4;&#x660E;</h2>
+
+<p><a href="https://github.com/goharbor/harbor/releases">https://github.com/goharbor/harbor/releases</a></p>
+<p><a href="https://storage.googleapis.com/harbor-releases/release-1.7.0/harbor-offline-installer-v1.7.5.tgz">https://storage.googleapis.com/harbor-releases/release-1.7.0/harbor-offline-installer-v1.7.5.tgz</a></p>
+<p><a href="https://github.com/goharbor/harbor/blob/release-1.8.0/docs/installation_guide.md">https://github.com/goharbor/harbor/blob/release-1.8.0/docs/installation_guide.md</a></p>
+<h3 class="mume-header" id="1%E5%AE%89%E8%A3%85harbor">1.&#x5B89;&#x88C5;harbor</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x5B89;&#x88C5;&#x6B65;&#x9AA4;&#x5F52;&#x7ED3;&#x4E3A;&#x4EE5;&#x4E0B;&#x5185;&#x5BB9;
+
+1&#xFF09;&#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#x7A0B;&#x5E8F;&#xFF1A;
+&#x53EF;&#x4EE5;&#x4ECE;&#x53D1;&#x5E03;&#x9875;&#x9762;&#x4E0B;&#x8F7D;&#x5B89;&#x88C5;&#x7A0B;&#x5E8F;&#x7684;&#x4E8C;&#x8FDB;&#x5236;&#x6587;&#x4EF6;&#x3002;&#x9009;&#x62E9;&#x5728;&#x7EBF;&#x6216;&#x79BB;&#x7EBF;&#x5B89;&#x88C5;&#x7A0B;&#x5E8F;&#x3002;&#x4F7F;&#x7528;tar&#x547D;&#x4EE4;&#x63D0;&#x53D6;&#x5305;&#x3002;
+
+&#x5728;&#x7EBF;&#x5B89;&#x88C5;&#xFF1A;
+    $ tar xvf harbor<span class="token punctuation">-</span>online<span class="token punctuation">-</span>installer<span class="token punctuation">-</span>&lt;version<span class="token punctuation">&gt;</span>.tgz
+&#x8131;&#x673A;&#x5B89;&#x88C5;&#xFF1A;
+    $ tar xvf harbor<span class="token punctuation">-</span>offline<span class="token punctuation">-</span>installer<span class="token punctuation">-</span>&lt;version<span class="token punctuation">&gt;</span>.tgz
+
+2&#xFF09;&#x914D;&#x7F6E;harbor.cfg ;
+&#x5FC5;&#x9700;&#x53C2;&#x6570;&#xFF1A;
+hostname&#xFF1A;&#x76EE;&#x6807;&#x4E3B;&#x673A;&#x7684;&#x4E3B;&#x673A;&#x540D;&#x6216;IP&#x5730;&#x5740;&#xFF0C;&#x6BD4;&#x5982;192.168.113.37
+harbor_admin_password&#xFF1A;&#x7BA1;&#x7406;&#x5458;&#x7684;&#x521D;&#x59CB;&#x5BC6;&#x7801;&#x3002;&#x6B64;&#x5BC6;&#x7801;&#x4EC5;&#x5728;Harbor&#x9996;&#x6B21;&#x542F;&#x52A8;&#x65F6;&#x751F;&#x6548;&#x3002;&#x4E4B;&#x540E;&#xFF0C;&#x5C06;&#x5FFD;&#x7565;&#x6B64;&#x8BBE;&#x7F6E;&#xFF0C;&#x5E76;&#x4E14;&#x5E94;&#x5728;Portal&#x4E2D;&#x8BBE;&#x7F6E;&#x7BA1;&#x7406;&#x5458;&#x5BC6;&#x7801;&#x3002;&#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x9ED8;&#x8BA4;&#x7528;&#x6237;&#x540D;/&#x5BC6;&#x7801;&#x4E3A;admin/Harbor12345&#x3002;
+    $ sudo vi harbor.cfg
+
+3&#xFF09;&#x8FD0;&#x884C;install.sh&#x5B89;&#x88C5;&#x5E76;&#x542F;&#x52A8;Harbor;
+&#x4E00;&#x65E6;harbor.cfg&#x548C;&#x5B58;&#x50A8;&#x540E;&#x7AEF;&#xFF08;&#x53EF;&#x9009;&#xFF09;&#x914D;&#x7F6E;&#xFF0C;&#x5B89;&#x88C5;&#x548C;&#x4F7F;&#x7528;&#x7684;&#x542F;&#x52A8;&#x6E2F;install.sh&#x811A;&#x672C;&#x3002;&#x8BF7;&#x6CE8;&#x610F;&#xFF0C;&#x5728;&#x7EBF;&#x5B89;&#x88C5;&#x7A0B;&#x5E8F;&#x53EF;&#x80FD;&#x9700;&#x8981;&#x4E00;&#x4E9B;&#x65F6;&#x95F4;&#x624D;&#x80FD;&#x4ECE;Docker hub&#x4E0B;&#x8F7D;Harbor&#x6620;&#x50CF;&#x3002;
+
+    $ sudo ./install.sh
+
+4&#xFF09;&#x767B;&#x5F55;http<span class="token punctuation">:</span>//192.168.113.37&#xFF0C;&#x4F7F;&#x7528;admin&#x767B;&#x5F55;
+
+5&#xFF09;&#x8981;&#x66F4;&#x6539;Harbour&#x7684;&#x914D;&#x7F6E;&#xFF0C;&#x8BF7;&#x5148;&#x505C;&#x6B62;&#x73B0;&#x6709;&#x7684;Harbor&#x5B9E;&#x4F8B;&#x5E76;&#x8FDB;&#x884C;&#x66F4;&#x65B0;harbor.cfg&#x3002;&#x7136;&#x540E;&#x8FD0;&#x884C;prepare&#x811A;&#x672C;&#x4EE5;&#x586B;&#x5145;&#x914D;&#x7F6E;&#x3002;&#x6700;&#x540E;&#x91CD;&#x65B0;&#x521B;&#x5EFA;&#x5E76;&#x542F;&#x52A8;Harbor&#x7684;&#x5B9E;&#x4F8B;&#xFF1A;
+
+    $ sudo docker<span class="token punctuation">-</span>compose down <span class="token punctuation">-</span>v
+    $ vim harbor.cfg
+    $ sudo prepare
+    $ sudo docker<span class="token punctuation">-</span>compose up <span class="token punctuation">-</span>d
+</pre><h3 class="mume-header" id="2%E4%BD%BF%E7%94%A8harbor">2.&#x4F7F;&#x7528;harbor</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"> 1&#xFF09;&#x8BBF;&#x95EE;&#x8DEF;&#x5F84;&#xFF1A;http<span class="token punctuation">:</span>//192.168.102.37
+ 2&#xFF09;&#x9996;&#x5148;&#xFF0C;&#x81EA;&#x5DF1;&#x6CE8;&#x518C;&#xFF0C;&#x7136;&#x540E;&#x767B;&#x5F55;&#xFF0C;&#x5BC6;&#x7801;&#x5FC5;&#x987B;&#x5305;&#x542B;&#x5927;&#x5C0F;&#x5199;&#x3001;&#x6570;&#x5B57;
+ 3&#xFF09;&#x767B;&#x5F55;&#x540E;&#xFF0C;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x516C;&#x5F00;&#x7684;&#x9879;&#x76EE;&#x548C;&#x81EA;&#x5DF1;&#x7684;&#x79C1;&#x6709;&#x9879;&#x76EE;&#xFF0C;&#x53EF;&#x4EE5;&#x81EA;&#x5DF1;&#x65B0;&#x5EFA;&#x79C1;&#x6709;&#x9879;&#x76EE;
+ 4&#xFF09;&#x672C;&#x5730;&#x7684;Docker&#x914D;&#x7F6E;&#x955C;&#x50CF;&#x4ED3;&#x5E93;&#x5730;&#x5740;
+
+&#x95EE;&#x9898;&#xFF1A;
+docker1.3.2&#x7248;&#x672C;&#x5F00;&#x59CB;&#x9ED8;&#x8BA4;docker registry&#x4F7F;&#x7528;&#x7684;&#x662F;https&#xFF0C;&#x6211;&#x4EEC;&#x8BBE;&#x7F6E;Harbor&#x9ED8;&#x8BA4;http&#x65B9;&#x5F0F;&#xFF0C;&#x6240;&#x4EE5;&#x5F53;&#x6267;&#x884C;&#x7528;docker login&#x3001;pull&#x3001;push&#x7B49;&#x547D;&#x4EE4;&#x64CD;&#x4F5C;&#x975E;https&#x7684;docker regsitry&#x7684;&#x65F6;&#x5C31;&#x4F1A;&#x62A5;&#x9519;&#x3002;
+
+&#x89E3;&#x51B3;&#x529E;&#x6CD5;&#xFF1A;
+
+<span class="token punctuation">-</span> 1)&#x3001; &#x5982;&#x679C;&#x7CFB;&#x7EDF;&#x662F;MacOS&#xFF0C;&#x5219;&#x53EF;&#x4EE5;&#x70B9;&#x51FB;&#x201C;Preference&#x201D;&#x91CC;&#x9762;&#x7684;&#x201C;Advanced&#x201D;&#x5728;&#x201C;InsecureRegistry&#x201D;&#x91CC;&#x52A0;&#x4E0A;192.168.102.37&#xFF0C;&#x91CD;&#x542F;Docker&#x5BA2;&#x6237;&#x7AEF;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;
+<span class="token punctuation">-</span> 2)&#x3001; &#x5982;&#x679C;&#x7CFB;&#x7EDF;&#x662F;Ubuntu&#xFF0C;&#x5219;&#x4FEE;&#x6539;&#x914D;&#x7F6E;&#x6587;&#x4EF6;/lib/systemd/system/docker.service&#xFF0C;&#x4FEE;&#x6539;<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>&#x4E0B;ExecStart&#x53C2;&#x6570;&#xFF0C;&#x589E;&#x52A0;&#x2013; insecure<span class="token punctuation">-</span>registry 192.168.102.37
+<span class="token punctuation">-</span> 3)&#x3001; &#x5982;&#x679C;&#x7CFB;&#x7EDF;&#x662F;Centos&#xFF0C;&#x53EF;&#x4EE5;&#x4FEE;&#x6539;&#x914D;&#x7F6E;/etc/sysconfig/docker&#xFF0C;&#x5C06;OPTIONS&#x589E;&#x52A0; &#x2013;insecure<span class="token punctuation">-</span>registry 192.168.102.37
+<span class="token punctuation">-</span> 4)&#x3001; &#x5982;&#x679C;&#x662F;&#x65B0;&#x7248;&#x672C;&#x7684;docker<span class="token punctuation">,</span>&#x5728;/etc/sysconfig/ &#x6CA1;&#x6709;docker&#x8FD9;&#x4E2A;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x7684;&#x60C5;&#x51B5;&#x4E0B;<span class="token punctuation">,</span>&#x5728;/etc/docker/&#x76EE;&#x5F55;&#x4E0B;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;daemon.json&#x5219;&#x65B0;&#x5EFA;&#xFF0C;&#x6709;&#x4E86;&#x5C31;&#x6DFB;&#x52A0;insecure<span class="token punctuation">-</span>registries&#x3002;
+
+<span class="token comment"># sudo vim /etc/docker/daemon.json</span>
+<span class="token punctuation">{</span>
+  <span class="token key atrule">&quot;insecure-registries&quot;</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">&quot;http://192.168.102.37&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+
+&#x914D;&#x7F6E;&#x5B8C;daemon.json&#xFF0C;&#x9700;&#x8981;&#x91CD;&#x65B0;&#x52A0;&#x8F7D;&#x7136;&#x540E;&#x91CD;&#x542F;
+
+<span class="token comment"># sudo systemctl daemon-reload</span>
+<span class="token comment"># sudo systemctl restart docker</span>
+<span class="token comment"># systemctl enable docker</span>
+
+&#x767B;&#x5F55;&#x516C;&#x5F00;&#x7684;&#x4ED3;&#x5E93;
+
+&#x516C;&#x5F00;&#x7684;&#x4ED3;&#x5E93;&#x4E0D;&#x9700;&#x8981;&#x767B;&#x5F55;&#xFF0C;&#x5728;&#x9875;&#x9762;&#x67E5;&#x770B;&#x9700;&#x8981;&#x7684;&#x955C;&#x50CF;&#x540D;&#x79F0;&#xFF0C;&#x901A;&#x8FC7;pull&#x547D;&#x4EE4;&#x4E0B;&#x8F7D;
+<span class="token comment"># sudo docker pull 192.168.102.37/library/busybox</span>
+
+
+&#x79C1;&#x6709;&#x4ED3;&#x5E93;&#xFF0C;&#x9996;&#x5148;&#x8981;&#x7528;&#x81EA;&#x5DF1;&#x7684;&#x8D26;&#x53F7;&#x767B;&#x5F55;
+
+<span class="token comment"># sudo docker login 192.168.102.37</span>
+<span class="token key atrule">Username</span><span class="token punctuation">:</span> wym
+<span class="token key atrule">Password</span><span class="token punctuation">:</span> newcapec
+Login Succeeded
+
+<span class="token comment"># sudo docker login -u admin -p admin 192.168.102.37</span>
+
+&#x7ED9;&#x8981;&#x4E0A;&#x4F20;&#x7684;&#x955C;&#x50CF;&#x6253;&#x6807;&#x7B7E;&#xFF0C;&#x6CE8;&#x610F;&#x5FC5;&#x987B;&#x5305;&#x62EC;&#x79C1;&#x6709;&#x4ED3;&#x5E93;IP&#x3001;&#x7AEF;&#x53E3;&#x548C;&#x9879;&#x76EE;&#x540D;&#x79F0;
+<span class="token comment"># sudo docker tag busybox 192.168.102.37/wymproject/busybox</span>
+
+&#x4E0A;&#x4F20;&#x955C;&#x50CF;
+<span class="token comment"># sudo docker push 192.168.102.37/wymproject/busybox</span>
+
+&#x4E0B;&#x8F7D;&#x955C;&#x50CF;
+<span class="token comment"># sudo docker pull 192.168.102.37/wymproject/busybox</span>
+
+&#x9879;&#x76EE;&#x7BA1;&#x7406;&#x5458;&#x53EF;&#x4EE5;&#x6DFB;&#x52A0;&#x9879;&#x76EE;&#x6210;&#x5458;&#xFF0C;&#x5220;&#x9664;&#x955C;&#x50CF;&#x7B49;&#x64CD;&#x4F5C;
+
+</pre><h2 class="mume-header" id="%E4%B9%9D-%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7">&#x4E5D;&#x3001;&#x7BA1;&#x7406;&#x5DE5;&#x5177;</h2>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token comment"># docker run -d -p 9000:9000 --restart=always -v /var/run/docker.sock:/var/run/docker.sock --name prtainer-test portainer/portainer</span>
+
+http<span class="token punctuation">:</span>//192.168.113.37<span class="token punctuation">:</span>9000 &#xFF0C;&#x767B;&#x5F55;admin&#xFF0C;&#x8BBE;&#x7F6E;&#x5BC6;&#x7801;admin
+
+&#x955C;&#x50CF;weaveworks/scope 
+scope launch &#x5C06;&#x4EE5;&#x5BB9;&#x5668;&#x65B9;&#x5F0F;&#x542F;&#x52A8; Weave Scope&#x3002;
+http<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span><span class="token number">4040</span>
+</pre><h2 class="mume-header" id="%E5%8D%81-docker%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">&#x5341;&#x3001;docker&#x5E38;&#x89C1;&#x95EE;&#x9898;</h2>
+
+<h3 class="mume-header" id="1-centos7%E4%B8%ADdocker-ce%E7%9A%84%E5%8D%B8%E8%BD%BD%E5%92%8C%E5%AE%89%E8%A3%85">1&#x3001;CentOS7&#x4E2D;Docker-ce&#x7684;&#x5378;&#x8F7D;&#x548C;&#x5B89;&#x88C5;</h3>
+
+<h3 class="mume-header" id="2-centos-%E5%AE%89%E8%A3%85docker%E6%97%B6%E5%87%BA%E7%8E%B0%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95">2&#x3001;centos &#x5B89;&#x88C5;docker&#x65F6;&#x51FA;&#x73B0;&#x4F9D;&#x8D56;&#x5173;&#x7CFB;&#x95EE;&#x9898;&#x7684;&#x89E3;&#x51B3;&#x529E;&#x6CD5;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x6211;&#x4EEC;&#x5728;&#x5B89;&#x88C5;&#x8001;&#x7248;&#x672C;&#x7684;docker&#x65F6;&#x53EF;&#x80FD;&#x4F1A;&#x51FA;&#x73B0;&#xFF1A;
+&#x201C;&#x6B63;&#x5728;&#x5904;&#x7406;&#x4F9D;&#x8D56;&#x5173;&#x7CFB; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux <span class="token punctuation">&gt;</span>= 17.03.0.ce<span class="token punctuation">-</span>1.el7.centos&#xFF0C;&#x5B83;&#x88AB;&#x8F6F;&#x4EF6;&#x5305; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>17.03.0.ce<span class="token punctuation">-</span>1.el7.centos.x86_64 &#x9700;&#x8981;
+&#x8F6F;&#x4EF6;&#x5305; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux &#x5DF2;&#x7ECF;&#x88AB; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>cli &#x53D6;&#x4EE3;&#xFF0C;&#x4F46;&#x662F;&#x53D6;&#x4EE3;&#x7684;&#x8F6F;&#x4EF6;&#x5305;&#x5E76;&#x672A;&#x6EE1;&#x8DB3;&#x9700;&#x6C42;&#x201D;
+
+&#x7B49;&#x4E00;&#x5927;&#x4E32;&#x7684;&#x95EE;&#x9898;
+
+&#x8FD9;&#x65F6;&#x6211;&#x4EEC;&#x9700;&#x8981;&#x901A;&#x8FC7; yum install &#x5B89;&#x88C5;&#x4E00;&#x4E2A;rpm&#x5305;
+
+&#x901A;&#x8FC7;&#x8FD9;&#x4E2A;&#x5730;&#x5740;&#x6211;&#x4EEC;&#x67E5;&#x770B;&#x548C;&#x6211;&#x4EEC;&#x5B89;&#x88C5;docker&#x7248;&#x672C;&#x4E00;&#x76F4;&#x7684;rpm&#x5305;
+https<span class="token punctuation">:</span>//download.docker.com/linux/centos/7/x86_64/stable/Packages/
+
+
+&#x8981;&#x5148;&#x5B89;&#x88C5;docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux<span class="token punctuation">-</span>17.03.2.ce&#xFF0C;&#x5426;&#x5219;&#x5B89;&#x88C5;docker<span class="token punctuation">-</span>ce&#x4F1A;&#x62A5;&#x9519;
+
+yum install https<span class="token punctuation">:</span>//download.docker.com/linux/centos/7/x86_64/stable/Packages/docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux<span class="token punctuation">-</span>17.03.2.ce<span class="token punctuation">-</span>1.el7.centos.noarch.rpm 
+
+&#x7136;&#x540E;&#x518D;&#x5B89;&#x88C5; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>17.03.2.ce&#xFF0C;&#x5C31;&#x80FD;&#x6B63;&#x5E38;&#x5B89;&#x88C5;
+
+sudo yum install docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>17.03.2.ce<span class="token punctuation">-</span>1.el7.centos
+
+&#x65E0;&#x6CD5;&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5305; docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>selinux<span class="token punctuation">-</span>17.03.2.ce<span class="token punctuation">-</span>1.el7.centos.noarch &#x3002;&#x88AB;&#x5DF2;&#x5B89;&#x88C5;&#x8F6F;&#x4EF6;&#x5305; 1<span class="token punctuation">:</span>docker<span class="token punctuation">-</span>ce<span class="token punctuation">-</span>cli<span class="token punctuation">-</span>18.09.0<span class="token punctuation">-</span>3.el7.x86_64 &#x6807;&#x8BB0;&#x4E3A;&#x5E9F;&#x9664;
+&#x9519;&#x8BEF;&#xFF1A;&#x65E0;&#x987B;&#x4EFB;&#x4F55;&#x5904;&#x7406;
+<span class="token punctuation">[</span>root@k8sm ~<span class="token punctuation">]</span><span class="token comment"># yum -y remove docker-ce-cli</span>
+
+</pre><h3 class="mume-header" id="3-%E8%AE%A9docker-%E5%AE%B9%E5%99%A8%E5%BC%80%E6%9C%BA%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8">3&#x3001;&#x8BA9;docker &#x5BB9;&#x5668;&#x5F00;&#x673A;&#x81EA;&#x52A8;&#x542F;&#x52A8;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">docker run &#x6307;&#x4EE4;&#x4E2D;&#x52A0;&#x5165; <span class="token punctuation">-</span><span class="token punctuation">-</span>restart=always &#x5C31;&#x884C;&#x3002;
+<span class="token comment"># sudo docker run --restart=always .....  </span>
+
+&#x5982;&#x679C;&#x521B;&#x5EFA;&#x65F6;&#x672A;&#x6307;&#x5B9A; <span class="token punctuation">-</span><span class="token punctuation">-</span>restart=always <span class="token punctuation">,</span>&#x53EF;&#x901A;&#x8FC7;update &#x547D;&#x4EE4;&#x8BBE;&#x7F6E;
+<span class="token comment"># docker update --restart=always &#x5BB9;&#x5668;ID</span>
+
+&#x5982;&#x679C;&#x4F60;&#x60F3;&#x53D6;&#x6D88;&#x6389;
+<span class="token comment"># docker update --restart=no &lt;CONTAINER ID&gt;</span>
+
+</pre><h3 class="mume-header" id="4-%E8%BF%81%E7%A7%BB-varlibdocker-%E7%9B%AE%E5%BD%95">4&#x3001;&#x8FC1;&#x79FB; /var/lib/docker &#x76EE;&#x5F55;</h3>
+
+<p>/var/lib/docker/overlay2 &#x5360;&#x7528;&#x5F88;&#x5927;&#xFF0C;&#x6E05;&#x7406;Docker&#x5360;&#x7528;&#x7684;&#x78C1;&#x76D8;&#x7A7A;&#x95F4;&#xFF0C;&#x8FC1;&#x79FB; /var/lib/docker &#x76EE;&#x5F55;</p>
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x8FC1;&#x79FB; /var/lib/docker &#x76EE;&#x5F55;
+
+4.1 &#x505C;&#x6B62;docker&#x670D;&#x52A1;&#x3002;
+<span class="token comment"># systemctl stop docker</span>
+
+4.2 &#x521B;&#x5EFA;&#x65B0;&#x7684;docker&#x76EE;&#x5F55;&#xFF0C;&#x6267;&#x884C;&#x547D;&#x4EE4;df <span class="token punctuation">-</span>h<span class="token punctuation">,</span>&#x627E;&#x4E00;&#x4E2A;&#x5927;&#x7684;&#x78C1;&#x76D8;&#x3002; &#x6211;&#x5728; /home&#x76EE;&#x5F55;&#x4E0B;&#x9762;&#x5EFA;&#x4E86; /home/docker/lib&#x76EE;&#x5F55;&#xFF0C;&#x6267;&#x884C;&#x7684;&#x547D;&#x4EE4;&#x662F;&#xFF1A;
+<span class="token comment"># mkdir -p /home/docker/lib</span>
+
+4.3 &#x8FC1;&#x79FB;/var/lib/docker&#x76EE;&#x5F55;&#x4E0B;&#x9762;&#x7684;&#x6587;&#x4EF6;&#x5230; /home/docker/lib&#xFF1A;
+<span class="token comment"># rsync -avz /var/lib/docker /home/docker/lib/</span>
+
+mv /var/lib/docker /home/y/docker/lib/docker/
+
+4.4 &#x914D;&#x7F6E; /etc/systemd/system/docker.service.d/devicemapper.conf&#x3002;
+&#x67E5;&#x770B; devicemapper.conf &#x662F;&#x5426;&#x5B58;&#x5728;&#x3002;&#x5982;&#x679C;&#x4E0D;&#x5B58;&#x5728;&#xFF0C;&#x5C31;&#x65B0;&#x5EFA;&#x3002;
+<span class="token comment"># mkdir -p /etc/systemd/system/docker.service.d/</span>
+<span class="token comment"># vim /etc/systemd/system/docker.service.d/deivcemapper.conf</span>
+
+4.5 &#x7136;&#x540E;&#x5728; devicemapper.conf &#x5199;&#x5165;&#xFF1A;&#xFF08;&#x540C;&#x6B65;&#x7684;&#x65F6;&#x5019;&#x628A;&#x7236;&#x6587;&#x4EF6;&#x5939;&#x4E00;&#x5E76;&#x540C;&#x6B65;&#x8FC7;&#x6765;&#xFF0C;&#x5B9E;&#x9645;&#x4E0A;&#x7684;&#x76EE;&#x5F55;&#x5E94;&#x5728; /home/docker/lib/docker &#xFF09;
+
+<span class="token punctuation">[</span>Service<span class="token punctuation">]</span>
+ExecStart=
+ExecStart=/usr/bin/dockerd  <span class="token punctuation">-</span><span class="token punctuation">-</span>graph=/home/y/docker/lib/docker
+
+ExecStart=/usr/bin/dockerd <span class="token punctuation">-</span><span class="token punctuation">-</span>insecure<span class="token punctuation">-</span>registry=&#x79C1;&#x670D;&#x5730;&#x5740; <span class="token punctuation">-</span><span class="token punctuation">-</span>graph=/home/docker/lib
+ 
+<span class="token comment"># &#x6CE8;&#x610F;&#xFF1A;&#x5982;&#x679C;/etc/systemd/system/docker.service.d/devicemapper.conf&#xFF0C;&#x8FD9;&#x4E2A;&#x8DEF;&#x5F84;&#x627E;&#x4E0D;&#x5230;&#x7684;&#x8BDD;&#xFF0C;&#x5C31;&#x65B0;&#x5EFA;&#xFF0C;&#x65B0;&#x5EFA;&#x4E4B;&#x540E;&#x52A0;&#x5165;&#x5185;&#x5BB9;&#xFF0C;&#x6CA1;&#x6709;&#x79C1;&#x670D;&#x5730;&#x5740;&#x7684;&#x8BDD;&#x5C31;&#x53EF;&#x4EE5;&#x53BB;&#x6389;&#x201D;--insecure-registry=&#x79C1;&#x670D;&#x5730;&#x5740;&#x201D;&#x3002;</span>
+
+4.6 &#x91CD;&#x65B0;&#x52A0;&#x8F7D; docker
+
+<span class="token comment"># systemctl daemon-reload</span>
+<span class="token comment"># systemctl restart docker</span>
+<span class="token comment"># systemctl enable docker</span>
+
+4.7 &#x4E3A;&#x4E86;&#x786E;&#x8BA4;&#x4E00;&#x5207;&#x987A;&#x5229;&#xFF0C;&#x8FD0;&#x884C;
+<span class="token comment"># docker info</span>
+&#x547D;&#x4EE4;&#x68C0;&#x67E5;Docker &#x7684;&#x6839;&#x76EE;&#x5F55;.&#x5B83;&#x5C06;&#x88AB;&#x66F4;&#x6539;&#x4E3A;  /home/y/docker/lib/docker
+
+Docker Root Dir<span class="token punctuation">:</span> /home/docker/lib/docker
+Debug Mode (client)<span class="token punctuation">:</span> <span class="token boolean important">false</span>
+Debug Mode (server)<span class="token punctuation">:</span> <span class="token boolean important">false</span>
+<span class="token key atrule">Registry</span><span class="token punctuation">:</span> https<span class="token punctuation">:</span>//index.docker.io/v1/
+
+4.8 &#x542F;&#x52A8;&#x6210;&#x529F;&#x540E;&#xFF0C;&#x518D;&#x786E;&#x8BA4;&#x4E4B;&#x524D;&#x7684;&#x955C;&#x50CF;&#x8FD8;&#x5728;&#xFF1A;
+<span class="token comment"># docker images</span>
+REPOSITORY           TAG                 IMAGE ID            CREATED             SIZE
+AAA/AAA               v2                  7331b8651bcc        27 hours ago        3.85GB
+BBB/BBB               v1                  da4a80dd8424        28 hours ago        3.47GB
+
+4.9 &#x786E;&#x5B9A;&#x5BB9;&#x5668;&#x6CA1;&#x95EE;&#x9898;&#x540E;&#x5220;&#x9664;/var/lib/docker/&#x76EE;&#x5F55;&#x4E2D;&#x7684;&#x6587;&#x4EF6;&#x3002;
+<span class="token comment"># rm -rf /var/lib/docker</span>
+</pre><h3 class="mume-header" id="5-%E9%85%8D%E7%BD%AEcentos8%E8%A7%A3%E5%86%B3-docker-failed-to-get-d-bus-connection-%E6%8A%A5%E9%94%99">5&#x3001;&#x914D;&#x7F6E;centos8&#x89E3;&#x51B3; docker Failed to get D-Bus connection &#x62A5;&#x9519;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x539F;&#x56E0;&#x53CA;&#x89E3;&#x51B3;&#x65B9;&#x5F0F;&#xFF1A;
+&#x5728;&#x521B;&#x5EFA;docker&#x5BB9;&#x5668;&#x65F6;&#x6DFB;&#x52A0;<span class="token punctuation">-</span><span class="token punctuation">-</span>privileged
+&#x8FD9;&#x4E2A;&#x7684;&#x539F;&#x56E0;&#x662F;&#x56E0;&#x4E3A;dbus<span class="token punctuation">-</span>daemon&#x6CA1;&#x80FD;&#x542F;&#x52A8;&#x3002;&#x5176;&#x5B9E;systemctl&#x5E76;&#x4E0D;&#x662F;&#x4E0D;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x3002;&#x5C06;&#x4F60;&#x7684;CMD&#x6216;&#x8005;entrypoint&#x8BBE;&#x7F6E;&#x4E3A;/usr/sbin/init&#x5373;&#x53EF;&#x3002;&#x4F1A;&#x81EA;&#x52A8;&#x5C06;dbus&#x7B49;&#x670D;&#x52A1;&#x542F;&#x52A8;&#x8D77;&#x6765;&#x3002;
+&#x7136;&#x540E;&#x5C31;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;systemctl&#x4E86;&#x3002;&#x547D;&#x4EE4;&#x5982;&#x4E0B;
+
+<span class="token comment"># docker run -it --name cobbler --privileged=true jasonlix/docker-cobbler /usr/sbin/init</span>
+</pre><h3 class="mume-header" id="6-%E4%B8%8D%E4%BD%BF%E7%94%A8sudo%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8Cdocker">6&#x3001;&#x4E0D;&#x4F7F;&#x7528;sudo&#x547D;&#x4EE4;&#x6267;&#x884C;docker</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x4E3A;&#x4EC0;&#x4E48;&#x9700;&#x8981;&#x521B;&#x5EFA;docker&#x7528;&#x6237;&#x7EC4;&#xFF1F;
+Docker&#x5B88;&#x5019;&#x8FDB;&#x7A0B;&#x7ED1;&#x5B9A;&#x7684;&#x662F;&#x4E00;&#x4E2A;unix socket&#xFF0C;&#x800C;&#x4E0D;&#x662F;TCP&#x7AEF;&#x53E3;&#x3002;&#x8FD9;&#x4E2A;&#x5957;&#x63A5;&#x5B57;&#x9ED8;&#x8BA4;&#x7684;&#x5C5E;&#x4E3B;&#x662F;root&#xFF0C;&#x5176;&#x4ED6;&#x662F;&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;sudo&#x547D;&#x4EE4;&#x6765;&#x8BBF;&#x95EE;&#x8FD9;&#x4E2A;&#x5957;&#x63A5;&#x5B57;&#x6587;&#x4EF6;&#x3002;&#x56E0;&#x4E3A;&#x8FD9;&#x4E2A;&#x539F;&#x56E0;&#xFF0C;docker&#x670D;&#x52A1;&#x8FDB;&#x7A0B;&#x90FD;&#x662F;&#x4EE5;root&#x5E10;&#x53F7;&#x7684;&#x8EAB;&#x4EFD;&#x8FD0;&#x884C;&#x7684;&#x3002;
+&#x4E3A;&#x4E86;&#x907F;&#x514D;&#x6BCF;&#x6B21;&#x8FD0;&#x884C;docker&#x547D;&#x4EE4;&#x7684;&#x65F6;&#x5019;&#x90FD;&#x9700;&#x8981;&#x8F93;&#x5165;sudo&#xFF0C;&#x53EF;&#x4EE5;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;docker&#x7528;&#x6237;&#x7EC4;&#xFF0C;&#x5E76;&#x628A;&#x76F8;&#x5E94;&#x7684;&#x7528;&#x6237;&#x6DFB;&#x52A0;&#x5230;&#x8FD9;&#x4E2A;&#x5206;&#x7EC4;&#x91CC;&#x9762;&#x3002;&#x5F53;docker&#x8FDB;&#x7A0B;&#x542F;&#x52A8;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x4F1A;&#x8BBE;&#x7F6E;&#x8BE5;&#x5957;&#x63A5;&#x5B57;&#x53EF;&#x4EE5;&#x88AB;docker&#x8FD9;&#x4E2A;&#x5206;&#x7EC4;&#x7684;&#x7528;&#x6237;&#x8BFB;&#x5199;&#x3002;&#x8FD9;&#x6837;&#x53EA;&#x8981;&#x662F;&#x5728;docker&#x8FD9;&#x4E2A;&#x7EC4;&#x91CC;&#x9762;&#x7684;&#x7528;&#x6237;&#x5C31;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x6267;&#x884C;docker&#x547D;&#x4EE4;&#x4E86;&#x3002;
+&#x8B66;&#x544A;&#xFF1A;&#x8BE5;dockergroup&#x7B49;&#x540C;&#x4E8E;root&#x5E10;&#x53F7;&#xFF0C;&#x5177;&#x4F53;&#x7684;&#x8BE6;&#x60C5;&#x53EF;&#x4EE5;&#x53C2;&#x8003;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;&#xFF1A;Docker Daemon Attack Surface.
+&#x64CD;&#x4F5C;&#x6B65;&#x9AA4;&#xFF1A;
+&#x4F7F;&#x7528;&#x6709;sudo&#x6743;&#x9650;&#x7684;&#x5E10;&#x53F7;&#x767B;&#x5F55;&#x7CFB;&#x7EDF;&#x3002;
+&#x521B;&#x5EFA;docker&#x5206;&#x7EC4;&#xFF0C;&#x5E76;&#x5C06;&#x76F8;&#x5E94;&#x7684;&#x7528;&#x6237;&#x6DFB;&#x52A0;&#x5230;&#x8FD9;&#x4E2A;&#x5206;&#x7EC4;&#x91CC;&#x9762;&#x3002;
+sudo usermod <span class="token punctuation">-</span>aG docker your_username
+&#x9000;&#x51FA;&#xFF0C;&#x7136;&#x540E;&#x91CD;&#x65B0;&#x767B;&#x5F55;&#xFF0C;&#x4EE5;&#x4FBF;&#x8BA9;&#x6743;&#x9650;&#x751F;&#x6548;&#x3002;
+&#x786E;&#x8BA4;&#x4F60;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x8FD0;&#x884C;docker&#x547D;&#x4EE4;&#x3002;
+$ docker run hello<span class="token punctuation">-</span>world
+</pre><h3 class="mume-header" id="7-docker-%E5%AE%B9%E5%99%A8%E4%B8%AD%E8%BF%90%E8%A1%8C-docker-%E5%91%BD%E4%BB%A4">7&#x3001;Docker &#x5BB9;&#x5668;&#x4E2D;&#x8FD0;&#x884C; Docker &#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml"><span class="token comment"># docker run -dit --name ubuntu1604 ubuntu:16.04</span>
+
+&#x901A;&#x5E38;&#x60A8;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x5B89;&#x88C5;Docker&#x5957;&#x63A5;&#x5B57;&#x4ECE;&#x5BB9;&#x5668;&#x5185;&#x7BA1;&#x7406;&#x4E3B;&#x673A;&#x5BB9;&#x5668;&#x3002;
+<span class="token comment"># docker run -it -v /var/run/docker.sock:/var/run/docker.sock --name ubuntu1604 ubuntu:16.04 sh -c &quot;apt-get update ; apt-get install docker.io -y ; bash&quot;</span>
+
+<span class="token comment"># docker run -dit --name c761810 --privileged=true centos:7.6.1810 /usr/sbin/init</span>
+
+Docker&#x91CC;&#x8FD0;&#x884C;Docker docker in docker(dind)
+
+Docker &#x5BB9;&#x5668;&#x4E2D;&#x8FD0;&#x884C; Docker &#x547D;&#x4EE4;
+&#x5728;&#x4F7F;&#x7528; GitLab/Jenkins &#x7B49; CI &#x8F6F;&#x4EF6;&#x7684;&#x65F6;&#x5019;&#x9700;&#x8981;&#x4F7F;&#x7528; Docker &#x547D;&#x4EE4;&#x6765;&#x6784;&#x5EFA;&#x955C;&#x50CF;&#xFF0C;&#x9700;&#x8981;&#x5728;&#x5BB9;&#x5668;&#x4E2D;&#x4F7F;&#x7528; Docker &#x547D;&#x4EE4;&#xFF1B;&#x901A;&#x8FC7;&#x5C06;&#x5BBF;&#x4E3B;&#x673A;&#x7684; Docker &#x5171;&#x4EAB;&#x7ED9;&#x5BB9;&#x5668;&#x5373;&#x53EF;
+
+&#x5728;&#x542F;&#x52A8;&#x5BB9;&#x5668;&#x65F6;&#x6DFB;&#x52A0;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#xFF1A;
+     <span class="token punctuation">-</span><span class="token punctuation">-</span>privileged \
+     <span class="token punctuation">-</span>v /var/run/docker.sock<span class="token punctuation">:</span>/var/run/docker.sock \
+     <span class="token punctuation">-</span>v $(which docker)r<span class="token punctuation">:</span>/bin/docker \
+<span class="token punctuation">-</span><span class="token punctuation">-</span>privileged &#x8868;&#x793A;&#x8BE5;&#x5BB9;&#x5668;&#x771F;&#x6B63;&#x542F;&#x7528; root &#x6743;&#x9650;
+<span class="token punctuation">-</span>v /var/run/docker.sock<span class="token punctuation">:</span>/var/run/docker.sock&#x548C;<span class="token punctuation">-</span>v $(which docker)r<span class="token punctuation">:</span>/bin/docker&#x547D;&#x4EE4;&#x5C06;&#x76F8;&#x5173;&#x7684; Docker &#x6587;&#x4EF6;&#x6302;&#x8F7D;&#x5230;&#x5BB9;&#x5668;
+
+<span class="token comment"># docker run -dit --name c761810 --privileged=true -v /var/run/docker.sock:/var/run/docker.sock -v $(which docker)r:/bin/docker centos:7.6.1810 /usr/sbin/init</span>
+
+<span class="token comment"># docker rm -f &#x5BB9;&#x5668;ID</span>
+</pre><h3 class="mume-header" id="%E5%88%9D%E5%A7%8B%E5%8C%96%E5%B8%B8%E7%94%A8%E8%BF%90%E8%A1%8C%E5%91%BD%E4%BB%A4">&#x521D;&#x59CB;&#x5316;&#x5E38;&#x7528;&#x8FD0;&#x884C;&#x547D;&#x4EE4;</h3>
+
+<pre data-role="codeBlock" data-info="yml" class="language-yaml">&#x914D;&#x7F6E;SSH&#x767B;&#x5F55;&#xFF0C;&#x5173;&#x95ED;SElinux&#x548C;&#x9632;&#x706B;&#x5899;
+<span class="token comment"># sed -i &apos;s/PasswordAuthentication no/PasswordAuthentication yes/g&apos; /etc/ssh/sshd_config &amp;&amp; systemctl restart sshd &amp;&amp; systemctl stop firewalld &amp;&amp; systemctl disable firewalld.service &amp;&amp; setenforce 0 &amp;&amp; sed -i &apos;s/SELINUX=enforcing/SELINUX=disabled/g&apos; /etc/selinux/config &amp;&amp; sed -i &apos;s/SELINUX=permissive/SELINUX=disabled/g&apos; /etc/selinux/config</span>
+
+&#x914D;&#x7F6E;&#x963F;&#x91CC;yum&#x6E90;&#x5E76;&#x5B89;&#x88C5;
+<span class="token comment"># mkdir -p /etc/yum.repos.d/repobak &amp;&amp; mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak &amp;&amp; curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo &amp;&amp; curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo &amp;&amp; curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo &amp;&amp; yum clean all &amp;&amp; yum makecache &amp;&amp; yum install -y wget vim tree net-tools zip unzip tmux bash-completion &amp;&amp; yum install -y docker-ce</span>
+
+&#x914D;&#x7F6E;&#x5185;&#x7F51;yum&#x6E90;&#x5E76;&#x5B89;&#x88C5;
+<span class="token comment"># mkdir -p /etc/yum.repos.d/repobak &amp;&amp; mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak &amp;&amp; curl http://192.168.102.3/CentOS-YUM/centos/repo/CentOS-7.repo &gt; /etc/yum.repos.d/Centos-7.repo &amp;&amp; curl http://192.168.102.3/CentOS-YUM/centos/repo/epel-7.repo &gt; /etc/yum.repos.d/epel-7.repo &amp;&amp; curl http://192.168.102.3/CentOS-YUM/centos/repo/docker-ce1806.repo &gt; /etc/yum.repos.d/docker-ce.repo &amp;&amp; yum clean all &amp;&amp; yum makecache &amp;&amp; yum install -y wget vim tree net-tools zip unzip tmux bash-completion dstat &amp;&amp; yum install -y docker-ce</span>
+
+&#x542F;&#x52A8;docker
+<span class="token comment"># systemctl start docker &amp;&amp; systemctl enable docker </span>
+
+&#x914D;&#x7F6E;&#x52A0;&#x901F;&#x5668;&#x548C;&#x79C1;&#x6709;&#x955C;&#x50CF;&#x4ED3;&#x5E93;
+<span class="token comment"># mkdir -p /etc/docker &amp;&amp; echo -e &apos;{&quot;registry-mirrors&quot;: [&quot;https://7bezldxe.mirror.aliyuncs.com&quot;],&quot;insecure-registries&quot;: [&quot;http://192.168.102.37&quot;]}&apos; &gt; /etc/docker/daemon.json &amp;&amp; systemctl daemon-reload &amp;&amp; systemctl restart docker</span>
+</pre>
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

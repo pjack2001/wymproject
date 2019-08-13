@@ -1091,7 +1091,6 @@ kubectl version
 
 
 
-
 ### 
 
 ```yml
@@ -1100,101 +1099,6 @@ kubectl version
 
 
 ```
-
-
-# 容器化运行 kubeasz
-
-## TL;DR;
-
-- 1.准备一台全新虚机（ansible控制端）
-```
-$ wget https://github.com/easzlab/kubeasz/releases/download/1.3.0/easzup
-$ chmod +x ./easzup
-$ ./easzup -D
-``` 
-- 2.配置 ssh 密钥登陆集群节点
-``` bash
-ssh-keygen -t rsa -b 2048 回车 回车 回车
-ssh-copy-id $IP  # $IP 为所有节点地址包括自身，按照提示输入 yes 和 root 密码
-```
-- 3.容器化运行 kubeasz，然后执行安装 k8s 集群（举例aio集群）
-
-``` bash
-$ ./easzup -S
-$ docker exec -it kubeasz easzctl start-aio
-# 若需要自定义集群创建，如下进入容器，然后配置/etc/ansible/hosts，执行创建即可
-# docker exec -it kubeasz sh
-```
-
-## 验证
-
-使用容器化安装成功后，可以在 **容器内** 或者 **宿主机** 上执行 kubectl 命令验证集群状态。
-
-## easzup 工具介绍
-
-初始化工具 tools/easzup 主要用于：
-
-- 下载 kubeasz 项目代码/k8s 二进制文件/其他所需二进制文件/离线docker镜像等
-- 【可选】容器化运行 kubeasz
-
-详见脚本内容
-
-### 容器化运行 kubeasz
-
-容器启动脚本详见文件 tools/easzup 中函数`start_kubeasz_docker`
-
-``` bash
-  docker run --detach \
-      --name kubeasz \
-      --restart always \
-      --env HOST_IP="$host_ip" \
-      --volume /etc/ansible:/etc/ansible \
-      --volume /root/.kube:/root/.kube \
-      --volume /root/.ssh/id_rsa:/root/.ssh/id_rsa:ro \
-      --volume /root/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro \
-      --volume /root/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
-      easzlab/kubeasz:${KUBEASZ_VER}
-```
-
-- --env HOST_IP="$host_ip" 传递这个参数是为了快速在本机安装aio集群
-- --volume /etc/ansible:/etc/ansible 挂载本地目录，这样可以在宿主机上修改集群配置，然后在容器内执行 ansible 安装
-- --volume /root/.kube:/root/.kube 容器内与主机共享 kubeconfig，这样都可以执行 kubectl 命令
-- --volume /root/.ssh/id_rsa:/root/.ssh/id_rsa:ro 等三个 volume 挂载保证：如果宿主机配置了免密码登陆所有集群节点，那么容器内也可以免密码登陆所有节点
-
-
-
-
-##
-
-```yml
-老版本的kubeasz安装k8s1.11,1.12，镜像启动正常，
-但是安装1.13版本，coredns和metrics-server提示ImagePullBackOff，怀疑是镜像版本不对
-
-```
-
-##
-
-```yml
-/home/w/SynologyDrive/github/kubernetes/kubeasz/docs/setup/docker_kubeasz.md
-/home/w/SynologyDrive/github/kubernetes/kubeasz/docs/setup/easzctl_cmd.md
-
-$ docker pull easzlab/kubeasz:1.2.0
-$ docker pull easzlab/kubeasz:1.3.0
-$ docker pull easzlab/kubeasz:2.0.0
-
-$ docker pull easzlab/kubeasz-k8s-bin:v1.11.10
-$ docker pull easzlab/kubeasz-k8s-bin:v1.12.9
-$ docker pull easzlab/kubeasz-k8s-bin:v1.13.7
-$ docker pull easzlab/kubeasz-k8s-bin:v1.14.3
-
-$ docker pull easzlab/kubeasz-ext-bin:0.2.0
-$ docker pull easzlab/kubeasz-ext-bin:0.3.0
-
-
-```
-
-
-
 
 ### 
 
@@ -1281,6 +1185,29 @@ Use "kubectl <command> --help" for more information about a given command.
 Use "kubectl options" for a list of global command-line options (applies to all commands).
 
 
+
+```
+
+
+### 
+
+```yml
+
+
+```
+
+### 
+
+```yml
+
+
+```
+
+
+
+### 
+
+```yml
 
 
 ```
@@ -1977,6 +1904,489 @@ echo "alias lzd='lazydocker'" >> ~/.zshrc
 ```
 
 
+
+### 基础环境准备
+
+```yml
+
+改主机名
+# hostnamectl set-hostname kubeasz171.example.com
+
+改IP
+# vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+
+改网卡名称为eth0
+
+修改centos7虚拟机的网卡名称为eth0
+# cd /etc/sysconfig/network-scripts/
+# mv ifcfg-ens33 ifcfg-eth0
+# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+NAME="eth0"
+DEVICE="eth0"
+
+修改grub文件  在GRUB_CMDLINE_LINUX原有的参数后面加上"net.ifnames=0 biosdevname=0"
+# vi /etc/default/grub
+GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap rhgb quiet net.ifnames=0 biosdevname=0"
+
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+# reboot
+
+防火墙和selinux
+# systemctl stop firewalld && systemctl disable firewalld.service && systemctl status firewalld
+# systemctl stop NetworkManager && systemctl disable NetworkManager && systemctl status NetworkManager
+# setenforce 0 && sed -i 's/SELINUX=enforcing/SELINUX=disabled/g'  /etc/selinux/config 
+
+
+阿里源
+# mkdir -p /etc/yum.repos.d/repobak && mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/repobak && curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
+
+
+```
+
+
+
+## kubeasz-总结
+
+```bash
+
+总结：
+1、最小化安装的centos系统，可以上网
+2、下载easzup，./easzup -D开始下载所有安装文件（安装docker，下载kubeasz镜像、下载k8s安装包）
+3、执行成功后，所有文件均已整理好放入目录`/etc/ansilbe`，只要把该目录整体复制到任何离线的机器上，即可开始安装集群
+4、设置参数启用离线安装
+# cd /etc/ansible
+# sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/chrony/defaults/main.yml
+# sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/ex-lb/defaults/main.yml
+# sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/kube-node/defaults/main.yml
+# sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/prepare/defaults/main.yml
+5、配置免密登录
+6、离线服务器执行 # ./easzup -S
+7、可以先添加镜像仓库方便做实验 # systemctl daemon-reload && systemctl restart docker
+8、使用默认配置安装 aio 集群 # docker exec -it kubeasz easzctl start-aio
+
+
+##########################################
+备注：
+# cat /etc/docker/daemon.json 
+{
+  "registry-mirrors": [
+    "https://dockerhub.azk8s.cn",
+    "https://docker.mirrors.ustc.edu.cn",
+    "http://hub-mirror.c.163.com"
+  ],
+  "insecure-registries": [
+    "http://192.168.113.38",
+    "http://192.168.113.37:8001",
+    "0.0.0.0/0"
+  ],
+  "max-concurrent-downloads": 10,
+  "log-driver": "json-file",
+  "log-level": "warn",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+    },
+  "data-root": "/var/lib/docker"
+}
+
+# ./easzup 
+Usage: easzup [options] [args]
+  option: -{DdekSz}
+    -C         stop&clean all local containers
+    -D         download all into /etc/ansible
+    -S         start kubeasz in a container
+    -d <ver>   set docker-ce version, default "18.09.8"
+    -e <ver>   set kubeasz-ext-bin version, default "0.3.0"
+    -k <ver>   set kubeasz-k8s-bin version, default "v1.15.2"
+    -m <str>   set docker registry mirrors, default "CN"(used in Mainland,China)
+    -p <ver>   set kubeasz-sys-pkg version, default "0.3.2"
+    -z <ver>   set kubeasz version, default "2.0.3"
+  
+see more at https://github.com/kubeasz/dockerfiles
+
+# ./easzctl 
+Usage: easzctl COMMAND [args]
+
+Cluster-wide operation:
+    checkout		To switch to context <clustername>, or create it if not existed
+    destroy		To destroy the current cluster, '--purge' to also delete the context
+    list		To list all of clusters managed
+    setup		To setup a cluster using the current context
+    start-aio		To quickly setup an all-in-one cluster for testing (like minikube)
+
+In-cluster operation:
+    add-etcd		To add a etcd-node to the etcd cluster
+    add-master		To add a kube-master(master node) to the k8s cluster
+    add-node		To add a kube-node(work node) to the k8s cluster
+    del-etcd		To delete a etcd-node from the etcd cluster
+    del-master		To delete a kube-master from the k8s cluster
+    del-node		To delete a kube-node from the k8s cluster
+    upgrade		To upgrade the k8s cluster
+
+Extra operation:
+    basic-auth   	To enable/disable basic-auth for apiserver
+
+Use "easzctl help <command>" for more information about a given command.
+
+
+```
+
+
+
+## kubeasz-allinone安装
+
+```bash
+
+github/kubernetes/kubeasz/docs/setup/quickStart.md
+
+
+3.配置 ssh 免密登陆
+
+ssh-keygen -t rsa -b 2048 -N '' -f ~/.ssh/id_rsa
+ssh-copy-id $IP  # $IP 为所有节点地址包括自身，按照提示输入 yes 和 root 密码
+
+- 4.1 容器化运行 kubeasz，详见[文档](docker_kubeasz.md)
+# ./easzup -S
+
+- 4.2 使用默认配置安装 aio 集群
+
+# docker exec -it kubeasz easzctl start-aio
+
+5.验证安装
+
+如果提示kubectl: command not found，退出重新ssh登陆一下，环境变量生效即可
+
+$ kubectl version                   # 验证集群版本     
+$ kubectl get componentstatus       # 验证 scheduler/controller-manager/etcd等组件状态
+$ kubectl get node                  # 验证节点就绪 (Ready) 状态
+$ kubectl get pod --all-namespaces  # 验证集群pod状态，默认已安装网络插件、coredns、metrics-server等
+$ kubectl get svc --all-namespaces  # 验证集群服务状态
+
+
+
+
+
+```
+
+
+
+### kubeasz-offline_install
+
+```bash
+
+/home/w/SynologyDrive/github/kubernetes/kubeasz/docs/setup/offline_install.md
+
+# 离线安装集群
+
+kubeasz 2.0.1 开始支持**完全离线安装**，目前已测试 `Ubuntu1604|1804` `CentOS7` `Debian9|10` 系统。
+
+## 离线文件准备
+
+在一台能够访问互联网的服务器上执行：
+
+# 下载工具脚本easzup，举例使用kubeasz版本2.0.2
+export release=2.0.2
+curl -C- -fLO --retry 3 https://github.com/easzlab/kubeasz/releases/download/${release}/easzup
+chmod +x ./easzup
+# 使用工具脚本下载
+./easzup -D
+
+执行成功后，所有文件均已整理好放入目录`/etc/ansilbe`，只要把该目录整体复制到任何离线的机器上，即可开始安装集群，离线文件包括：
+
+- kubeasz 项目代码 --> /etc/ansible
+- kubernetes 集群组件二进制 --> /etc/ansible/bin
+- 其他集群组件二进制（etcd/CNI等）--> /etc/ansible/bin
+- 操作系统基础依赖软件包（haproxy/ipvsadm/ipset/socat等）--> /etc/ansible/down/packages
+- 集群基本插件镜像（coredns/dashboard/metrics-server等）--> /etc/ansible/down
+
+离线文件不包括：
+
+- 管理端 ansible 安装，但可以使用 kubeasz 容器运行 ansible 脚本
+- 其他更多 kubernetes 插件镜像
+
+## 离线安装
+
+上述下载完成后，把`/etc/ansible`整个目录复制到目标离线服务器，然后在离线服务器上运行：
+
+# 离线安装 docker，检查本地文件等
+$ ./easzup -D
+
+# 启动 kubeasz 容器
+$ ./easzup -S
+
+# 进入容器
+$ docker exec -it kubeasz sh
+
+# 设置参数启用离线安装
+$ cd /etc/ansible
+$ sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/chrony/defaults/main.yml
+$ sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/ex-lb/defaults/main.yml
+$ sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/kube-node/defaults/main.yml
+$ sed -i 's/^INSTALL_SOURCE.*$/INSTALL_SOURCE: "offline"/g' roles/prepare/defaults/main.yml
+
+# 按照文档 https://github.com/easzlab/kubeasz/blob/master/docs/setup/00-planning_and_overall_intro.md 集群规划后安装
+$ ansible-playbook 90.setup.yml
+
+
+```
+
+
+
+### kubeasz下载日志
+
+```yml
+
+[root@kubeasz170 ~]# ./easzup -h
+./easzup: 非法选项 -- h
+Usage: easzup [options] [args]
+  option: -{DdekSz}
+    -C         stop&clean all local containers
+    -D         download all into /etc/ansible
+    -S         start kubeasz in a container
+    -d <ver>   set docker-ce version, default "18.09.8"
+    -e <ver>   set kubeasz-ext-bin version, default "0.3.0"
+    -k <ver>   set kubeasz-k8s-bin version, default "v1.15.2"
+    -m <str>   set docker registry mirrors, default "CN"(used in Mainland,China)
+    -p <ver>   set kubeasz-sys-pkg version, default "0.3.2"
+    -z <ver>   set kubeasz version, default "2.0.3"
+  
+see more at https://github.com/kubeasz/dockerfiles
+[root@kubeasz170 ~]# ./easzup -D
+[INFO] Action begin : download_all
+Unit docker.service could not be found.
+Unit containerd.service could not be found.
+[INFO] downloading docker binaries 18.09.8
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 45.8M  100 45.8M    0     0   259k      0  0:03:01  0:03:01 --:--:--  312k
+[INFO] generate docker service file
+[INFO] generate docker config file
+[INFO] prepare register mirror for CN
+[INFO] turn off selinux in CentOS/Redhat
+setenforce: SELinux is disabled
+[INFO] enable and start docker
+Created symlink from /etc/systemd/system/multi-user.target.wants/docker.service to /etc/systemd/system/docker.service.
+[INFO] downloading kubeasz 2.0.3
+[INFO] run a temporary container
+Unable to find image 'easzlab/kubeasz:2.0.3' locally
+2.0.3: Pulling from easzlab/kubeasz
+e7c96db7181b: Pull complete 
+116b16256f3f: Pull complete 
+Digest: sha256:24a672bced557482699f9ce840c23ec46bbf269dca2e862ebc678d5038ece0f4
+Status: Downloaded newer image for easzlab/kubeasz:2.0.3
+3683f2cdd41def2692139d3e065383c782884c2abff4f55b44c1543674caf955
+[INFO] cp kubeasz code from the temporary container
+[INFO] stop&remove temporary container
+temp_easz
+[INFO] downloading kubernetes v1.15.2 binaries
+v1.15.2: Pulling from easzlab/kubeasz-k8s-bin
+e7c96db7181b: Already exists 
+2baca36b775d: Pull complete 
+Digest: sha256:e2c04f57fc3d27b0bb99ef5b316b308647520b2dc22bd1804ddae5470912466e
+Status: Downloaded newer image for easzlab/kubeasz-k8s-bin:v1.15.2
+[INFO] run a temporary container
+9374967e308364f2a0643f1e5bc1a96c80a21138ffd53e4ceef14ce2a1d23be6
+[INFO] cp k8s binaries
+[INFO] stop&remove temporary container
+temp_k8s_bin
+[INFO] downloading extral binaries kubeasz-ext-bin:0.3.0
+0.3.0: Pulling from easzlab/kubeasz-ext-bin
+e7c96db7181b: Already exists 
+fc74181adce3: Pull complete 
+Digest: sha256:75c5955010408d73dcbc2548efbf8287ffc09756c013baca259fc7dddb434adf
+Status: Downloaded newer image for easzlab/kubeasz-ext-bin:0.3.0
+[INFO] run a temporary container
+ae2064295434ce166812c070d4ca9c5f2431e95cb06365cea597e358a37197d4
+[INFO] cp extral binaries
+[INFO] stop&remove temporary container
+temp_ext_bin
+[INFO] downloading system packages kubeasz-sys-pkg:0.3.2
+0.3.2: Pulling from easzlab/kubeasz-sys-pkg
+e7c96db7181b: Already exists 
+a5379a6b9b05: Pull complete 
+4b9478026435: Pull complete 
+e1bee6f2e3f0: Pull complete 
+1609737ab51c: Pull complete 
+1f0181455391: Pull complete 
+Digest: sha256:283b47c6b0af8530d4bfe1aaf25e9880020b0c6ea97a4bcc6628f66aa5658bac
+Status: Downloaded newer image for easzlab/kubeasz-sys-pkg:0.3.2
+[INFO] run a temporary container
+48f8bb25b9e030c9e38f5e6e6bd498ace9862c4a704a0caab52b141a88b8254d
+[INFO] cp system packages
+[INFO] stop&remove temporary container
+temp_sys_pkg
+[INFO] downloading offline images
+v3.4.4: Pulling from calico/cni
+c87736221ed0: Pull complete 
+5c9ca5efd0e4: Pull complete 
+208ecfdac035: Pull complete 
+4112fed29204: Pull complete 
+Digest: sha256:bede24ded913fb9f273c8392cafc19ac37d905017e13255608133ceeabed72a1
+Status: Downloaded newer image for calico/cni:v3.4.4
+v3.4.4: Pulling from calico/kube-controllers
+c87736221ed0: Already exists 
+e90e29149864: Pull complete 
+5d1329dbb1d1: Pull complete 
+Digest: sha256:b2370a898db0ceafaa4f0b8ddd912102632b856cc010bb350701828a8df27775
+Status: Downloaded newer image for calico/kube-controllers:v3.4.4
+v3.4.4: Pulling from calico/node
+c87736221ed0: Already exists 
+07330e865cef: Pull complete 
+d4d8bb3c8ac5: Pull complete 
+870dc1a5d2d5: Pull complete 
+af40827f5487: Pull complete 
+76fa1069853f: Pull complete 
+Digest: sha256:1582527b4923ffe8297d12957670bc64bb4f324517f57e4fece3f6289d0eb6a1
+Status: Downloaded newer image for calico/node:v3.4.4
+1.5.0: Pulling from coredns/coredns
+e0daa8927b68: Pull complete 
+10ff8df5aaa5: Pull complete 
+Digest: sha256:e83beb5e43f8513fa735e77ffc5859640baea30a882a11cc75c4c3244a737d3c
+Status: Downloaded newer image for coredns/coredns:1.5.0
+v1.10.1: Pulling from mirrorgooglecontainers/kubernetes-dashboard-amd64
+63926ce158a6: Pull complete 
+Digest: sha256:d6b4e5d77c1cdcb54cd5697a9fe164bc08581a7020d6463986fe1366d36060e8
+Status: Downloaded newer image for mirrorgooglecontainers/kubernetes-dashboard-amd64:v1.10.1
+v0.11.0-amd64: Pulling from easzlab/flannel
+cd784148e348: Pull complete 
+04ac94e9255c: Pull complete 
+e10b013543eb: Pull complete 
+005e31e443b1: Pull complete 
+74f794f05817: Pull complete 
+Digest: sha256:bd76b84c74ad70368a2341c2402841b75950df881388e43fc2aca000c546653a
+Status: Downloaded newer image for easzlab/flannel:v0.11.0-amd64
+v1.5.4: Pulling from mirrorgooglecontainers/heapster-amd64
+b8f516daaab1: Pull complete 
+684442675e9a: Pull complete 
+Digest: sha256:3a9d4e2f6d8ee30602bb273b569a5d54e01cce4df152096d150913bc1b9e4968
+Status: Downloaded newer image for mirrorgooglecontainers/heapster-amd64:v1.5.4
+v0.3.3: Pulling from mirrorgooglecontainers/metrics-server-amd64
+9fed77bd433c: Pull complete 
+454ba71109e2: Pull complete 
+Digest: sha256:3f2674fbad065f60044b3601ac0564c24447f0ddfa28fe2bdd467218ce359ea9
+Status: Downloaded newer image for mirrorgooglecontainers/metrics-server-amd64:v0.3.3
+3.1: Pulling from mirrorgooglecontainers/pause-amd64
+67ddbfb20a22: Pull complete 
+Digest: sha256:59eec8837a4d942cc19a52b8c09ea75121acc38114a2c68b98983ce9356b8610
+Status: Downloaded newer image for mirrorgooglecontainers/pause-amd64:3.1
+v1.7.12: Pulling from library/traefik
+d572f7c8e983: Pull complete 
+d62b0f6adf29: Pull complete 
+Digest: sha256:02cfdb77b0cd82d973dffb3dafe498283f82399bd75b335797d7f0fe3ebeccb8
+Status: Downloaded newer image for traefik:v1.7.12
+2.0.3: Pulling from easzlab/kubeasz
+Digest: sha256:24a672bced557482699f9ce840c23ec46bbf269dca2e862ebc678d5038ece0f4
+Status: Image is up to date for easzlab/kubeasz:2.0.3
+[INFO] Action successed : download_all
+[root@kubeasz170 ~]# 
+
+
+
+```
+
+
+#### 容器化运行 kubeasz
+
+```bash
+- 1.准备一台全新虚机（ansible控制端）
+
+$ wget https://github.com/easzlab/kubeasz/releases/download/1.3.0/easzup
+$ chmod +x ./easzup
+$ ./easzup -D
+
+- 2.配置 ssh 密钥登陆集群节点
+
+ssh-keygen -t rsa -b 2048 回车 回车 回车
+ssh-copy-id $IP  # $IP 为所有节点地址包括自身，按照提示输入 yes 和 root 密码
+
+- 3.容器化运行 kubeasz，然后执行安装 k8s 集群（举例aio集群）
+
+
+$ ./easzup -S
+$ docker exec -it kubeasz easzctl start-aio
+# 若需要自定义集群创建，如下进入容器，然后配置/etc/ansible/hosts，执行创建即可
+# docker exec -it kubeasz sh
+
+
+#### 验证
+
+使用容器化安装成功后，可以在 **容器内** 或者 **宿主机** 上执行 kubectl 命令验证集群状态。
+
+#### easzup 工具介绍
+
+初始化工具 tools/easzup 主要用于：
+
+- 下载 kubeasz 项目代码/k8s 二进制文件/其他所需二进制文件/离线docker镜像等
+- 【可选】容器化运行 kubeasz
+
+详见脚本内容
+
+#### 容器化运行 kubeasz
+
+容器启动脚本详见文件 tools/easzup 中函数`start_kubeasz_docker`
+
+  docker run --detach \
+      --name kubeasz \
+      --restart always \
+      --env HOST_IP="$host_ip" \
+      --volume /etc/ansible:/etc/ansible \
+      --volume /root/.kube:/root/.kube \
+      --volume /root/.ssh/id_rsa:/root/.ssh/id_rsa:ro \
+      --volume /root/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro \
+      --volume /root/.ssh/known_hosts:/root/.ssh/known_hosts:ro \
+      easzlab/kubeasz:${KUBEASZ_VER}
+
+
+- --env HOST_IP="$host_ip" 传递这个参数是为了快速在本机安装aio集群
+- --volume /etc/ansible:/etc/ansible 挂载本地目录，这样可以在宿主机上修改集群配置，然后在容器内执行 ansible 安装
+- --volume /root/.kube:/root/.kube 容器内与主机共享 kubeconfig，这样都可以执行 kubectl 命令
+- --volume /root/.ssh/id_rsa:/root/.ssh/id_rsa:ro 等三个 volume 挂载保证：如果宿主机配置了免密码登陆所有集群节点，那么容器内也可以免密码登陆所有节点
+
+
+
+老版本的kubeasz安装k8s1.11,1.12，镜像启动正常，
+但是安装1.13版本，coredns和metrics-server提示ImagePullBackOff，怀疑是镜像版本不对
+
+/home/w/SynologyDrive/github/kubernetes/kubeasz/docs/setup/docker_kubeasz.md
+/home/w/SynologyDrive/github/kubernetes/kubeasz/docs/setup/easzctl_cmd.md
+
+$ docker pull easzlab/kubeasz:1.2.0
+$ docker pull easzlab/kubeasz:1.3.0
+$ docker pull easzlab/kubeasz:2.0.0
+
+$ docker pull easzlab/kubeasz-k8s-bin:v1.11.10
+$ docker pull easzlab/kubeasz-k8s-bin:v1.12.9
+$ docker pull easzlab/kubeasz-k8s-bin:v1.13.7
+$ docker pull easzlab/kubeasz-k8s-bin:v1.14.3
+
+$ docker pull easzlab/kubeasz-ext-bin:0.2.0
+$ docker pull easzlab/kubeasz-ext-bin:0.3.0
+
+
+```
+
+
+### 
+
+```yml
+
+
+
+
+```
+
+
+### 
+
+```yml
+
+
+
+
+```
+
+
 ### 
 
 ```yml
@@ -2007,5 +2417,11 @@ echo "alias lzd='lazydocker'" >> ~/.zshrc
 ```
 
 
+### 
+
+```yml
 
 
+
+
+```
