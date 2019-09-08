@@ -2,7 +2,7 @@
 # File    :   v8_load_tag_push.sh
 # Time    :   2019/07/05 11:46:18
 # Author  :   wangyuming 
-# Version :   0.1
+# Version :   0.2
 # License :   (C)Copyright 2018-2019, MIT
 # Desc    :   centos7.6下执行通过，ubuntu失败
 
@@ -75,7 +75,8 @@ load_tag_push(){
                 echo "Images ${harborurl}$f:$cur_date failed to push"
             fi
             # 删除镜像
-            docker rmi --force `docker images | grep ${harborurl} | awk '{print $3}'`
+            #docker rmi --force `docker images | grep ${harborurl} | awk '{print $3}'`
+            docker rmi --force `docker images | grep ${harborurl} | awk '{print $1":"$2}'`
             if [ $? -eq 0 ]; then
                 echo "Scene rmied successfully ${harborurl}$f:$cur_date"
                 #bash run.sh

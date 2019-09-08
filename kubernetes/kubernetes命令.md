@@ -1,8 +1,76 @@
 
 # 目录
 
-## 常用命令 
 
+### kubernetes帮助
+
+```yml
+
+# 安装kubectl
+chmod +x ./kubectl
+将二进制文件移动到PATH中。
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+mkdir -p ~/.kube
+cp conf/admin.kubeconfig ~/.kube/config
+我们推荐您使用这种方式。
+
+# 学会使用帮助
+
+$ kubectl --help
+
+比如命令补全
+$ kubectl completion --help
+
+#Ubuntu使用zsh补全
+$ source <(kubectl completion zsh)
+$ kubectl completion zsh > "${fpath[1]}/_kubectl"
+
+# linux使用bash的配置
+# source <(kubectl completion bash)
+# kubectl completion bash > ~/.kube/completion.bash.inc
+printf "
+source '$HOME/.kube/completion.bash.inc'
+" >> $HOME/.bash_profile
+
+生效
+# source $HOME/.bash_profile
+
+
+```
+
+## 
+
+```yml
+# 帮助
+$ kubectl get --help
+# 查看资源
+$ kubectl api-resources
+
+$ kubectl get pod -n v8namespace
+$ kubectl get pod -o wide -n v8namespace
+$ kubectl get pod/nginxtest-7559d7958-z28fv -n v8namespace
+$ kubectl describe pod/nginxtest-7559d7958-z28fv -n v8namespace
+$ kubectl get pod/nginxtest-7559d7958-z28fv -n v8namespace -o yaml
+$ kubectl exec -it nginxtest-7559d7958-ph7jk /bin/sh -n v8namespace
+
+$ kubectl get pod -n v8namespace
+$ kubectl logs pod/ykt-ui-647db784b7-dlzxz -n v8namespace
+$ kubectl logs pod/core-5bb7569df7-rb89h -n v8namespace
+
+$ kubectl get deployments --all-namespaces
+$ kubectl describe deployments/nginxtest -n v8namespace
+
+$ kubectl get rs -n v8namespace
+$ kubectl scale deployments/nginxtest --replicas=3 -n v8namespace
+
+
+
+
+
+```
+
+## 常用命令 
 
 ```yml
 allinone
@@ -69,43 +137,6 @@ admin/test1234
 
 ```
 
-### kubernetes帮助
-
-```yml
-学会使用帮助
-
-$ kubectl --help
-
-比如命令补全
-$ kubectl completion --help
-
-# source <(kubectl completion bash)
-# kubectl completion bash > ~/.kube/completion.bash.inc
-printf "
-source '$HOME/.kube/completion.bash.inc'
-" >> $HOME/.bash_profile
-
-生效
-# source $HOME/.bash_profile
-
-如果使用zsh，按下列
-  # Load the kubectl completion code for zsh[1] into the current shell
-  source <(kubectl completion zsh)
-  # Set the kubectl completion code for zsh[1] to autoload on startup
-  kubectl completion zsh > "${fpath[1]}/_kubectl"
-
-# 注意：Ubuntu使用.bashrc
-$ source <(kubectl completion bash)
-$ kubectl completion bash > ~/.kube/completion.bash.inc
-
-$ printf "
-# Kubectl shell completion
-source '$HOME/.kube/completion.bash.inc'
-" >> $HOME/.bashrc
-
-$ source $HOME/.bashrc
-
-```
 
 ### rancher环境命令
 
@@ -2381,6 +2412,52 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 
 ```yml
 
+# kubectl create -f ./ #创建本地目录下所有yaml文件
+
+
+kubectl get node --show-labels
+
+kubectl exec -it nginx-ingress-controller-77db86888d-pxdq4 -n kube-system /bin/bash
+
+
+kubectl get pod -n kube-system
+排错命令
+kubectl descirbe pod -n kube-system
+
+
+
+
+
+
+
+
+
+```
+
+
+### 
+
+```yml
+kubectl create -f nginx-ingress-deployment.yaml
+kubectl create -f ./
+
+
+$ kubectl get pod -n v8namespace
+
+$ kubectl describe pod nginxtest-7559d7958-z28fv -n v8namespace
+
+kubectl get node --show-labels
+
+
+k8s里都是资源，所有node节点也是，都可以用-o yaml参数查看
+# kubectl get node 192.168.113.67 -o yaml
+
+
+# kubectl delete pod POD名称 --force # 强制删除
+# kubectl delete pod POD名称 --force --grace-period=0 # 强制删除
+
+
+
 
 
 
@@ -2401,7 +2478,113 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 
 ```yml
 
-
+$ kubectl get pod/nginxtest-7559d7958-z28fv -n v8namespace -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cattle.io/timestamp: "2019-08-22T10:01:11Z"
+    cni.projectcalico.org/podIP: 10.42.1.3/32
+    field.cattle.io/ports: '[[{"containerPort":80,"dnsName":"nginxtest-nodeport","kind":"NodePort","name":"80tcp01","protocol":"TCP","sourcePort":0}]]'
+  creationTimestamp: "2019-08-22T10:01:12Z"
+  generateName: nginxtest-7559d7958-
+  labels:
+    pod-template-hash: 7559d7958
+    workload.user.cattle.io/workloadselector: deployment-v8namespace-nginxtest
+  name: nginxtest-7559d7958-z28fv
+  namespace: v8namespace
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: nginxtest-7559d7958
+    uid: c53d57b8-c4c3-11e9-a92c-005056ad85e1
+  resourceVersion: "5384"
+  selfLink: /api/v1/namespaces/v8namespace/pods/nginxtest-7559d7958-z28fv
+  uid: c5717dfc-c4c3-11e9-a92c-005056ad85e1
+spec:
+  containers:
+  - image: 192.168.19.241/wymproject/nginx:1.14.2-alpine
+    imagePullPolicy: Always
+    name: nginxtest
+    ports:
+    - containerPort: 80
+      name: 80tcp01
+      protocol: TCP
+    resources: {}
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities: {}
+      privileged: false
+      readOnlyRootFilesystem: false
+      runAsNonRoot: false
+    stdin: true
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-9qhg9
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: rancher245
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: default-token-9qhg9
+    secret:
+      defaultMode: 420
+      secretName: default-token-9qhg9
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2019-08-22T10:01:12Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2019-08-22T10:01:20Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2019-08-22T10:01:20Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2019-08-22T10:01:12Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://7481e35a7e95129d45db91a5e61dcdafbe482fd38833ebd3925b7cd8b7480fee
+    image: 192.168.19.241/wymproject/nginx:1.14.2-alpine
+    imageID: docker-pullable://192.168.19.241/wymproject/nginx@sha256:adfd8ccf00554bd6a79abcdf9fee7866f7ac1a9c0473d144615b79eee429864c
+    lastState: {}
+    name: nginxtest
+    ready: true
+    restartCount: 0
+    state:
+      running:
+        startedAt: "2019-08-22T10:01:20Z"
+  hostIP: 192.168.19.245
+  phase: Running
+  podIP: 10.42.1.3
+  qosClass: BestEffort
+  startTime: "2019-08-22T10:01:12Z"
 
 
 ```
@@ -2416,6 +2599,86 @@ $ docker pull easzlab/kubeasz-ext-bin:0.3.0
 
 ```
 
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
+
+### 
+
+```yml
+
+
+
+
+```
 
 ### 
 

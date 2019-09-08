@@ -1901,6 +1901,172 @@ ansible-playbook -C hello.yml
 $ ansible-playbook hello.yml -vv
 
 
+
+
+
+```
+
+
+#### 收集的playbook，尚未验证
+````yml
+
+
+
+使用Ansible的user模块批量修改用户密码
+Galactics关注0人评论42720人阅读2018-07-11 14:51:52
+介绍使用ansible批量修改用户密码的方法，因为在使用ansible修改用户密码的时候不能使用明文的方式，需要先加密，所以就需要使用一个方法对输入的明文的密码进行加密，下面就直接上干货。
+
+方法一：
+1、这个方法适用于更改多个固定的用户；playbook写法如下：
+
+# cat userpass.yml
+---
+- hosts: test
+  gather_facts: false
+  tasks:
+  - name: change user passwd
+    user: name={{ item.name }} password={{ item.chpass | password_hash('sha512') }}  update_password=always
+    with_items:
+         - { name: 'root', chpass: 'admin#123' }
+         - { name: 'wym', chpass: 'newcapec ' }
+
+
+1.1、执行playbook如下：
+# ansible-playbook userpass.yml
+
+以非root用户连接目标主机通过 sudo执行 剧本：
+
+　　　　ansible-playbook play.yml --user=app --private-key=/home/app/.ssh/id_rsa -b 
+　　　　解析：-b 是 become  -s 是旧版本的sudo
+
+
+方法二：
+2、这个方法更改单用户比较方便，从外面使用-e参数传递变量到playbook中，playbook写法如下：
+
+  # cat  userpass2.yml               
+    ---
+    - hosts: test
+      gather_facts: false
+      tasks:
+      - name: Change password
+        user: name={{ name1 }}  password={{ chpass | password_hash('sha512') }}  update_password=always
+2 .1、执行playbook脚本，使用-e参数传递用户名和密码给剧本，其中test为用户名，admin#123就是要设置密码，执行如下：
+
+# ansible-playbook userpass2.yml -e "name1=test chpass=admin#123"
+
+
+#数据库
+---
+- hosts: oracle
+
+  tasks:
+
+  - name: "磁盘"
+    shell: df -lh
+
+  - name: "Unzip temp"
+    unarchive: src=/home/w/tool/oracle/temp.zip dest=/opt/install/
+
+  - name: "Unzip oracle installer 1of2"
+    unarchive: src=/home/w/tool/oracle/linux_11gR2_database_1of2.zip dest=/opt/install/ 
+
+  - name: "Unzip oracle installer 2of2"
+    unarchive: src=/home/w/tool/oracle/linux_11gR2_database_2of2.zip dest=/opt/install/
+
+
+# ssh
+一、描述
+
+   拿到一批机器，需要做首先是修改ssh端口，防火墙配置，以及limits.conf控制文件描述符，进程数，栈大小等。
+
+二、剧本如下：
+
+---
+    - hosts: "{{ host }}"
+      remote_user: "{{ user }}"
+      gather_facts: false
+ 
+      tasks:
+          - name: Modify ssh port 69410
+            lineinfile:
+                dest: /etc/ssh/{{ item }}
+                regexp: '^Port 69410'
+                insertafter: '#Port 22'
+                line: 'Port 69410'
+ 
+            with_items:
+                - sshd_config
+                - ssh_config
+            tags:
+                - sshport
+ 
+          - name: Set sysctl file limiits
+#            pam_limits: domain='*' limit_type=`item`.`limit_type` limit_item=`item`.`limit_item` value=`item`.`value` 
+            pam_limits:
+                dest: "{{ item.dest }}"
+                domain: '*'
+                limit_type: "{{ item.limit_type }}"
+                limit_item: "{{ item.limit_item }}"
+                value: "{{ item.value }}"
+            with_items:
+                - { dest: '/etc/security/limits.conf',limit_type: 'soft',limit_item: 'nofile', value: '655350' }
+                - { dest: '/etc/security/limits.conf',limit_type: 'hard',limit_item: 'nofile', value: '655350'}
+                - { dest: '/etc/security/limits.conf',limit_type: 'soft',limit_item: 'nproc', value: '102400' }
+                - { dest: '/etc/security/limits.conf',limit_type: 'hard',limit_item: 'nproc', value: '102400' }
+                - { dest: '/etc/security/limits.conf',limit_type: 'soft',limit_item: 'sigpending', value: '255377' }
+                - { dest: '/etc/security/limits.conf',limit_type: 'hard',limit_item: 'sigpending', value: '255377' }
+                - { dest: '/etc/security/limits.d/90-nproc.conf', limit_type: 'soft',limit_item: 'nproc', value: '262144' }
+                - { dest: '/etc/security/limits.d/90-nproc.conf', limit_type: 'hard',limit_item: 'nproc', value: '262144' }
+ 
+            tags:
+                - setlimits
+
+#按IP修改主机名
+changehostname.yml 
+- hosts : testall
+  remote_user : root
+  tasks :
+  - name : show hostname
+    shell : hostname
+  - name : show ip
+    command : ip a
+  - hostname : name=web{{ ansible_default_ipv4.address.split('.')[-1] }}   
+
+
+ # ansible 增加本机/etc/hosts 下hostsname 与IP
+
+---
+- hosts: all
+  vars:
+     IP: "{{ ansible_eth0['ipv4']['address'] }}"
+  tasks:
+    - name: 将原有的hosts文件备份
+      shell: mv /etc/hosts /etc/hosts_bak
+
+    - name: 将ansible端的hosts复制到各自机器上
+      copy: src=/root/hosts dest=/etc/ owner=root group=root mode=0644
+
+    - name: 在新的hosts文件后面追加各自机器内网ip和hostname
+      lineinfile: dest=/etc/hosts line="{{IP}}  {{ansible_hostname}}"
+
+---
+- name: host file update - Local DSN setup across all the servers
+  hosts: " {{ group }} "
+  vars: 
+    group: " {{ group }} "
+  tasks:
+    - name: update the /etc/hosts file with node name
+      become: yes
+      become_user: root
+      lineinfile:
+        path: "/etc/hosts"
+        regexp: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname']}}"
+        line: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname'] }}"
+        state: present
+      when: ansible_hostname != "{{ item }}" or ansible_hostname == "{{ item }}"
+      with_items: "{{groups[group]}}"
+
+
 ```
 
 
